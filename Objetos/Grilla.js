@@ -1,5 +1,4 @@
-
-            function VertexGrid (_rows, _cols) {
+function VertexGrid (_rows, _cols) {
                 this.cols = _cols;
                 this.rows = _rows;
                 this.index_buffer = null;
@@ -26,7 +25,7 @@
 								incremento+=2;
 								this.index_buffer.push(i*2+incremento);
 							}
-                    */
+                    */ 
                     
                     var cantidadTriangulos = (this.rows*this.cols) / 3.0;      
 							for (var i=0.0;i<cantidadTriangulos;i++)
@@ -51,6 +50,7 @@
 							//this.index_buffer = [0,2,4,0, 1, 2, 3,4,5,1,3,5];
 							
                 }
+                        
                 
                 this.createUniformPlaneGrid = function(){
                     
@@ -77,15 +77,7 @@
                   		  	this.color_buffer.push(1.0);
                     		}
                     }
-                    
-                    
-                    
                 }
-
-                // ACTIVIDAD 2.
-                // Crear alguna otra función similar a la anterior createUniformPlaneGrid()
-                // que cree una superficie en donde la altura ya no sea z=0 sino que tenga aluna forma
-                // o partón en particular.
 
 
                 // Esta función crea e incializa los buffers dentro del pipeline para luego
@@ -135,6 +127,13 @@
                     
                     gl.drawElements(gl.LINE_STRIP, this.rows*this.cols, gl.UNSIGNED_SHORT, 0);
                 }
+                
+                this.inicializar = function(){
+						this.createUniformPlaneGrid();
+              		this.createIndexBuffer();
+                  this.setupWebGLBuffers();                
+                }
+                
             }
 
 
