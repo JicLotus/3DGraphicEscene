@@ -196,7 +196,7 @@
                 /*my_grid = new VertexGrid(5,5);
                 my_grid.inicializar();*/
                 
-                esfera = new EsferaGrid(5);
+                esfera = new EsferaGrid(5.0);
                 esfera.inicializar();
             }
             
@@ -215,8 +215,8 @@
                 // Preparamos una matriz de modelo+vista.
                 mat4.identity(mvMatrix);
                 mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-10.0]);
-                //mat4.rotate(mvMatrix, mvMatrix, t, [1.0, 0.0, 0.0]);
-                //t = t + 0.01;
+                mat4.rotate(mvMatrix, mvMatrix, t, [1.0, 0.0, 0.0]);
+                t = t + 0.01;
 
                 gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
 
