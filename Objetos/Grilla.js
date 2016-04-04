@@ -1,9 +1,4 @@
-          //////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////
-            //
-            // OBJETO VERTEX-GRID
-            // Definimos un constructor para el objeto VertexGrid
+
             function VertexGrid (_rows, _cols) {
                 this.cols = _cols;
                 this.rows = _rows;
@@ -17,44 +12,74 @@
                 this.webgl_index_buffer = null;
 
                 this.createIndexBuffer = function(){
-
-                    // ACTIVIDAD 1.
-                    // Este index buffer está armado para renderizar dos los triangulos
-                    // que se obervan como ejemplo.
-                    // Modificar el método para que a partir de conocer las dimensiones
-                    // de la grilla (que deberían estar en los atributos this.rows y this.cols)
-                    // se genere el index buffer correspondiente para renderizar la grilla utilizando
-                    // triangle-strip
-                    //
-                    this.index_buffer = [0, 1, 2, 1, 2, 3];
+                	     
+							this.index_buffer = [];                    
+                             
+                    /*
+							//Completamos linea superior de pares
+							var incremento=0;
+							for(var i=0;i<this.cols/3;i++)
+							{
+								this.index_buffer.push(i*2+incremento);
+								incremento+=2;
+								this.index_buffer.push(i*2+incremento);
+								incremento+=2;
+								this.index_buffer.push(i*2+incremento);
+							}
+                    */
+                    
+                    var cantidadTriangulos = (this.rows*this.cols) / 3.0;      
+							for (var i=0.0;i<cantidadTriangulos;i++)
+							{
+								var nodoPrimero=i*2+i;
+								this.index_buffer.push(nodoPrimero);
+								this.index_buffer.push(nodoPrimero+1);
+								this.index_buffer.push(nodoPrimero+2);
+							}
+							/*
+							var incremento=0;
+							for(var i=0;i<this.cols/3;i++)
+							{
+								incremento+=1;
+								this.index_buffer.push(i+incremento);
+								incremento+=2;
+								this.index_buffer.push(i+incremento);
+								incremento+=2;
+								this.index_buffer.push(i+incremento);
+							}
+							*/
+							//this.index_buffer = [0,2,4,0, 1, 2, 3,4,5,1,3,5];
+							
                 }
-
-                // Esta función inicializa el position_buffer y el color buffer de forma de 
-                // crear un plano de color gris que se extiende sobre el plano XY, con Z=0
-                // El plano se genera centrado en el origen.
-                // El propósito de esta función es a modo de ejemplo de como inicializar y cargar
-                // los buffers de las posiciones y el color para cada vértice.
+                
                 this.createUniformPlaneGrid = function(){
-
+                    
                     this.position_buffer = [];
                     this.color_buffer = [];
 
-                    for (var i = 0.0; i < this.rows; i++) { 
-                       for (var j = 0.0; j < this.cols; j++) {
-
-                           // Para cada vértice definimos su posición
-                           // como coordenada (x, y, z=0)
-                           this.position_buffer.push(i-(this.rows-1.0)/2.0);
-                           this.position_buffer.push(j-(this.rows-1)/2.0);
-                           this.position_buffer.push(0);
-
-                           // Para cada vértice definimos su color
-                           this.color_buffer.push(1.0/this.rows * i);
-                           this.color_buffer.push(0.2);
-                           this.color_buffer.push(1.0/this.cols * j);
-                                                  
-                       };
-                    };
+                    var cte=((this.cols-1.0)/4.0); 
+                    var valor1=0.0;
+                    var valor2=0.0;
+                     
+                    for (var j=0;j<this.cols;j++){
+                    		for (var i=0;i<this.rows;i++){
+  									
+  									valor1=j-cte;
+  									valor2=i-cte;
+  									
+  									this.position_buffer.push(valor1);
+									this.position_buffer.push(valor2);
+									this.position_buffer.push(0.0);		
+  
+		  							//Todos los vertices siempre blanco
+      		              	this.color_buffer.push(1.0);
+            		        	this.color_buffer.push(1.0);
+                  		  	this.color_buffer.push(1.0);
+                    		}
+                    }
+                    
+                    
+                    
                 }
 
                 // ACTIVIDAD 2.
@@ -89,13 +114,6 @@
                 }
 
 
-                // Esta función es la que se encarga de configurar todo lo necesario
-                // para dibujar el VertexGrid.
-                // En el caso del ejemplo puede observarse que la última línea del método
-                // indica dibujar triángulos utilizando los 6 índices cargados en el Index_Buffer
-                // ATIVIDAD 3.
-                // Reemplazar dicha línea de código por la correspondiente para dibujar el strip
-                // de triángulos utilizando el index buffer generado en la ACTIVIDAD 1.
                 this.drawVertexGrid = function(){
 
                     var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
@@ -111,11 +129,25 @@
                     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
                     // Dibujamos.
-                    gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+                    
+                    //this.rows*this.cols/2  = por las lineas q completan los pares
+                    //this.rows*this.cols/2  = por las lineas q completan los impares
+                    
+                    gl.drawElements(gl.LINE_STRIP, this.rows*this.cols, gl.UNSIGNED_SHORT, 0);
                 }
             }
-            //
-            //////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////
+
+
+//ANOTACIONES
+/*
+//rows=2
+//cols=3
+//cte=0.5
+-0.5,-0.5 (0)
+-0.5,0.5  (1)
+j=1
+0.5,-0.5	(2)
+0.5,0.5	(3)
+j=2
+1.0,-0.5	(4)
+1.0,0.5 	(5)*/

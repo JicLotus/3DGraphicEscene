@@ -48,13 +48,17 @@
         cada pixel.
         -->
         <script id="shader-fs" type="x-shader/x-fragment">
-        varying highp vec4 vColor;
+
+    		 varying highp vec4 vColor;
 
         void main(void) {
           // gl_FragColor es una variable "built-in" de GLSL que es usada para 
           // almacenar el color resultante del fragmento.
           gl_FragColor = vColor;
         }
+        
+        
+        
         </script>
 
         <script>
@@ -188,7 +192,7 @@
             
             function setupBuffers()
             {
-                my_grid = new VertexGrid(2,2);
+                my_grid = new VertexGrid(5,5);
                 my_grid.createUniformPlaneGrid();
                 my_grid.createIndexBuffer();
                 my_grid.setupWebGLBuffers();
@@ -208,9 +212,9 @@
                 
                 // Preparamos una matriz de modelo+vista.
                 mat4.identity(mvMatrix);
-                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -5.0]);
-                mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
-                t = t + 0.01;
+                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-10.0]);
+                //mat4.rotate(mvMatrix, mvMatrix, t, [1.0, 0.0, 0.0]);
+                //t = t + 0.01;
 
                 gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
 
