@@ -2,31 +2,32 @@
             function EsferaGrid (_radio) {
 
 						this.radio = _radio;
-						this.grilla = new VertexGrid(15,15);
+						this.grilla = new VertexGrid(20,20);
 
                this.createUniformEsfera = function(){
                     
                     this.grilla.position_buffer = [];
                     this.grilla.color_buffer = [];
 
-                    var cte=((this.grilla.cols-1.0)/4.0); 
+                    var cte=((this.grilla.cols-1.0)/2.0); 
                     var x=0.0;
                     var y=0.0;
                     var z=0.0;
-                    var phi=0.0;
-                    var thita=0.0;
-                     
-                    for (var j=0;j<this.grilla.cols;j++){
-                    		for (var i=0;i<this.grilla.rows;i++){
-  									
-  									//x=j-cte;
-  									//y=i-cte;
-  									thita+=400.0;
-  									phi+=400.0;
+                    
+                    var v=-Math.PI/2;
+                    var u=-Math.PI;
+                    
+                    for (var j=0;j<this.grilla.rows;j++){
+
+								v+=(Math.PI)/this.grilla.rows;
 									
-  									x = this.radio * Math.cos(phi) * Math.cos(thita);
-  									y = this.radio * Math.cos(phi) * Math.sin(thita);
-  									z = this.radio * Math.sin(phi);
+                    		for (var i=0;i<this.grilla.cols;i++){
+                    			
+	  							   u+=(2*Math.PI)/this.grilla.cols;                    											   	
+										
+  									x = this.radio * Math.cos(v) * Math.cos(u);
+									y = this.radio * Math.cos(v) * Math.sin(u);  									
+  									z = this.radio * Math.sin(v);
   									
   									this.grilla.position_buffer.push(x);								
 									this.grilla.position_buffer.push(y);
@@ -37,9 +38,11 @@
             		        	this.grilla.color_buffer.push(1.0);
                   		  	this.grilla.color_buffer.push(1.0);
                     		}
-                    }
-                    
+                    	}
+                    	
                 }
+
+
                 
 					this.drawVertexEsfera = function(){
 						this.grilla.drawVertexGrid();

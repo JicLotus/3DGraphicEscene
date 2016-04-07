@@ -193,10 +193,10 @@
             
             function setupBuffers()
             {
-                /*my_grid = new VertexGrid(5,5);
-                my_grid.inicializar();*/
+                my_grid = new VertexGrid(10,10);
+                my_grid.inicializar();
                 
-                esfera = new EsferaGrid(5.0);
+               esfera = new EsferaGrid(2.0);
                 esfera.inicializar();
             }
             
@@ -214,14 +214,16 @@
                 
                 // Preparamos una matriz de modelo+vista.
                 mat4.identity(mvMatrix);
-                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-10.0]);
-                mat4.rotate(mvMatrix, mvMatrix, t, [1.0, 0.0, 0.0]);
+                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-15.0]);
+                mat4.rotate(mvMatrix, mvMatrix, 850, [1.0, 0.0, 0.0]);
+                mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 0.0, 1.0]);
                 t = t + 0.01;
 
                 gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
 
                 //my_grid.drawVertexGrid();
-               	esfera.drawVertexEsfera();
+                
+               esfera.drawVertexEsfera();
                	
             }
 
