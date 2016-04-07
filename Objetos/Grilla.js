@@ -2,6 +2,7 @@ function VertexGrid (_rows, _cols) {
                 this.cols = _cols;
                 this.rows = _rows;
                 this.index_buffer = null;
+                this.cantidadVertices=0;
 
                 this.position_buffer = null;
                 this.color_buffer = null;
@@ -11,44 +12,39 @@ function VertexGrid (_rows, _cols) {
                 this.webgl_index_buffer = null;
 
                 this.createIndexBuffer = function(){
-                	     
-							this.index_buffer = [];                    
-                             
-                    /*
-							//Completamos linea superior de pares
-							var incremento=0;
-							for(var i=0;i<this.cols/3;i++)
-							{
-								this.index_buffer.push(i*2+incremento);
-								incremento+=2;
-								this.index_buffer.push(i*2+incremento);
-								incremento+=2;
-								this.index_buffer.push(i*2+incremento);
-							}
-                    */ 
-                    
-                    var cantidadTriangulos = (this.rows*this.cols) / 3.0;      
-							for (var i=0.0;i<cantidadTriangulos;i++)
-							{
-								var nodoPrimero=i*2+i;
-								this.index_buffer.push(nodoPrimero);
-								this.index_buffer.push(nodoPrimero+1);
-								this.index_buffer.push(nodoPrimero+2);
-							}
-							/*
-							var incremento=0;
-							for(var i=0;i<this.cols/3;i++)
-							{
-								incremento+=1;
-								this.index_buffer.push(i+incremento);
-								incremento+=2;
-								this.index_buffer.push(i+incremento);
-								incremento+=2;
-								this.index_buffer.push(i+incremento);
-							}
-							*/
-							//this.index_buffer = [0,2,4,0, 1, 2, 3,4,5,1,3,5];
+                	  
+							this.index_buffer = [];  
 							
+							
+							this.index_buffer.push(this.cols-1);
+							this.index_buffer.push(this.cols-1);
+							this.index_buffer.push(0);
+							             
+                     //this.index_buffer = [0, 5, 1, 6, 2, 7, 3, 8, 4, 9, 9, 5, 5,10, 6, 11, 7, 12, 8, 13, 9, 14]
+                                   
+							 var indice=0;                                          
+                      for (var i=0;i<this.rows-1;i++)
+                      {
+								for(var j=0;j<this.cols;j++)
+								{
+									indice=i+j+(this.cols-1)*i;
+									this.index_buffer.push(indice);
+									indice=indice+this.cols;
+									this.index_buffer.push(indice);
+									
+									if (j==this.cols-1 && i<this.rows-2){
+										this.index_buffer.push(indice);
+										this.index_buffer.push(indice-(this.cols-1));
+									}
+									
+								}                      
+                      }
+                     
+							this.index_buffer.push(this.cols*this.rows-1);
+							this.index_buffer.push(this.cols*this.rows-1);
+							this.index_buffer.push(this.cols*this.rows-this.cols);
+							
+							this.cantidadVertices = this.cols*2*(this.rows-1)+ (this.rows-2)*2 +3+3;
                 }
                         
                 
@@ -57,18 +53,17 @@ function VertexGrid (_rows, _cols) {
                     this.position_buffer = [];
                     this.color_buffer = [];
 
-                    var cte=((this.cols-1.0)/4.0); 
-                    var valor1=0.0;
-                    var valor2=0.0;
+                    var cte=((this.cols-1.0)/2.0); 
+                    var x=0.0;
+                    var y=0.0;
                      
-                    for (var j=0;j<this.cols;j++){
-                    		for (var i=0;i<this.rows;i++){
-  									
-  									valor1=j-cte;
-  									valor2=i-cte;
-  									
-  									this.position_buffer.push(valor1);
-									this.position_buffer.push(valor2);
+                    for (var j=0;j<this.rows;j++){
+                    		y=cte-j;	
+                    		for (var i=0;i<this.cols;i++){
+									x=cte+i;		  							
+		  						
+  									this.position_buffer.push(x);
+									this.position_buffer.push(y);
 									this.position_buffer.push(0.0);		
   
 		  							//Todos los vertices siempre blanco
@@ -120,12 +115,9 @@ function VertexGrid (_rows, _cols) {
 
                     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
-                    // Dibujamos.
-                    
-                    //this.rows*this.cols/2  = por las lineas q completan los pares
-                    //this.rows*this.cols/2  = por las lineas q completan los impares
-                    
-                    gl.drawElements(gl.LINE_STRIP, this.rows*this.cols, gl.UNSIGNED_SHORT, 0);
+
+						// Los dos ultimos + 3 son para cerrar la grilla
+                    gl.drawElements(gl.LINE_STRIP, this.cantidadVertices, gl.UNSIGNED_SHORT, 0);
                 }
                 
                 this.inicializar = function(){
@@ -135,18 +127,3 @@ function VertexGrid (_rows, _cols) {
                 }
                 
             }
-
-
-//ANOTACIONES
-/*
-//rows=2
-//cols=3
-//cte=0.5
--0.5,-0.5 (0)
--0.5,0.5  (1)
-j=1
-0.5,-0.5	(2)
-0.5,0.5	(3)
-j=2
-1.0,-0.5	(4)
-1.0,0.5 	(5)*/
