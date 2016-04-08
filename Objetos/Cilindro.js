@@ -1,39 +1,38 @@
 
-function EsferaGrid (_radio) {
+function CilindroGrid (_radio) {
 
 	this.radio = _radio;
-	this.grilla = new VertexGrid(20,20);
+	this.grilla = new VertexGrid(10,10);
+	
 
-	this.createUniformEsfera = function(){
+	this.createUniformCilindro = function(){
 		
 		this.grilla.position_buffer = [];
 		this.grilla.color_buffer = [];
 
-		var cte=((this.grilla.cols-1.0)/2.0); 
 		var x=0.0;
 		var y=0.0;
 		var z=0.0;
 		
-		var v=-Math.PI/2;
-		var u=-Math.PI;
+		var altura=0;
+		var u=0;
 		
 		for (var j=0;j<this.grilla.rows;j++){
 			
-			v+=(Math.PI)/this.grilla.rows;
+			altura+=(4)/this.grilla.rows;
 			
 			for (var i=0;i<this.grilla.cols;i++){				
 				u+=(2*Math.PI)/this.grilla.cols;                    											   	
 					
-				x = this.radio * Math.cos(v) * Math.cos(u);
-				y = this.radio * Math.cos(v) * Math.sin(u);  									
-				z = this.radio * Math.sin(v);
-
+				x = this.radio * Math.cos(u);
+				y = this.radio * Math.sin(u);  									
+				
 				this.grilla.position_buffer.push(x);								
 				this.grilla.position_buffer.push(y);
-				this.grilla.position_buffer.push(z);		
+				this.grilla.position_buffer.push(altura);		
 
 				//Todos los vertices siempre blanco
-				this.grilla.color_buffer.push(1.0);
+				this.grilla.color_buffer.push(0.0);
 				this.grilla.color_buffer.push(1.0);
 				this.grilla.color_buffer.push(1.0);
 				
@@ -47,7 +46,7 @@ function EsferaGrid (_radio) {
 
 	this.inicializar = function()
 	{
-		this.createUniformEsfera();
+		this.createUniformCilindro();
 		this.grilla.createIndexBuffer();
 		this.grilla.setupWebGLBuffers();                   
 	}

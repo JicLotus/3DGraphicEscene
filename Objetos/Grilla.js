@@ -20,8 +20,6 @@ function VertexGrid (_rows, _cols) {
 							this.index_buffer.push(this.cols-1);
 							this.index_buffer.push(0);
 							             
-                     //this.index_buffer = [0, 5, 1, 6, 2, 7, 3, 8, 4, 9, 9, 5, 5,10, 6, 11, 7, 12, 8, 13, 9, 14]
-                                   
 							 var indice=0;                                          
                       for (var i=0;i<this.rows-1;i++)
                       {
@@ -101,7 +99,7 @@ function VertexGrid (_rows, _cols) {
                 }
 
 
-                this.drawVertexGrid = function(){
+                this.draw = function(){
 
                     var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
                     gl.enableVertexAttribArray(vertexPositionAttribute);

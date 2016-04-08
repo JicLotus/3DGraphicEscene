@@ -13,6 +13,7 @@
         <script type="text/javascript" src="gl-matrix.js"></script>
         <script type="text/javascript" src="Objetos/Grilla.js"></script>
         <script type="text/javascript" src="Objetos/Esfera.js"></script>
+        <script type="text/javascript" src="Objetos/Cilindro.js"></script>
         <!--
         Vertex shader
 
@@ -193,11 +194,14 @@
             
             function setupBuffers()
             {
-                my_grid = new VertexGrid(10,10);
-                my_grid.inicializar();
+               my_grid = new VertexGrid(30,30);
+               my_grid.inicializar();
                 
-               esfera = new EsferaGrid(2.0);
-                esfera.inicializar();
+               esfera = new EsferaGrid(1.0);
+               esfera.inicializar();
+               
+               cilindro = new CilindroGrid(0.5);
+               cilindro.inicializar();
             }
             
             function drawScene()
@@ -211,20 +215,38 @@
 
                 var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
                 
-                
+                              
                 // Preparamos una matriz de modelo+vista.
                 mat4.identity(mvMatrix);
-                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-15.0]);
+                mat4.translate(mvMatrix, mvMatrix, [-27.0, -3.0,-20.0]);
+                mat4.rotate(mvMatrix, mvMatrix, 850, [1.0, 0.0, 0.0]);
+                
+
+                gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
+
+				my_grid.draw();
+
+                mat4.identity(mvMatrix);
+                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-10.0]);
+                mat4.rotate(mvMatrix, mvMatrix, 850, [1.0, 0.0, 0.0]);
+
+                gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
+                
+				cilindro.draw();
+				
+                
+                mat4.identity(mvMatrix);
+                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-10.0]);
                 mat4.rotate(mvMatrix, mvMatrix, 850, [1.0, 0.0, 0.0]);
                 mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 0.0, 1.0]);
                 t = t + 0.01;
 
                 gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
+               
+                esfera.draw();
 
-                //my_grid.drawVertexGrid();
                 
-               esfera.drawVertexEsfera();
-               	
+
             }
 
         </script>
