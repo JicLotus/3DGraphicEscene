@@ -13,16 +13,17 @@ function VertexGrid (_rows, _cols) {
 
                 this.createIndexBuffer = function(){
                 	  
-							this.index_buffer = [];  
+					this.index_buffer = [];  
 							
 							
-							this.index_buffer.push(this.cols-1);
-							this.index_buffer.push(this.cols-1);
-							this.index_buffer.push(0);
+					this.index_buffer.push(this.cols-1);
+					this.index_buffer.push(this.cols-1);
+					this.index_buffer.push(0);
 							             
 							 var indice=0;                                          
                       for (var i=0;i<this.rows-1;i++)
                       {
+					
 								for(var j=0;j<this.cols;j++)
 								{
 									indice=i+j+(this.cols-1)*i;
@@ -38,11 +39,12 @@ function VertexGrid (_rows, _cols) {
 								}                      
                       }
                      
-							this.index_buffer.push(this.cols*this.rows-1);
-							this.index_buffer.push(this.cols*this.rows-1);
-							this.index_buffer.push(this.cols*this.rows-this.cols);
-							
-							this.cantidadVertices = this.cols*2*(this.rows-1)+ (this.rows-2)*2 +3+3;
+					this.index_buffer.push(this.cols*this.rows-1);
+					this.index_buffer.push(this.cols*this.rows-1);
+					this.index_buffer.push(this.cols*this.rows-this.cols);
+					
+					//this.cantidadVertices = (this.rows -1) * (this.cols-1) * 2 +6;
+					this.cantidadVertices = this.cols*2*(this.rows-1)+ (this.rows-2)*2 +3+3;
                 }
                         
                 
@@ -113,8 +115,6 @@ function VertexGrid (_rows, _cols) {
 
                     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
-
-						// Los dos ultimos + 3 son para cerrar la grilla
                     gl.drawElements(gl.LINE_STRIP, this.cantidadVertices, gl.UNSIGNED_SHORT, 0);
                 }
                 

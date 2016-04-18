@@ -11,9 +11,12 @@
         </style>
 
         <script type="text/javascript" src="gl-matrix.js"></script>
+        <script type="text/javascript" src="Curvas/Punto.js"></script>
+        <script type="text/javascript" src="Curvas/Bazier.js"></script>
         <script type="text/javascript" src="Objetos/Grilla.js"></script>
         <script type="text/javascript" src="Objetos/Esfera.js"></script>
         <script type="text/javascript" src="Objetos/Cilindro.js"></script>
+        <script type="text/javascript" src="Objetos/SupBarrido.js"></script>
         <!--
         Vertex shader
 
@@ -194,14 +197,14 @@
             
             function setupBuffers()
             {
-               my_grid = new VertexGrid(30,30);
-               my_grid.inicializar();
-                
-               esfera = new EsferaGrid(1.0);
-               esfera.inicializar();
+               tierra = new EsferaGrid(1.0);
+               tierra.inicializar();
                
-               cilindro = new CilindroGrid(0.5);
-               cilindro.inicializar();
+               sol = new EsferaGrid(1.0);
+               sol.inicializar();
+               
+               supBarrido = new SupBarrido(1.0);
+               supBarrido.inicializar();               
             }
             
             function drawScene()
@@ -215,36 +218,37 @@
 
                 var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
                 
-                              
-                // Preparamos una matriz de modelo+vista.
-                mat4.identity(mvMatrix);
-                mat4.translate(mvMatrix, mvMatrix, [-27.0, -3.0,-20.0]);
-                mat4.rotate(mvMatrix, mvMatrix, 850, [1.0, 0.0, 0.0]);
                 
-
-                gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
-
-				my_grid.draw();
-
+                /*
                 mat4.identity(mvMatrix);
-                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-10.0]);
+                mat4.translate(mvMatrix, mvMatrix, [2.0, 0.0,-10.0]);
                 mat4.rotate(mvMatrix, mvMatrix, 850, [1.0, 0.0, 0.0]);
+                mat4.scale(mvMatrix,mvMatrix,[4.0,4.0,4.0]);
 
-                gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
-                
-				cilindro.draw();
+				gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
 				
+				sol.draw();
                 
                 mat4.identity(mvMatrix);
-                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-10.0]);
+                mat4.translate(mvMatrix, mvMatrix, [-5.0, 0.0,-10.0]);
                 mat4.rotate(mvMatrix, mvMatrix, 850, [1.0, 0.0, 0.0]);
                 mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 0.0, 1.0]);
                 t = t + 0.01;
 
                 gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
                
-                esfera.draw();
+                tierra.draw();*/
+                
 
+                mat4.identity(mvMatrix);
+                mat4.translate(mvMatrix, mvMatrix, [2.0, 0.0,-15.0]);
+                mat4.rotate(mvMatrix, mvMatrix, 850, [1.0, 0.0, 0.0]);
+				mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 0.0, 1.0]);
+                t = t + 0.01;
+
+				gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
+				
+				supBarrido.draw();
                 
 
             }
