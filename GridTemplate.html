@@ -54,16 +54,14 @@
         -->
         <script id="shader-fs" type="x-shader/x-fragment">
 
-    		 varying highp vec4 vColor;
+			varying highp vec4 vColor;
 
-        void main(void) {
-          // gl_FragColor es una variable "built-in" de GLSL que es usada para 
-          // almacenar el color resultante del fragmento.
-          gl_FragColor = vColor;
-        }
-        
-        
-        
+			void main(void) {
+			  // gl_FragColor es una variable "built-in" de GLSL que es usada para 
+			  // almacenar el color resultante del fragmento.
+			  gl_FragColor = vColor;
+			}
+			        
         </script>
 
         <script>
@@ -73,6 +71,10 @@
                 fragmentShader = null,
                 vertexShader = null,
                 t = 0.0;
+                fovy=45;
+                aspect=640.0/480.0;
+                near= 0.1;
+                far= 100.0;
 				my_grid = null;
 
             var mvMatrix = mat4.create();
@@ -197,13 +199,13 @@
             
             function setupBuffers()
             {
-               tierra = new EsferaGrid(1.0);
+               tierra = new EsferaGrid(0.1);
                tierra.inicializar();
                
-               sol = new EsferaGrid(1.0);
+               sol = new EsferaGrid(0.1);
                sol.inicializar();
                
-               supBarrido = new SupBarrido(1.0);
+               supBarrido = new SupBarrido(2.0);
                supBarrido.inicializar();               
             }
             
@@ -212,43 +214,37 @@
                 gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
                 
                 var u_proj_matrix = gl.getUniformLocation(glProgram, "uPMatrix");
+                
+                //fovy+=0.01;
+                
                 // Preparamos una matriz de perspectiva.
-                mat4.perspective(pMatrix, 45, 640.0/480.0, 0.1, 100.0);
+                mat4.perspective(pMatrix, fovy, aspect, near, far);
+                
                 gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
-
+				
                 var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
-                
-                
-                /*
+               
+               
                 mat4.identity(mvMatrix);
-                mat4.translate(mvMatrix, mvMatrix, [2.0, 0.0,-10.0]);
+                mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
+                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-0.4]);
                 mat4.rotate(mvMatrix, mvMatrix, 850, [1.0, 0.0, 0.0]);
-                mat4.scale(mvMatrix,mvMatrix,[4.0,4.0,4.0]);
 
 				gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
 				
-				sol.draw();
+				//sol.draw();
                 
                 mat4.identity(mvMatrix);
-                mat4.translate(mvMatrix, mvMatrix, [-5.0, 0.0,-10.0]);
+                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-1.0]);
                 mat4.rotate(mvMatrix, mvMatrix, 850, [1.0, 0.0, 0.0]);
                 mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 0.0, 1.0]);
                 t = t + 0.01;
 
                 gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
                
-                tierra.draw();*/
+                //tierra.draw();
                 
-
-                mat4.identity(mvMatrix);
-                mat4.translate(mvMatrix, mvMatrix, [2.0, 0.0,-15.0]);
-                mat4.rotate(mvMatrix, mvMatrix, 850, [1.0, 0.0, 0.0]);
-				mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 0.0, 1.0]);
-                t = t + 0.01;
-
-				gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
-				
-				supBarrido.draw();
+				supBarrido.draw(u_model_view_matrix);
                 
 
             }
