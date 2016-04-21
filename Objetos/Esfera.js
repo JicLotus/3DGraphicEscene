@@ -2,7 +2,7 @@
 function EsferaGrid (_radio) {
 
 	this.radio = _radio;
-	this.grilla = new VertexGrid(20,20);
+	this.grilla = new VertexGrid(40,40);
 
 	this.createUniformEsfera = function(){
 		

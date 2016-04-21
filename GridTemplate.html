@@ -10,6 +10,39 @@
 			textarea{ background-color: black; foreground-color: white;}
         </style>
 
+		<script type="text/javascript">
+			function myKeyPress(e){
+				var keynum;
+
+				if(window.event) { // IE                    
+				  keynum = e.keyCode;
+				} else if(e.which){ // Netscape/Firefox/Opera                   
+				  keynum = e.which;
+				}
+
+				//alert(String.fromCharCode(keynum));
+				
+				if(keynum==37)
+					left+=0.1;
+				else if(keynum==38)
+					right-=0.1;
+				else if(keynum==39)
+					left-=0.1;
+				else if(keynum==40)
+					right+=0.1;
+					
+			}
+		</script>
+		
+		<script type="text/javascript">
+			function ruedita(e){
+				if (e.wheelDelta==120)
+					upDown+=0.1;
+				else if (e.wheelDelta==-120)
+					upDown-=0.1;
+			}
+		</script>
+
         <script type="text/javascript" src="gl-matrix.js"></script>
         <script type="text/javascript" src="Curvas/Punto.js"></script>
         <script type="text/javascript" src="Curvas/Bazier.js"></script>
@@ -19,13 +52,15 @@
         <script type="text/javascript" src="Objetos/SupBarrido.js"></script>
         <!--
         Vertex shader
-
         El vertex shader define la posición y forma de cada vertice de cada polígono.
         --> 
         <script id="shader-vs" type="x-shader/x-vertex">
             // Los atributos son características propias de cada vertice.
             attribute vec3 aVertexPosition;
             attribute vec3 aVertexColor;
+            
+            attribute vec3 aVertexTextureColor;
+            attribute vec3 aVertexNormal;
 
             // Los uniforms son características propias de una etapa de dibujado completa.
             // Son comunes a todos los vertices involucrados en el dibujado.
@@ -70,7 +105,11 @@
                 glProgram = null,
                 fragmentShader = null,
                 vertexShader = null,
+                left=0.0;
+                right=0.0;
+                upDown=0.0;
                 t = 0.0;
+                xe=0.0;
                 fovy=45;
                 aspect=640.0/480.0;
                 near= 0.1;
@@ -199,13 +238,13 @@
             
             function setupBuffers()
             {
-               tierra = new EsferaGrid(0.1);
+               tierra = new EsferaGrid(4.0);
                tierra.inicializar();
                
-               sol = new EsferaGrid(0.1);
+               sol = new EsferaGrid(10);
                sol.inicializar();
                
-               supBarrido = new SupBarrido(2.0);
+               supBarrido = new SupBarrido(0.4);
                supBarrido.inicializar();               
             }
             
@@ -215,10 +254,14 @@
                 
                 var u_proj_matrix = gl.getUniformLocation(glProgram, "uPMatrix");
                 
-                //fovy+=0.01;
+                // Fovy y aspect definen el tamaño y la posicion de la ventana de recorte
+                // Near y Far especifican las distancias entre el punto de vista y los planos de recorte proximo y lejano
                 
                 // Preparamos una matriz de perspectiva.
                 mat4.perspective(pMatrix, fovy, aspect, near, far);
+				
+				mat4.translate(pMatrix, pMatrix, [0.0, right,upDown-2.0]);
+                mat4.rotate(pMatrix, pMatrix, left, [0.0, 1.0, 0.0]);
                 
                 gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 				
@@ -227,35 +270,33 @@
                
                 mat4.identity(mvMatrix);
                 mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
-                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-0.4]);
-                mat4.rotate(mvMatrix, mvMatrix, 850, [1.0, 0.0, 0.0]);
+                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-60.0]);
+                mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
 
 				gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
 				
-				//sol.draw();
+				sol.draw();
                 
                 mat4.identity(mvMatrix);
-                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-1.0]);
-                mat4.rotate(mvMatrix, mvMatrix, 850, [1.0, 0.0, 0.0]);
+                mat4.translate(mvMatrix, mvMatrix, [0.0, -6.0,0.0]);
+                mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
                 mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 0.0, 1.0]);
-                t = t + 0.01;
+                t = t + 0.001;
 
                 gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
                
-                //tierra.draw();
+                tierra.draw();
                 
 				supBarrido.draw(u_model_view_matrix);
-                
-
             }
 
         </script>
     </head>
-    <body onload="initWebGL()">
+    <body onload="initWebGL()" onkeydown="myKeyPress(event)" onwheel="ruedita(event)">
 		<center>
 			<h1>Sistemas Gráficos - 66.71</h1>
 			<h2>WebGL - Grilla de vértices</h2>
-			<canvas id="my-canvas" width="900" height="500">
+			<canvas id="my-canvas" width="900" height="500" >
 			Your browser does not support the HTML5 canvas element.
 			</scanvas>
 			
