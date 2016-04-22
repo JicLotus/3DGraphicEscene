@@ -1,8 +1,12 @@
 function SupBarrido (_radio) {
 
 	this.radio = _radio;
-	this.grilla = new VertexGrid(20,20);
-	
+	//El numero de columnas es el numero de puntos que tenga el perfil
+	this.grilla = new VertexGrid(200,20);
+	/*
+	this.tuboCentral = new CilindroGrid(0.1);
+	this.tuboCentral.inicializar();
+	*/
 	this.puntosPolinomio = [];
 	
 	this.cantidadTapas=50;
@@ -19,16 +23,70 @@ function SupBarrido (_radio) {
 		var altura=0;
 		var u=0;
 		
+		var xPol=0.0;
+		var yPol=0.0;
+		var zPol=0.0;
+		
+		var antY=0.0;
+		var antX=0.0;
+		var antZ=0.0;
+		var angle=0.0;
+		
+		var dirY =0.0;
+		var dirX= 0.0;
+		var dirZ= 0.0;
+		
+		var base= mat4.create();
+		
+		var posNew = [];
+		
+		var angle = 0.0;
+		
 		for (var j=0;j<this.grilla.rows;j++){
+			
+			xPol = this.puntosPolinomio[j].getX();
+			yPol = this.puntosPolinomio[j].getY();
+			zPol = this.puntosPolinomio[j].getZ();
+			
+			
+			angle += (2*Math.PI)/this.grilla.rows;//Math.atan(dirY/dirX);
+			v = [xPol, yPol, zPol];
+			vec3.normalize(v,v);
+			
+			v [4.0 * Math.cos(angle),4.0* Math.sin(angle),0];
+			vec3.normalize(v,v);
+			
+			dirX = v[0] - antX;
+			dirY = v[1] - antY;
+			dirZ = v[2] - antZ;
+				
+			antX = v[0];
+			antY = v[1];
+			antZ = v[2];
+			
+			
+			u=0.0;
+			
+			
+			
 			for (var i=0;i<this.grilla.cols;i++){
-					
+				
+				
 				u+=(2*Math.PI)/this.grilla.cols;                    											   	
 				x = this.radio * Math.cos(u);
 				y = this.radio * Math.sin(u);
 				
-				this.grilla.position_buffer.push(x);								
-				this.grilla.position_buffer.push(y);
-				this.grilla.position_buffer.push(altura);	
+				mat4.identity(base);
+				mat4.translate(base,base,v);
+				mat4.rotate(base, base, angle, [0.0, 0.0, 1.0]);
+				mat4.rotate(base, base, Math.PI/2, [1.0, 0.0, 0.0]);
+				
+				
+				vec3.transformMat4(posNew,[x,y,altura],base);
+				
+				this.grilla.position_buffer.push(posNew[0]);								
+				this.grilla.position_buffer.push(posNew[1]);
+				this.grilla.position_buffer.push(posNew[2]);	
 
 				this.grilla.color_buffer.push(0.0);
 				this.grilla.color_buffer.push(1.0);
@@ -86,7 +144,6 @@ function SupBarrido (_radio) {
 			
 			mat4.identity(base);
 			mat4.translate(base,mvMatrix,v);
-			
 			mat4.rotate(base, base, Math.PI/2, [1.0, 0.0, 0.0]);
 		
 			//mat4.rotate(base, base, angulo2, [0.0, 1.0, 0.0]);
@@ -102,12 +159,22 @@ function SupBarrido (_radio) {
 	this.draw = function(_matrizModeloVista){
 		mat4.identity(mvMatrix);
 		
-		mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,0.0]);
-        mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
+		//mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,0.0]);
+        //mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
+        
+        gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
+		this.grilla.draw();
+        
         //mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 0.0, 1.0]);
         
-        this.formarSupBarrido(mvMatrix,_matrizModeloVista);
+        //this.formarSupBarrido(mvMatrix,_matrizModeloVista);
         
+        /*
+        mat4.identity(mvMatrix);
+		mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,0.0]);
+        
+        gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
+        this.tuboCentral.draw();*/
 	}              
 
 	this.armarPolinomioBezier = function()
@@ -123,6 +190,7 @@ function SupBarrido (_radio) {
 		*/
 	   
 	   
+	   //SIempre pasar de a pocos puntos
 	   punto1 = new Punto(0.0,1.0,0.0);
 	   punto2 = new Punto(c,1.0,0.0);
 	   punto3 = new Punto(1.0,c,0.0);
@@ -142,9 +210,13 @@ function SupBarrido (_radio) {
 	   punto13 = new Punto(-1.0,0.0,0.0);
 	   punto14 = new Punto(-1.0,c,0.0);
 	   punto15 = new Punto(-1.0*c,1.0,0.0);
-	   punto16 = new Punto(0.0,1.0,0.0);*/
+	   punto16 = new Punto(0.0,1.0,0.0);
+	   */
+	   
 	   
 	   puntos = [punto1,punto2,punto3,punto4,punto5,punto6,punto7,punto8,punto9,punto10,punto11,punto12];//,punto13,punto14,punto15,punto16];
+	   
+	   
 	   
 	   bezier = new Bezier(puntos,200);
 	   bezier.bezier();

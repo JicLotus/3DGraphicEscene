@@ -66,7 +66,7 @@
             // Son comunes a todos los vertices involucrados en el dibujado.
             uniform mat4 uMVMatrix;
             uniform mat4 uPMatrix;
-
+      
             // Los varying son propiedades que toman valor para cada fragmento a partir
             // de interpolar linealmente entre los valores que se les asigna en cada 
             // vértice del polígono al cual pertenecen.
@@ -260,13 +260,15 @@
                 // Preparamos una matriz de perspectiva.
                 mat4.perspective(pMatrix, fovy, aspect, near, far);
 				
-				mat4.translate(pMatrix, pMatrix, [0.0, right,upDown-2.0]);
-                mat4.rotate(pMatrix, pMatrix, left, [0.0, 1.0, 0.0]);
+				mat4.translate(pMatrix, pMatrix, [0.0, right,upDown-5.0]);
+				mat4.rotate(pMatrix, pMatrix, left-0.5, [0.0, 1.0, 0.0]);
+				
                 
                 gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 				
                 var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
                
+				
                
                 mat4.identity(mvMatrix);
                 mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
