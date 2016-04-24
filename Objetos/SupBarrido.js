@@ -2,7 +2,7 @@ function SupBarrido (_radio) {
 
 	this.radio = _radio;
 	//El numero de columnas es el numero de puntos que tenga el perfil
-	this.grilla = new VertexGrid(200,20);
+	this.grilla = new VertexGrid(50,10);
 	/*
 	this.tuboCentral = new CilindroGrid(0.1);
 	this.tuboCentral.inicializar();
@@ -20,7 +20,7 @@ function SupBarrido (_radio) {
 		var y=0.0;
 		var z=0.0;
 		
-		var altura=0;
+		var altura=0.0;
 		var u=0;
 		
 		var xPol=0.0;
@@ -42,19 +42,31 @@ function SupBarrido (_radio) {
 		
 		var angle = 0.0;
 		
+		var a=0.0;
+		var sum=0.0;
+		
 		for (var j=0;j<this.grilla.rows;j++){
 			
 			xPol = this.puntosPolinomio[j].getX();
 			yPol = this.puntosPolinomio[j].getY();
 			zPol = this.puntosPolinomio[j].getZ();
 			
-			
-			angle += (2*Math.PI)/this.grilla.rows;//Math.atan(dirY/dirX);
 			v = [xPol, yPol, zPol];
-			vec3.normalize(v,v);
 			
-			v [4.0 * Math.cos(angle),4.0* Math.sin(angle),0];
+			/*
+			v = [sum, sum, 0];
+			sum+=0.1;
+			
+			
 			vec3.normalize(v,v);
+			*/
+			
+			
+			v = [1*Math.cos(a), 1* Math.sin(a), 0];
+			a+= (Math.PI*2)/this.grilla.rows;
+			
+			/*vec3.normalize(v,v);
+			*/
 			
 			dirX = v[0] - antX;
 			dirY = v[1] - antY;
@@ -64,13 +76,10 @@ function SupBarrido (_radio) {
 			antY = v[1];
 			antZ = v[2];
 			
-			
+			angle = Math.atan(dirY/dirX);
 			u=0.0;
-			
-			
-			
+	
 			for (var i=0;i<this.grilla.cols;i++){
-				
 				
 				u+=(2*Math.PI)/this.grilla.cols;                    											   	
 				x = this.radio * Math.cos(u);
@@ -78,11 +87,11 @@ function SupBarrido (_radio) {
 				
 				mat4.identity(base);
 				mat4.translate(base,base,v);
-				mat4.rotate(base, base, angle, [0.0, 0.0, 1.0]);
 				mat4.rotate(base, base, Math.PI/2, [1.0, 0.0, 0.0]);
+				mat4.rotate(base, base, a, [0.0, 1.0, 0.0]);
 				
 				
-				vec3.transformMat4(posNew,[x,y,altura],base);
+				vec3.transformMat4(posNew,[x,y,0.0],base);
 				
 				this.grilla.position_buffer.push(posNew[0]);								
 				this.grilla.position_buffer.push(posNew[1]);
@@ -90,13 +99,115 @@ function SupBarrido (_radio) {
 
 				this.grilla.color_buffer.push(0.0);
 				this.grilla.color_buffer.push(1.0);
-				this.grilla.color_buffer.push(1.0);
-				
+				this.grilla.color_buffer.push(1.0);	
 			}
+			
 		}	
 
 	}
 
+
+	this.draw = function(_matrizModeloVista){
+		mat4.identity(mvMatrix);
+		
+		mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
+        
+        gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
+		this.grilla.draw();
+        
+        //mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 0.0, 1.0]);
+        
+        //this.formarSupBarrido(mvMatrix,_matrizModeloVista);
+        
+        /*
+        mat4.identity(mvMatrix);
+		mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,0.0]);
+        
+        gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
+        this.tuboCentral.draw();*/
+	}              
+
+	this.armarPolinomioBezier = function()
+	{
+	   var c = 0.551915024494;
+	
+	/*
+	   punto1 = new Punto(-40.0,-40.0,0.0);
+	   punto2 = new Punto(-10.0,200.0,0.0);	
+	   punto3 = new Punto(10.0,-200.0,0.0);
+	   punto4 = new Punto(40.0,40.0,0.0);
+	   puntos = [punto1,punto2,punto3,punto4];
+		*/
+	   
+	  
+	   
+	   //SIempre pasar de a pocos puntos
+	   punto1 = new Punto(0.0,1.0,0.0);
+	   punto2 = new Punto(c,1.0,0.0);
+	   punto3 = new Punto(1.0,c,0.0);
+	   punto4 = new Punto(1.0,0.0,0.0);
+	   
+	   punto5 = new Punto(1.0,0.0,0.0);
+	   punto6 = new Punto(1.0,-1.0*c,0.0);
+	   punto7 = new Punto(c,-1.0,0.0);
+	   punto8 = new Punto(0.0,-1.0,0.0);
+	   
+	   
+	   punto9 = new Punto(0.0,-1.0,0.0);
+	   punto10 = new Punto(-1.0*c,-1.0,0.0);
+	   punto11 = new Punto(-1.0,-1.0*c,0.0);
+	   punto12 = new Punto(-1.0,0.0,0.0);
+	   
+	   /*
+	   punto13 = new Punto(-1.0,0.0,0.0);
+	   punto14 = new Punto(-1.0,c,0.0);
+	   punto15 = new Punto(-1.0*c,1.0,0.0);
+	   punto16 = new Punto(0.0,1.0,0.0);
+	   */
+	   
+	   
+	   puntos = [punto1,punto2,punto3,punto4,punto5,punto6,punto7,punto8,punto9,punto10,punto11,punto12];//,punto13,punto14,punto15,punto16];
+	   
+	   
+	   
+	   bezier = new Bezier(puntos,50);
+	   bezier.bezier();
+	   
+	   this.puntosPolinomio = bezier.getPuntosFinales();
+	}
+
+	this.inicializar = function()
+	{
+		this.armarPolinomioBezier();
+		this.createUniformEsfera();
+		this.grilla.createIndexBuffer();
+		this.grilla.setupWebGLBuffers();                   
+	}
+}
+
+
+			
+			
+			
+			/*
+			mat4.identity(base);
+			
+			//
+			//
+			mat4.rotate(base,base,angle,[1.0, 1.0, 1.0]);
+			//mat4.rotate(base,base,angle2,[1.0, 1.0, 1.0]);
+			
+			vec4.normalize([base[0],base[1],base[2],base[3]],[base[0],base[1],base[2],base[3]]);
+			vec4.normalize([base[4],base[5],base[6],base[7]],[base[4],base[5],base[6],base[7]]);
+			vec4.normalize([base[8],base[9],base[10],base[11]],[base[8],base[9],base[10],base[11]]);
+			vec4.normalize([base[12],base[13],base[14],base[15]],[base[12],base[13],base[14],base[15]]);
+			
+			v[0] = base[0] * v[0] + base[4] * v[1] + base[8] * v[2];
+			v[1] = base[1] * v[0] + base[5] * v[1] + base[9] * v[2];
+			v[2] = base[2] * v[0] + base[6] * v[1] + base[10] * v[2];*/
+			
+			
+			/*
 
 	this.formarSupBarrido = function(_mvMatrix,_matrizModeloVista){
 		
@@ -154,102 +265,4 @@ function SupBarrido (_radio) {
 
 		}
 	
-	}
-
-	this.draw = function(_matrizModeloVista){
-		mat4.identity(mvMatrix);
-		
-		//mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,0.0]);
-        //mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
-        
-        gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
-		this.grilla.draw();
-        
-        //mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 0.0, 1.0]);
-        
-        //this.formarSupBarrido(mvMatrix,_matrizModeloVista);
-        
-        /*
-        mat4.identity(mvMatrix);
-		mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,0.0]);
-        
-        gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
-        this.tuboCentral.draw();*/
-	}              
-
-	this.armarPolinomioBezier = function()
-	{
-	   var c = 0.551915024494;
-	
-	/*
-	   punto1 = new Punto(-40.0,-40.0,0.0);
-	   punto2 = new Punto(-10.0,200.0,0.0);	
-	   punto3 = new Punto(10.0,-200.0,0.0);
-	   punto4 = new Punto(40.0,40.0,0.0);
-	   puntos = [punto1,punto2,punto3,punto4];
-		*/
-	   
-	   
-	   //SIempre pasar de a pocos puntos
-	   punto1 = new Punto(0.0,1.0,0.0);
-	   punto2 = new Punto(c,1.0,0.0);
-	   punto3 = new Punto(1.0,c,0.0);
-	   punto4 = new Punto(1.0,0.0,0.0);
-	   
-	   punto5 = new Punto(1.0,0.0,0.0);
-	   punto6 = new Punto(1.0,-1.0*c,0.0);
-	   punto7 = new Punto(c,-1.0,0.0);
-	   punto8 = new Punto(0.0,-1.0,0.0);
-	   
-	   punto9 = new Punto(0.0,-1.0,0.0);
-	   punto10 = new Punto(-1.0*c,-1.0,0.0);
-	   punto11 = new Punto(-1.0,-1.0*c,0.0);
-	   punto12 = new Punto(-1.0,0.0,0.0);
-	   
-	   /*
-	   punto13 = new Punto(-1.0,0.0,0.0);
-	   punto14 = new Punto(-1.0,c,0.0);
-	   punto15 = new Punto(-1.0*c,1.0,0.0);
-	   punto16 = new Punto(0.0,1.0,0.0);
-	   */
-	   
-	   
-	   puntos = [punto1,punto2,punto3,punto4,punto5,punto6,punto7,punto8,punto9,punto10,punto11,punto12];//,punto13,punto14,punto15,punto16];
-	   
-	   
-	   
-	   bezier = new Bezier(puntos,200);
-	   bezier.bezier();
-	   
-	   this.puntosPolinomio = bezier.getPuntosFinales();
-	}
-
-	this.inicializar = function()
-	{
-		this.armarPolinomioBezier();
-		this.createUniformEsfera();
-		this.grilla.createIndexBuffer();
-		this.grilla.setupWebGLBuffers();                   
-	}
-}
-
-
-			
-			
-			
-			/*
-			mat4.identity(base);
-			
-			//
-			//
-			mat4.rotate(base,base,angle,[1.0, 1.0, 1.0]);
-			//mat4.rotate(base,base,angle2,[1.0, 1.0, 1.0]);
-			
-			vec4.normalize([base[0],base[1],base[2],base[3]],[base[0],base[1],base[2],base[3]]);
-			vec4.normalize([base[4],base[5],base[6],base[7]],[base[4],base[5],base[6],base[7]]);
-			vec4.normalize([base[8],base[9],base[10],base[11]],[base[8],base[9],base[10],base[11]]);
-			vec4.normalize([base[12],base[13],base[14],base[15]],[base[12],base[13],base[14],base[15]]);
-			
-			v[0] = base[0] * v[0] + base[4] * v[1] + base[8] * v[2];
-			v[1] = base[1] * v[0] + base[5] * v[1] + base[9] * v[2];
-			v[2] = base[2] * v[0] + base[6] * v[1] + base[10] * v[2];*/
+	}*/
