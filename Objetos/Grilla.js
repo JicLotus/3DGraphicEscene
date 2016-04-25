@@ -20,7 +20,7 @@ function VertexGrid (_rows, _cols) {
 					this.index_buffer.push(this.cols-1);
 					this.index_buffer.push(0);
 							             
-							 var indice=0;                                          
+					var indice=0;                                          
                       for (var i=0;i<this.rows-1;i++)
                       {
 					
@@ -119,9 +119,9 @@ function VertexGrid (_rows, _cols) {
                 }
                 
                 this.inicializar = function(){
-						this.createUniformPlaneGrid();
+					this.createUniformPlaneGrid();
               		this.createIndexBuffer();
-                  this.setupWebGLBuffers();                
+					this.setupWebGLBuffers();                
                 }
                 
             }

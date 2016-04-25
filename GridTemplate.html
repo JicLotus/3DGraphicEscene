@@ -49,7 +49,9 @@
         <script type="text/javascript" src="Objetos/Grilla.js"></script>
         <script type="text/javascript" src="Objetos/Esfera.js"></script>
         <script type="text/javascript" src="Objetos/Cilindro.js"></script>
-        <script type="text/javascript" src="Objetos/SupBarrido.js"></script>
+        <script type="text/javascript" src="Objetos/EstacionEspacial.js"></script>
+        <script type="text/javascript" src="Objetos/TubosEstacionEspacial.js"></script>
+        
         <!--
         Vertex shader
         El vertex shader define la posición y forma de cada vertice de cada polígono.
@@ -246,8 +248,10 @@
                sol = new EsferaGrid(10);
                sol.inicializar();
                
-               supBarrido = new SupBarrido(0.4);
-               supBarrido.inicializar();               
+               estacionEspacial = new EstacionEspacial(0.4);
+               estacionEspacial.inicializar();
+               
+          
             }
             
             function drawScene()
@@ -275,6 +279,7 @@
 				up = [1,1,1];
 				center = [1,1,1];
 				mat4.lookAt(mvMatrix, eye, center, up);*/
+				
 				mat4.translate(mvMatrix, mvMatrix, [0.0, right,upDown-5.0]);
 				mat4.rotate(mvMatrix, mvMatrix, left-0.5, [0.0, 1.0, 0.0]);
 				
@@ -282,9 +287,7 @@
 				
 				
                 var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
-               
-				
-               
+             
                 mat4.identity(mvMatrix);
                 mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
                 mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-60.0]);
@@ -304,7 +307,8 @@
                
                 tierra.draw();
                 
-				supBarrido.draw(u_model_view_matrix);
+				estacionEspacial.draw(u_model_view_matrix);
+				
             }
 
         </script>
@@ -313,7 +317,7 @@
 		<center>
 			<h1>Sistemas Gráficos - 66.71</h1>
 			<h2>WebGL - Grilla de vértices</h2>
-			<canvas id="my-canvas" width="900" height="500" >
+			<canvas id="my-canvas" width="1024" height="800" >
 			Your browser does not support the HTML5 canvas element.
 			</scanvas>
 			
