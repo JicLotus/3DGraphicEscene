@@ -3,13 +3,14 @@ function EstacionEspacial (_radio) {
 	this.radio = _radio;
 	
 	//El numero de columnas es el numero de puntos que tenga el perfil
-	this.grilla = new VertexGrid(20,10);
+	this.grilla = new VertexGrid(50,52);
+	this.tubo = new CilindroGrid(0.09,4.0);
+	this.tubo.inicializar();
+	this.tubosCentral = new TubosEstacionEspacial(this.tubo);
+	this.panelSolar = new PanelSolar(this.tubo);
 	
-	this.tubosCentral = new TubosEstacionEspacial();
 	this.puntosPolinomio = [];
 	
-	this.cantidadTapas=50;
-
 	this.crearEstacionEspacial = function(){
 		
 		this.grilla.position_buffer = [];
@@ -31,12 +32,15 @@ function EstacionEspacial (_radio) {
 			angle+= (Math.PI*1.5)/this.grilla.rows;
 			u=0.0;
 	
-			for (var i=0;i<this.grilla.cols;i++){
+			for (var i=0;i<this.grilla.cols-2;i++){
 				
 				u+=(2.23*Math.PI)/this.grilla.cols;                    											   	
 				x = this.radio * Math.cos(u);
 				y = this.radio * Math.sin(u);
 				
+				x = this.puntosPolinomio[i].getX();
+				y = this.puntosPolinomio[i].getY();
+		
 				mat4.identity(base);
 				mat4.translate(base,base,v);
 				mat4.rotate(base, base, Math.PI/2, [1.0, 0.0, 0.0]);
@@ -53,12 +57,45 @@ function EstacionEspacial (_radio) {
 				this.grilla.color_buffer.push(1.0);	
 			}
 			
+				y+=0.5;
+				mat4.identity(base);
+				mat4.translate(base,base,v);
+				mat4.rotate(base, base, Math.PI/2, [1.0, 0.0, 0.0]);
+				mat4.rotate(base, base, angle, [0.0, 1.0, 0.0]);
+			
+				vec3.transformMat4(posNew,[x,y,0.0],base);
+				
+				this.grilla.position_buffer.push(posNew[0]);								
+				this.grilla.position_buffer.push(posNew[1]);
+				this.grilla.position_buffer.push(posNew[2]);	
+
+				this.grilla.color_buffer.push(0.0);
+				this.grilla.color_buffer.push(1.0);
+				this.grilla.color_buffer.push(1.0);	
+				
+				x+=0.5;
+				mat4.identity(base);
+				mat4.translate(base,base,v);
+				mat4.rotate(base, base, Math.PI/2, [1.0, 0.0, 0.0]);
+				mat4.rotate(base, base, angle, [0.0, 1.0, 0.0]);
+			
+				vec3.transformMat4(posNew,[x,y,0.0],base);
+				
+				this.grilla.position_buffer.push(posNew[0]);								
+				this.grilla.position_buffer.push(posNew[1]);
+				this.grilla.position_buffer.push(posNew[2]);	
+
+				this.grilla.color_buffer.push(0.0);
+				this.grilla.color_buffer.push(1.0);
+				this.grilla.color_buffer.push(1.0);	
+			
 		}	
 
 	}
 
 
 	this.draw = function(_matrizModeloVista){
+		
 		mat4.identity(mvMatrix);
 		
 		mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
@@ -68,18 +105,49 @@ function EstacionEspacial (_radio) {
 		mat4.rotate(mvMatrix, mvMatrix, -Math.PI/2, [1.0, 0.0, 0.0]);
 		this.tubosCentral.dibujar(_matrizModeloVista);
 		
+		this.dibujarPaneles(mvMatrix,_matrizModeloVista,1.5);
+		this.dibujarPaneles(mvMatrix,_matrizModeloVista,-5.0);
+		
 		
 	}              
 
+
+
+	this.dibujarPaneles = function(mvMatrix,_matrizModeloVista,_yPosition)
+	{
+		matrizPanelSolar = mat4.create();
+		mat4.identity(matrizPanelSolar);
+		mat4.scale(matrizPanelSolar,mvMatrix,[0.5,0.5,0.5]);
+		mat4.rotate(matrizPanelSolar,matrizPanelSolar,Math.PI/3,[0,1,0]);
+		mat4.translate(matrizPanelSolar,matrizPanelSolar,[-0.1,_yPosition,-0.3]);
+		
+		for (var i =0;i<4;i++){
+			mat4.translate(matrizPanelSolar,matrizPanelSolar,[0.0,0.8,0.0]);
+			this.panelSolar.dibujar(matrizPanelSolar,_matrizModeloVista);
+		}
+		
+		
+		mat4.identity(matrizPanelSolar);
+		mat4.scale(matrizPanelSolar,mvMatrix,[0.5,0.5,0.5]);
+		mat4.rotate(matrizPanelSolar,matrizPanelSolar,1.2*Math.PI,[0,1,0]);
+		mat4.translate(matrizPanelSolar,matrizPanelSolar,[-0.1,_yPosition,-0.3]);
+		
+		for (var i =0;i<4;i++){
+			mat4.translate(matrizPanelSolar,matrizPanelSolar,[0.0,0.8,0.0]);
+			this.panelSolar.dibujar(matrizPanelSolar,_matrizModeloVista);
+		}
+		
+	}
+
+
+
 	this.armarPolinomioBezier = function()
 	{
-	   var c = 0.551915024494;
-	
 	   //Siempre pasar de a pocos puntos
-	   punto1 = new Punto(0.0,1.0,0.0);
-	   punto2 = new Punto(c,1.0,0.0);
-	   punto3 = new Punto(1.0,c,0.0);
-	   punto4 = new Punto(1.0,0.0,0.0);
+	   punto1 = new Punto(0.8,-0.3,0.0);
+	   punto2 = new Punto(0.8,-0.6,0.0);
+	   punto3 = new Punto(0.1,-0.6,0.0);
+	   punto4 = new Punto(0.1,-0.3,0.0);
 	   
 	   puntos = [punto1,punto2,punto3,punto4];
 	   
@@ -98,114 +166,3 @@ function EstacionEspacial (_radio) {
 	}
 }
 
-		
-/*
-mat4.identity(base);
-
-//
-//
-mat4.rotate(base,base,angle,[1.0, 1.0, 1.0]);
-//mat4.rotate(base,base,angle2,[1.0, 1.0, 1.0]);
-
-vec4.normalize([base[0],base[1],base[2],base[3]],[base[0],base[1],base[2],base[3]]);
-vec4.normalize([base[4],base[5],base[6],base[7]],[base[4],base[5],base[6],base[7]]);
-vec4.normalize([base[8],base[9],base[10],base[11]],[base[8],base[9],base[10],base[11]]);
-vec4.normalize([base[12],base[13],base[14],base[15]],[base[12],base[13],base[14],base[15]]);
-
-v[0] = base[0] * v[0] + base[4] * v[1] + base[8] * v[2];
-v[1] = base[1] * v[0] + base[5] * v[1] + base[9] * v[2];
-v[2] = base[2] * v[0] + base[6] * v[1] + base[10] * v[2];*/
-
-
-
-
-/*
- var xPol=0.0;
-		var yPol=0.0;
-		var zPol=0.0;
-		
-		var antY=0.0;
-		var antX=0.0;
-		var antZ=0.0;
-		
-		
-		var dirY =0.0;
-		var dirX= 0.0;
-		var dirZ= 0.0; 
- 
-			xPol = this.puntosPolinomio[j].getX();
-			yPol = this.puntosPolinomio[j].getY();
-			zPol = this.puntosPolinomio[j].getZ();
-			
-			v = [xPol, yPol, zPol];
-			vec3.normalize(v,v);
-						
-			dirX = v[0] - antX;
-			dirY = v[1] - antY;
-			dirZ = v[2] - antZ;
-				
-			antX = v[0];
-			antY = v[1];
-			antZ = v[2];
-			
-			angle = Math.atan(dirY/dirX);
-
-
-
-	this.formarSupBarrido = function(_mvMatrix,_matrizModeloVista){
-		
-		var base= mat4.create();
-		var xPol=0.0;
-		var yPol=0.0;
-		var zPol=0.0;
-		
-		var antY=0.0;
-		var antX=0.0;
-		var antZ=0.0;
-		var angle=0.0;
-		var angle2=0.0;
-		
-		var dirY =0.0;
-		var dirX= 0.0;
-		var dirZ= 0.0;
-		var hip = 0.0;
-		
-		var possCurva=0;
-		var angulorot=0;
-		
-		for (var i=0;i<this.cantidadTapas;i++){		
-		
-			xPol = this.puntosPolinomio[possCurva].getX();
-			yPol = this.puntosPolinomio[possCurva].getY();
-			zPol = this.puntosPolinomio[possCurva].getZ();
-			
-			v = [xPol, yPol, zPol];
-			vec3.normalize(v,v);
-			
-			possCurva += Math.round(this.puntosPolinomio.length/this.cantidadTapas);
-		
-			dirX = v[0] - antX;
-			dirY = v[1] - antY;
-			dirZ = v[2] - antZ;
-				
-			antX = v[0];
-			antY = v[1];
-			antZ = v[2];
-			
-			angle = Math.atan(dirY/dirX);
-			hip = Math.hypot(dirX,dirY);
-			angle2 = Math.atan(dirZ/hip);
-			
-			mat4.identity(base);
-			mat4.translate(base,mvMatrix,v);
-			mat4.rotate(base, base, Math.PI/2, [1.0, 0.0, 0.0]);
-		
-			//mat4.rotate(base, base, angulo2, [0.0, 1.0, 0.0]);
-			angulorot+=(2.0*Math.PI)/this.cantidadTapas;
-			
-			gl.uniformMatrix4fv(_matrizModeloVista, false, base);
-			this.grilla.draw();
-
-		}
-	
-	}*/

@@ -51,6 +51,7 @@
         <script type="text/javascript" src="Objetos/Cilindro.js"></script>
         <script type="text/javascript" src="Objetos/EstacionEspacial.js"></script>
         <script type="text/javascript" src="Objetos/TubosEstacionEspacial.js"></script>
+        <script type="text/javascript" src="Objetos/PanelSolar.js"></script>
         
         <!--
         Vertex shader
@@ -242,7 +243,7 @@
             
             function setupBuffers()
             {
-               tierra = new EsferaGrid(4.0);
+               tierra = new EsferaGrid(8.0);
                tierra.inicializar();
                
                sol = new EsferaGrid(10);
@@ -288,29 +289,38 @@
 				
                 var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
              
-                mat4.identity(mvMatrix);
-                mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
-                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-60.0]);
-                mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
 
-				gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
+                dibujarSol(u_model_view_matrix);
+				dibujarTierra(u_model_view_matrix);
+				estacionEspacial.draw(u_model_view_matrix);
 				
-				sol.draw();
-                
-                mat4.identity(mvMatrix);
-                mat4.translate(mvMatrix, mvMatrix, [0.0, -6.0,0.0]);
+            }
+            
+            function dibujarTierra(_u_model_view_matrix)
+            {
+				mat4.identity(mvMatrix);
+                mat4.translate(mvMatrix, mvMatrix, [0.0, -14.0,0.0]);
                 mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
                 mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 0.0, 1.0]);
                 t = t + 0.001;
 
-                gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
+                gl.uniformMatrix4fv(_u_model_view_matrix, false, mvMatrix);
                
                 tierra.draw();
-                
-				estacionEspacial.draw(u_model_view_matrix);
-				
-            }
+			}
+			
+			function dibujarSol(_u_model_view_matrix)
+			{
+				mat4.identity(mvMatrix);
+                mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
+                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-60.0]);
+                mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
 
+				gl.uniformMatrix4fv(_u_model_view_matrix, false, mvMatrix);
+				
+				sol.draw();	
+			}
+			
         </script>
     </head>
     <body onload="initWebGL()" onkeydown="myKeyPress(event)" onwheel="ruedita(event)">
