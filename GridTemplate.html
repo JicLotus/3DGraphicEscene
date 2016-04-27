@@ -44,6 +44,7 @@
 		</script>
 
         <script type="text/javascript" src="gl-matrix.js"></script>
+        <script type="text/javascript" src="Objetos/Turbina.js"></script>
         <script type="text/javascript" src="Curvas/Punto.js"></script>
         <script type="text/javascript" src="Curvas/Bazier.js"></script>
         <script type="text/javascript" src="Objetos/Grilla.js"></script>
@@ -251,7 +252,9 @@
                
                estacionEspacial = new EstacionEspacial(0.4);
                estacionEspacial.inicializar();
-               
+
+               turbina = new Turbina();
+               turbina.inicializar();            
           
             }
             
@@ -290,10 +293,26 @@
                 var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
              
 
+                dibujarTurbina(u_model_view_matrix);
                 dibujarSol(u_model_view_matrix);
 				dibujarTierra(u_model_view_matrix);
 				estacionEspacial.draw(u_model_view_matrix);
 				
+            }
+
+            function dibujarTurbina(_u_model_view_matrix){
+
+                mat4.identity(mvMatrix);
+                mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 1.0, 0.0]);
+                mat4.rotate(mvMatrix, mvMatrix, t*10, [0.0, 0.0, 1.0]);
+                
+                mat4.scale(mvMatrix,mvMatrix,[0.5,0.5,1.5]);
+                
+
+                gl.uniformMatrix4fv(_u_model_view_matrix, false, mvMatrix);
+                           
+                turbina.draw();
+
             }
             
             function dibujarTierra(_u_model_view_matrix)
