@@ -9,6 +9,11 @@ function EstacionEspacial (_radio) {
 	
 	this.centroBaseEspacialInterno = new CentroBaseEspacialInterno();
 	this.centroBaseEspacialExterno = new CentroBaseEspacialExterno();
+	
+	this.curvasCorazonEstacionEspacial = new CurvasCorazonEstacionEspacial();
+	this.corazonEstacionEspacial = new CorazonNaveEspacial(this.curvasCorazonEstacionEspacial);
+	
+	
 	this.tapaPrincipal;
 	this.tapaSecundaria;
 	
@@ -18,9 +23,18 @@ function EstacionEspacial (_radio) {
 		
 		mat4.identity(mvMatrix);
 		
+
 		mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
 		gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
 		this.centroBaseEspacialInterno.draw();
+		
+		
+		m = mat4.create();
+		mat4.identity(m);
+		mat4.scale(m,mvMatrix,[4.0,4.0,0.8]);
+		mat4.translate(m,m,[0.0,0.0,-1.2]);
+		gl.uniformMatrix4fv(_matrizModeloVista, false, m);
+		this.corazonEstacionEspacial.draw();
 		
 		gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
 		this.centroBaseEspacialExterno.draw();
@@ -77,6 +91,8 @@ function EstacionEspacial (_radio) {
 		
 		this.tapaSecundaria = new TapaCentroBaseEspacial(this.centroBaseEspacialInterno.getTapas2(),this.centroBaseEspacialExterno.getTapas2());
 		this.tapaSecundaria.inicializar();
+		
+		this.corazonEstacionEspacial.inicializar();
 	}
 }
 
