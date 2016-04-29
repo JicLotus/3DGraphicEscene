@@ -115,7 +115,7 @@ function VertexGrid (_rows, _cols) {
 
                     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
-                    gl.drawElements(gl.LINE_STRIP, this.cantidadVertices, gl.UNSIGNED_SHORT, 0);
+                    gl.drawElements(gl.TRIANGLE_STRIP, this.cantidadVertices, gl.UNSIGNED_SHORT, 0);
                 }
                 
                 this.inicializar = function(){
