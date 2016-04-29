@@ -60,6 +60,9 @@
         <script type="text/javascript" src="Objetos/CentroBaseEspacialExterno.js"></script>
         <script type="text/javascript" src="Objetos/TapaCentroBaseEspacial.js"></script>
         <script type="text/javascript" src="Objetos/CorazonNaveEspacial.js"></script>
+        <script type="text/javascript" src="Objetos/NaveEspacial.js"></script>
+        <script type="text/javascript" src="Objetos/Sol.js"></script>
+        <script type="text/javascript" src="Objetos/Tierra.js"></script>
         
         <!--
         Vertex shader
@@ -131,8 +134,8 @@
 
             var mvMatrix = mat4.create();
             var pMatrix = mat4.create();
-
-
+            
+            
              // SHADERS FUNCTION
             function getShader(gl, id) {
                 var shaderScript, src, currentChild, shader;
@@ -251,32 +254,26 @@
             
             function setupBuffers()
             {
-               tierra = new EsferaGrid(8.0);
-               tierra.inicializar();
+               tierra = new Tierra();
+				sol = new Sol();
                
-               sol = new EsferaGrid(10);
-               sol.inicializar();
-               
-               estacionEspacial = new EstacionEspacial(0.4);
+               estacionEspacial = new EstacionEspacial();
                estacionEspacial.inicializar();
 
-               turbina = new Turbina();
-               turbina.inicializar();            
-          
+               naveEspacial = new NaveEspacial();
             }
             
             function drawScene()
             {
+				
                 gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
                 
                 var u_proj_matrix = gl.getUniformLocation(glProgram, "uPMatrix");
                 
                 // Fovy y aspect definen el tamaño y la posicion de la ventana de recorte
                 // Near y Far especifican las distancias entre el punto de vista y los planos de recorte proximo y lejano
-                
                 // Preparamos una matriz de perspectiva.
                 mat4.perspective(pMatrix, fovy, aspect, near, far);
-				
 				
                 gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 				
@@ -284,113 +281,45 @@
 				var u_vista_matrix = gl.getUniformLocation(glProgram, "uVistaMatrix");
 				
 				
+				//////////CAMARA
+				////////////////////////////////////////////////////////////////
 				mat4.identity(mvMatrix);
+				var matrizTransformacion = estacionEspacial.getMatriz();
 				
-				/*eye = [1,1,1];
-				up = [1,1,1];
-				center = [1,1,1];
-				mat4.lookAt(mvMatrix, eye, center, up);*/
+				// Y es el vector de arriba
+				eye = [10.0,0.0,0.0]; // Posicion de la camara en el mundo
+				mat4.rotate(matrizTransformacion, matrizTransformacion, right, [0.0, 0.0, 1.0]);
+				mat4.rotate(matrizTransformacion, matrizTransformacion, upDown, [0.0, 1.0, 0.0]);
+				vec3.transformMat4(eye,eye,matrizTransformacion);
 				
-				mat4.translate(mvMatrix, mvMatrix, [0.0, right,upDown-5.0]);
-				mat4.rotate(mvMatrix, mvMatrix, left-0.5, [0.0, 1.0, 0.0]);
+				center = [0.0,0.0,0.0]; //Punto al cual mira la camara al mundo
+				
+				vec3.transformMat4(center,center,matrizTransformacion);
+				
+				up = [0.0,1.0,0.0];
+				mat4.lookAt(mvMatrix, eye, center, up);
+				
+				//mat4.translate(mvMatrix, mvMatrix, [0.0, right,upDown-5.0]);
+				//mat4.rotate(mvMatrix, mvMatrix, left-0.5, [0.0, 1.0, 0.0]);
 				
 				gl.uniformMatrix4fv(u_vista_matrix, false, mvMatrix);
+				////////////////////////////////////////////////////////////////
 				
 				
                 var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
              
 
-                dibujarTurbina(u_model_view_matrix);
-                dibujarSol(u_model_view_matrix);
-				dibujarTierra(u_model_view_matrix);
+                naveEspacial.draw(u_model_view_matrix);
+                sol.draw(u_model_view_matrix);
+				tierra.draw(u_model_view_matrix);
 				estacionEspacial.draw(u_model_view_matrix);
-				
             }
-
-            function dibujarTurbina(_u_model_view_matrix){
-
-                mat4.identity(mvMatrix);
-                mat4.translate(mvMatrix, mvMatrix, [4.0, 0.0, 0.0])
-                mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [0.0, 1.0, 0.0]);
-                mat4.rotate(mvMatrix, mvMatrix, t*10, [0.0, 0.0, 1.0]);
-               
-                mat4.scale(mvMatrix,mvMatrix,[0.5,0.5,1.5]);
-                
-
-                gl.uniformMatrix4fv(_u_model_view_matrix, false, mvMatrix);
-                           
-                turbina.draw();
-
-                mat4.identity(mvMatrix);
-                mat4.translate(mvMatrix, mvMatrix, [4.0, 0.0, 0.0])
-                mat4.rotate(mvMatrix, mvMatrix, Math.PI, [0.0, 1.0, 0.0]);
-                mat4.rotate(mvMatrix, mvMatrix, t*10, [0.0, 0.0, 1.0]);
-                
-                mat4.scale(mvMatrix,mvMatrix,[0.5,0.5,1.5]);
-                
-
-                gl.uniformMatrix4fv(_u_model_view_matrix, false, mvMatrix);
-                           
-                turbina.draw();
-
-                mat4.identity(mvMatrix);
-                mat4.translate(mvMatrix, mvMatrix, [4.0, 0.0, 0.0])
-                mat4.rotate(mvMatrix, mvMatrix, 3*Math.PI/2, [0.0, 1.0, 0.0]);
-                mat4.rotate(mvMatrix, mvMatrix, t*10, [0.0, 0.0, 1.0]);
-               
-                mat4.scale(mvMatrix,mvMatrix,[0.5,0.5,1.5]);
-                
-
-                gl.uniformMatrix4fv(_u_model_view_matrix, false, mvMatrix);
-                           
-                turbina.draw();
-
-                mat4.identity(mvMatrix);
-                mat4.translate(mvMatrix, mvMatrix, [4.0, 0.0, 0.0])
-                mat4.rotate(mvMatrix, mvMatrix, 2*Math.PI, [0.0, 1.0, 0.0]);
-                mat4.rotate(mvMatrix, mvMatrix, t*10, [0.0, 0.0, 1.0]);
-                
-                mat4.scale(mvMatrix,mvMatrix,[0.5,0.5,1.5]);
-                
-
-                gl.uniformMatrix4fv(_u_model_view_matrix, false, mvMatrix);
-                           
-                turbina.draw();
-
-            }
-            
-            function dibujarTierra(_u_model_view_matrix)
-            {
-				mat4.identity(mvMatrix);
-                mat4.translate(mvMatrix, mvMatrix, [0.0, -14.0,0.0]);
-                mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
-                mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 0.0, 1.0]);
-                t = t + 0.001;
-
-                gl.uniformMatrix4fv(_u_model_view_matrix, false, mvMatrix);
-               
-                tierra.draw();
-			}
-			
-			function dibujarSol(_u_model_view_matrix)
-			{
-				mat4.identity(mvMatrix);
-                mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
-                mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0,-60.0]);
-                mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
-
-				gl.uniformMatrix4fv(_u_model_view_matrix, false, mvMatrix);
-				
-				sol.draw();	
-			}
 			
         </script>
     </head>
     <body onload="initWebGL()" onkeydown="myKeyPress(event)" onwheel="ruedita(event)">
 		<center>
-			<h1>Sistemas Gráficos - 66.71</h1>
-			<h2>WebGL - Grilla de vértices</h2>
-			<canvas id="my-canvas" width="1024" height="800" >
+			<canvas id="my-canvas" width="1024" height="600" >
 			Your browser does not support the HTML5 canvas element.
 			</scanvas>
 			

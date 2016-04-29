@@ -1,7 +1,5 @@
-function EstacionEspacial (_radio) {
+function EstacionEspacial () {
 
-	this.radio = _radio;
-	
 	this.tubo = new CilindroGrid(0.09,4.0);
 	this.tubo.inicializar();
 	this.tubosCentral = new TubosEstacionEspacial(this.tubo);
@@ -19,12 +17,16 @@ function EstacionEspacial (_radio) {
 	
 	this.puntosTapas =[];
 	
+	var matrizTransformacion = mat4.create();
+	
 	this.draw = function(_matrizModeloVista){
 		
 		mat4.identity(mvMatrix);
-		
 
 		mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
+		
+		matrizTransformacion = mvMatrix;
+		
 		gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
 		this.centroBaseEspacialInterno.draw();
 		
@@ -94,5 +96,11 @@ function EstacionEspacial (_radio) {
 		
 		this.corazonEstacionEspacial.inicializar();
 	}
+	
+	this.getMatriz = function()
+	{
+		return matrizTransformacion;
+	}
+	
 }
 
