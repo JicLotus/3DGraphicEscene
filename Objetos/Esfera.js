@@ -1,20 +1,15 @@
 
-function EsferaGrid (_radio) {
+function EsferaGrid () {
 
-	this.radio = _radio;
 	this.grilla = new VertexGrid(40,40);
 
 	/*
 		Este método crea los puntos que componen la esfera
 	*/
-
 	this.createUniformEsfera = function(){
 		
 		this.grilla.position_buffer = [];
 		this.grilla.color_buffer = [];
-
-		//No se esta usando			
-		var cte=((this.grilla.cols-1.0)/2.0); 
 		
 		var x=0.0;
 		var y=0.0;
@@ -26,15 +21,15 @@ function EsferaGrid (_radio) {
 		for (var j=0;j<this.grilla.rows;j++){
 			
 			//define los saltos en altura
-			v+=(Math.PI)/this.grilla.rows;
+			v+=(2*Math.PI)/this.grilla.rows;
 			
 			for (var i=0;i<this.grilla.cols;i++){				
 				//define el paso	
 				u+=(2*Math.PI)/this.grilla.cols;                    											   	
 					
-				x = this.radio * Math.cos(v) * Math.cos(u);
-				y = this.radio * Math.cos(v) * Math.sin(u);  									
-				z = this.radio * Math.sin(v);
+				x =  Math.cos(v) * Math.cos(u);
+				y =  Math.cos(v) * Math.sin(u);  									
+				z =  Math.sin(v);
 
 				this.grilla.position_buffer.push(x);								
 				this.grilla.position_buffer.push(y);

@@ -23,9 +23,12 @@ function EstacionEspacial () {
 		
 		mat4.identity(mvMatrix);
 
+		mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
+		mat4.translate(mvMatrix, mvMatrix, [40.0, 3.0,0.0]);
 		mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
+		mat4.scale(mvMatrix,mvMatrix,[0.1,0.1,0.1]);
 		
-		matrizTransformacion = mvMatrix;
+		mat4.copy(matrizTransformacion,mvMatrix);
 		
 		gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
 		this.centroBaseEspacialInterno.draw();
