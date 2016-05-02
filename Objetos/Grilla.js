@@ -1,3 +1,5 @@
+
+
 function VertexGrid (_rows, _cols) {
                 this.cols = _cols;
                 this.rows = _rows;
@@ -6,10 +8,16 @@ function VertexGrid (_rows, _cols) {
 
                 this.position_buffer = null;
                 this.color_buffer = null;
+				this.texture_coord_buffer = null;
 
                 this.webgl_position_buffer = null;
                 this.webgl_color_buffer = null;
+                this.webgl_texture_coord_buffer = null;
+                
                 this.webgl_index_buffer = null;
+
+				this.texture = null;
+
 
                 this.createIndexBuffer = function(){
                 	  
@@ -92,12 +100,19 @@ function VertexGrid (_rows, _cols) {
                     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
                     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);   
 
+					/*
+					this.webgl_texture_coord_buffer = gl.createBuffer();
+					gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+					gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coord_buffer), gl.STATIC_DRAW);
+*/
+
+
                     // Repetimos los pasos 1. 2. y 3. para la información de los índices
                     // Notar que esta vez se usa ELEMENT_ARRAY_BUFFER en lugar de ARRAY_BUFFER.
                     // Notar también que se usa un array de enteros en lugar de floats.
                     this.webgl_index_buffer = gl.createBuffer();
                     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
-                    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
+                    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);					
                 }
 
 
@@ -108,6 +123,13 @@ function VertexGrid (_rows, _cols) {
                     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
                     gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
 
+/*
+					var vertexTextureAttribute = gl.getAttribLocation(glProgram, "aTextureCoord");
+					gl.enableVertexAttribArray(vertexTextureAttribute);
+					gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+                    gl.vertexAttribPointer(vertexTextureAttribute, 2, gl.FLOAT, false, 0, 0);
+*/
+
                     var vertexColorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
                     gl.enableVertexAttribArray(vertexColorAttribute);
                     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
@@ -115,9 +137,26 @@ function VertexGrid (_rows, _cols) {
 
                     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
-                    gl.drawElements(gl.TRIANGLE_STRIP, this.cantidadVertices, gl.UNSIGNED_SHORT, 0);
+                    gl.drawElements(gl.LINE_STRIP, this.cantidadVertices, gl.UNSIGNED_SHORT, 0);
                 }
                 
+                
+				this.initTexture = function(texture_file){
+					var aux_texture = gl.createTexture();
+					this.texture = aux_texture;
+					this.texture.image = new Image();
+
+					this.texture.image.onload = function () {
+						   handleLoadedTexture()
+					}
+					this.texture.image.src = texture_file;
+				}
+				
+				this.getTexture = function()
+				{
+					return this.texture;
+				}
+				
                 this.inicializar = function(){
 					this.createUniformPlaneGrid();
               		this.createIndexBuffer();

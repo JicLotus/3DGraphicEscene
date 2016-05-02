@@ -50,6 +50,10 @@
         <script type="text/javascript" src="Curvas/CurvasExternasCentroEstacionEspacial.js"></script>
         <script type="text/javascript" src="Curvas/CurvasInternasCentroEstacionEspacial.js"></script>
         <script type="text/javascript" src="Curvas/CurvasCorazonEstacionEspacial.js"></script>
+        <script type="text/javascript" src="Curvas/CurvasManguera.js"></script>
+        <script type="text/javascript" src="Curvas/BSpline.js"></script>
+        <script type="text/javascript" src="Curvas/ContenedorPunto.js"></script>
+        
         <script type="text/javascript" src="Objetos/Grilla.js"></script>
         <script type="text/javascript" src="Objetos/Esfera.js"></script>
         <script type="text/javascript" src="Objetos/Cilindro.js"></script>
@@ -63,6 +67,8 @@
         <script type="text/javascript" src="Objetos/NaveEspacial.js"></script>
         <script type="text/javascript" src="Objetos/Sol.js"></script>
         <script type="text/javascript" src="Objetos/Tierra.js"></script>
+        <script type="text/javascript" src="Objetos/Manguera.js"></script>
+        
         
         <!--
         Vertex shader
@@ -72,9 +78,7 @@
             // Los atributos son características propias de cada vertice.
             attribute vec3 aVertexPosition;
             attribute vec3 aVertexColor;
-            
-            attribute vec3 aVertexTextureColor;
-            attribute vec3 aVertexNormal;
+            attribute vec2 aTextureCoord;
 
             // Los uniforms son características propias de una etapa de dibujado completa.
             // Son comunes a todos los vertices involucrados en el dibujado.
@@ -87,6 +91,7 @@
             // de interpolar linealmente entre los valores que se les asigna en cada 
             // vértice del polígono al cual pertenecen.
             varying highp vec4 vColor;    
+			varying vec2 vTextureCoord;
  
             void main(void) {
                 // gl_Position es una variable "built-in" de GLSL que es usada para 
@@ -136,8 +141,10 @@
             var pMatrix = mat4.create();
             var matrizTransformacion = mat4.create();
             
+
             
-             // SHADERS FUNCTION
+            
+            
             function getShader(gl, id) {
                 var shaderScript, src, currentChild, shader;
 
@@ -256,13 +263,27 @@
             function setupBuffers()
             {
                tierra = new Tierra();
-				sol = new Sol();
-               
+			   sol = new Sol();
                estacionEspacial = new EstacionEspacial();
                estacionEspacial.inicializar();
-
                naveEspacial = new NaveEspacial();
+               
+               manguera = new Manguera();
+               manguera.inicializar();
             }
+            
+            function handleLoadedTexture() {
+				gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+				gl.bindTexture(gl.TEXTURE_2D, sol.getTexture());
+				gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, sol.getTexture().image);
+				gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+				gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+				gl.generateMipmap(gl.TEXTURE_2D);
+
+				gl.bindTexture(gl.TEXTURE_2D, null);
+			}
+            
+            
             
             function drawScene()
             {
@@ -279,16 +300,23 @@
                 gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 				
 				
+				setMatrizLookAt();
+				dibujarFiguras();
+
+            }
+			
+			
+			function setMatrizLookAt()
+			{
+				
 				var u_vista_matrix = gl.getUniformLocation(glProgram, "uVistaMatrix");
-				
-				
 				//////////CAMARA
 				////////////////////////////////////////////////////////////////
 				mat4.identity(mvMatrix);
 				
 				
 				// Y es el vector de arriba
-				eye = [10.0-upDown,0.0,0.0]; // Posicion de la camara en el mundo
+				eye = [20.0-upDown,0.0,0.0]; // Posicion de la camara en el mundo
 				mat4.rotate(matrizTransformacion, matrizTransformacion, left, [0.0, 0.0, 1.0]);
 				
 				vec3.transformMat4(eye,eye,matrizTransformacion);
@@ -306,17 +334,25 @@
 				gl.uniformMatrix4fv(u_vista_matrix, false, mvMatrix);
 				////////////////////////////////////////////////////////////////
 				
-				
-                var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
+			}
+			
+			function dibujarFiguras()
+			{
+				var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
              
-
+				sol.draw(u_model_view_matrix);
                 naveEspacial.draw(u_model_view_matrix);
-                sol.draw(u_model_view_matrix);
 				tierra.draw(u_model_view_matrix);
 				estacionEspacial.draw(u_model_view_matrix);
 				
+				manguera.draw(u_model_view_matrix);
+				
+				
 				matrizTransformacion = estacionEspacial.getMatriz();
-            }
+			}
+			
+			
+			
 			
         </script>
     </head>

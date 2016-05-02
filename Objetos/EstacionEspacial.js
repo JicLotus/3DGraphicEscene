@@ -19,6 +19,7 @@ function EstacionEspacial () {
 	
 	var matrizTransformacion = mat4.create();
 	
+	
 	this.draw = function(_matrizModeloVista){
 		
 		mat4.identity(mvMatrix);

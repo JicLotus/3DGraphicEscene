@@ -13,4 +13,15 @@ function Sol () {
 		
 		esfera.draw();
 	}
+	
+	
+	this.getTexture = function()
+	{
+		return esfera.getTexture();
+	}
+	
+	this.getMatriz = function()
+	{
+		return mMatrixSol;
+	}
 }
