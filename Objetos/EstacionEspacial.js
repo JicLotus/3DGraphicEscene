@@ -12,6 +12,9 @@ function EstacionEspacial () {
 	this.corazonEstacionEspacial = new CorazonNaveEspacial(this.curvasCorazonEstacionEspacial);
 	
 	
+    this.manguera = new Manguera();
+    this.manguera.inicializar();
+	
 	this.tapaPrincipal;
 	this.tapaSecundaria;
 	
@@ -37,12 +40,22 @@ function EstacionEspacial () {
 		
 		m = mat4.create();
 		mat4.identity(m);
+		mat4.translate(m,mvMatrix,[-1.5,0.0,3.0]);
+		mat4.scale(m,m,[0.1,0.1,0.1]);
+		gl.uniformMatrix4fv(_matrizModeloVista, false, m);
+		this.manguera.draw();
+		
+		
+		m = mat4.create();
+		mat4.identity(m);
 		mat4.scale(m,mvMatrix,[4.0,4.0,0.8]);
 		mat4.translate(m,m,[0.0,0.0,-1.2]);
 		gl.uniformMatrix4fv(_matrizModeloVista, false, m);
 		this.corazonEstacionEspacial.draw();
 		
+		
 		gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
+		
 		this.centroBaseEspacialExterno.draw();
 		
 		gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);

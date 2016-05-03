@@ -8,7 +8,6 @@ function Manguera () {
 	this.curvas = new CurvasManguera(this.puntosBSplineInternos);
 	this.puntosPolinomio = [];
 	
-	var matrizTransformacion = mat4.create();
 	
 	this.crear = function(){
 		
@@ -33,6 +32,7 @@ function Manguera () {
 				angle = 0.0;
 				
 				v = [SplineActual[i].punto.x,SplineActual[i].punto.y,SplineActual[i].punto.z];
+				
 				der = [SplineActual[i].puntoDerivado.x,SplineActual[i].puntoDerivado.y,SplineActual[i].puntoDerivado.z];
 				
 				angleYX = Math.atan(der[1]/der[0]);
@@ -71,19 +71,7 @@ function Manguera () {
 		
 	}
 	
-	
-	
-	this.getMatriz = function()
-	{
-		return matrizTransformacion;
-	}
-	
-	
-	this.draw = function(u_model_view_matrix){
-		mat4.identity(matrizTransformacion);
-		mat4.translate(matrizTransformacion,matrizTransformacion,[-4,-2,0]);
-		mat4.scale(matrizTransformacion,matrizTransformacion,[0.1,0.1,0.1]);
-		gl.uniformMatrix4fv(u_model_view_matrix, false, matrizTransformacion);
+	this.draw = function(){
 		this.grilla.draw();
 	}
 	

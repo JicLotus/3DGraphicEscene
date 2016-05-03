@@ -25,6 +25,8 @@ function CurvasManguera (_puntosBSpline) {
 	   
 	   this.puntosCurva.push(bSpline.getPuntosFinales());
 	}
+
+	
 	
 	
 }
