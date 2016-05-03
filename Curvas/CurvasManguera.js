@@ -12,10 +12,10 @@ function CurvasManguera (_puntosBSpline) {
 
 	this.arcoPrimero = function()
 	{
-	   punto1 = [0.8,-0.3,0.0];
-	   punto2 = [0.8,-0.6,0.0];
-	   punto3 = [0.1,-0.6,0.0];
-	   punto4 = [0.1,-0.3,0.0];
+	   punto1 = [10,45,-200.0];
+	   punto2 = [20,10,0.0];
+	   punto3 = [60,10,0.0];
+	   punto4 = [70,45,10.0];
 	   
 	   puntos = [punto1,punto2,punto3,punto4];
 	   

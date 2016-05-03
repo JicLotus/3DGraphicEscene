@@ -314,10 +314,12 @@
 				////////////////////////////////////////////////////////////////
 				mat4.identity(mvMatrix);
 				
-				
+				/*
 				// Y es el vector de arriba
-				eye = [20.0-upDown,0.0,0.0]; // Posicion de la camara en el mundo
+				eye = [10.0-upDown,0.0,0.0]; // Posicion de la camara en el mundo
+				
 				mat4.rotate(matrizTransformacion, matrizTransformacion, left, [0.0, 0.0, 1.0]);
+				
 				
 				vec3.transformMat4(eye,eye,matrizTransformacion);
 				
@@ -326,10 +328,10 @@
 				vec3.transformMat4(center,center,matrizTransformacion);
 				
 				up = [0.0,1.0,0.0];
-				mat4.lookAt(mvMatrix, eye, center, up);
+				mat4.lookAt(mvMatrix, eye, center, up);*/
 				
-				//mat4.translate(mvMatrix, mvMatrix, [0.0, right,upDown-5.0]);
-				//mat4.rotate(mvMatrix, mvMatrix, left-0.5, [0.0, 1.0, 0.0]);
+				mat4.translate(mvMatrix, mvMatrix, [0.0, right,upDown-5.0]);
+				mat4.rotate(mvMatrix, mvMatrix, left-0.5, [0.0, 1.0, 0.0]);
 				
 				gl.uniformMatrix4fv(u_vista_matrix, false, mvMatrix);
 				////////////////////////////////////////////////////////////////
@@ -340,15 +342,15 @@
 			{
 				var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
              
-				sol.draw(u_model_view_matrix);
+				//sol.draw(u_model_view_matrix);
                 naveEspacial.draw(u_model_view_matrix);
 				tierra.draw(u_model_view_matrix);
-				estacionEspacial.draw(u_model_view_matrix);
+				//estacionEspacial.draw(u_model_view_matrix);
 				
 				manguera.draw(u_model_view_matrix);
 				
 				
-				matrizTransformacion = estacionEspacial.getMatriz();
+				matrizTransformacion = manguera.getMatriz();
 			}
 			
 			
