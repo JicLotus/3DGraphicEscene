@@ -2,7 +2,7 @@
 function Turbina (){
 	
 	//El numero de filas 	
-	this.grilla = new VertexGrid(30,30);
+	this.grilla = new VertexGrid(10,31);
 
 	this.puntosPolinomio = [];
 
@@ -63,70 +63,30 @@ function Turbina (){
 
 			}
 				/*Se incrementa el paso*/
-				angle+= (2*Math.PI/this.grilla.rows);
+				angle+= (2.2*Math.PI/this.grilla.rows);
 
 		}
 
 	}
 
 	this.iniciarPuntosDelPolinomio = function(){
-	  /*
-	   punto1 = new Punto(1.0,1.0,0.0);
-	   punto2 = new Punto(0.9,0.25,0.0);
-	   punto3 = new Punto(0.8,0.5,0.0);
-	   punto4 = new Punto(0.8,0.0,0.0);
-	   punto5 = new Punto(0.8,-0.5,0.0);
-	   punto6 = new Punto(0.9,-0.25,0.0);
-	   punto7  = new Punto(1.0, 1.0, 0.0);
-		*/
+		punto0 = new Punto(0.0, 0.50, 0.0);
 
-  	   //punto1 = new Punto(0.5,-1.0,0.0);
-	   //punto2 = new Punto(1.0,-0.5,0.0);
-	   //punto3 = new Punto(1.0, 0.5,0.0);
-	   //punto4 = new Punto(0.5,1.0,0.0);
+		punto1 = new Punto(0.20, 0.50, 0,0);
+		punto2 = new Punto(0.30,0.60,0.0);
+		punto3 = new Punto(0.40,0.70,0.0);
+		punto4 = new Punto(0.50,0.80,0.0);
+		punto5 = new Punto(0.6,0.9,0.0);
+		punto6 = new Punto(0.35,0.90,0.0);
 
-	   //punto4 = new Punto(0.8,0.0,0.0);
-	  
-		/*
-		punto7  = new Punto(0.5, 0.0, 0.0);
-		punto8  = new Punto(1.0, 0.0, 0.0);   
 		
-		punto9  = new Punto(1.0, 0.5, 0.0);
-		punto10  = new Punto(0.5, 0.5, 0.0);   
-		punto11  = new Punto(0.5, 0.0, 0.0);   
-	  */
-        
- 	   punto6 = new Punto(0.35,0.90,0.0);
-	   punto5 = new Punto(0.6,0.9,0.0);
-	   punto4 = new Punto(0.50,0.80,0.0);
-	   punto3 = new Punto(0.40,0.70,0.0);
-       punto2 = new Punto(0.30,0.60,0.0);
-       punto1 = new Punto(0.20, 0.50, 0,0);
+		puntos = [punto1,punto2,punto3,punto4, punto5, punto6];
 
-	   puntos = [punto1,punto2,punto3,punto4, punto5, punto6];
+		bezier = new Bezier(puntos,30);
+		bezier.bezier();
 
-	   bezier = new Bezier(puntos,30);
-	   bezier.bezier();
-	   
-	   this.puntosPolinomio = bezier.getPuntosFinales();
-/*
-	  	this.puntosPolinomio.push(punto1);
-	  	this.puntosPolinomio.push(punto2);
-	  	this.puntosPolinomio.push(punto3);
-	  	this.puntosPolinomio.push(punto4);
-*/
-//	  	this.puntosPolinomio.push(punto5);
-//	  	this.puntosPolinomio.push(punto6);  
-//	  	this.puntosPolinomio.push(punto7);  
-
-//	   this.puntosPolinomio = puntos;
-/*	  	this.puntosPolinomio.push(punto7);
-	  	this.puntosPolinomio.push(punto8);  
-	  	this.puntosPolinomio.push(punto9);
-	  	this.puntosPolinomio.push(punto10);  
-	  	this.puntosPolinomio.push(punto11);  
-
-*/
+		this.puntosPolinomio = bezier.getPuntosFinales();
+		this.puntosPolinomio.unshift(punto0);
 	}
 
 	this.draw = function(){
