@@ -6,6 +6,10 @@ function SostenTurbinas(){
 
 	this.puntosPolinomio = [];
 
+	var r = 102.0/255.0;
+	var g = 51/255.0;
+	var b = 0.0/255.0;
+
 	this.crearSosten = function(){
 
 		this.grilla.position_buffer = [];
@@ -49,9 +53,10 @@ function SostenTurbinas(){
 			/*
 				Se inserta el color
 			*/
-			this.grilla.color_buffer.push(1.0);
-			this.grilla.color_buffer.push(1.0);
-			this.grilla.color_buffer.push(1.0);	
+
+			this.grilla.color_buffer.push(r);
+			this.grilla.color_buffer.push(g);
+			this.grilla.color_buffer.push(b);	
 			
 
 		}
@@ -87,9 +92,9 @@ function SostenTurbinas(){
 				/*
 					Se inserta el color
 				*/
-				this.grilla.color_buffer.push(1.0);
-				this.grilla.color_buffer.push(1.0);
-				this.grilla.color_buffer.push(1.0);	
+				this.grilla.color_buffer.push(r);
+				this.grilla.color_buffer.push(g);
+				this.grilla.color_buffer.push(b);	
 				
 
 			}

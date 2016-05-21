@@ -2,9 +2,14 @@
 function CuerpoNaveEspacial(){
 	
 	//El numero de filas 	
-	this.grilla = new VertexGrid(40,7);
+	this.grilla = new VertexGrid(30,7);
 
 	this.puntosPolinomio = [];
+
+	//variables que definen el color... el 0 es 0 y el 1 es 255
+	var r = 255.0/255.0;
+	var g = 255.0/255.0;
+	var b = 255.0/255.0;
 
 	this.crearCuerpo = function(){
 
@@ -47,9 +52,9 @@ function CuerpoNaveEspacial(){
 			/*
 				Se inserta el color
 			*/
-			this.grilla.color_buffer.push(1.0);
-			this.grilla.color_buffer.push(1.0);
-			this.grilla.color_buffer.push(1.0);	
+			this.grilla.color_buffer.push(r);
+			this.grilla.color_buffer.push(g);
+			this.grilla.color_buffer.push(b);	
 			
 
 		}
@@ -82,9 +87,9 @@ function CuerpoNaveEspacial(){
 				/*
 					Se inserta el color
 				*/
-				this.grilla.color_buffer.push(1.0);
-				this.grilla.color_buffer.push(1.0);
-				this.grilla.color_buffer.push(1.0);	
+				this.grilla.color_buffer.push(r);
+				this.grilla.color_buffer.push(g);
+				this.grilla.color_buffer.push(b);	
 				
 
 			}

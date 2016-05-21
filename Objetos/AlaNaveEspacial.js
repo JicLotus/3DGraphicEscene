@@ -7,26 +7,31 @@ function AlaNaveEspacial() {
 	sostenTurbinas = new SostenTurbinas();
 
 	var matrizDelAla = mat4.create();
+	var anguloRotacionTurbina = 0.0;
+
+	this.setAnguloRotacionTurbina = function(anguloTurbina){
+		this.anguloRotacionTurbina = anguloTurbina;
+	}
 
 	this.draw = function(matrizNaveEspacial, _u_model_view_matrix){
 
 		mat4.identity(matrizDelAla);
 		mat4.translate(matrizDelAla, matrizNaveEspacial, [0.0, 0.0, 0.0]);
-		mat4.scale(matrizDelAla,matrizDelAla,[1.0,1.0,1.0]);
+		mat4.scale(matrizDelAla, matrizDelAla, [2.0,2.0,2.0]);
 		gl.uniformMatrix4fv(_u_model_view_matrix, false, matrizDelAla);
    		sostenTurbinas.draw();
 
 		mat4.identity(matrizDelAla);
-		mat4.translate(matrizDelAla, matrizNaveEspacial, [0.7, 0.4, -1.9]);
-		mat4.rotate(matrizDelAla, matrizDelAla, t*100, [0.0, 0.0, 1.0]);
-		mat4.scale(matrizDelAla,matrizDelAla,[0.5,0.5,2.5]);
+		mat4.translate(matrizDelAla, matrizNaveEspacial, [1.0, 0.8, 0.0]);
+		mat4.rotate(matrizDelAla, matrizDelAla, this.anguloRotacionTurbina, [0.0, 1.0, 0.0]);
+		mat4.scale(matrizDelAla,matrizDelAla,[0.5,0.5,1.5]);
 		gl.uniformMatrix4fv(_u_model_view_matrix, false, matrizDelAla);			   
 		turbina.draw();
 
 		mat4.identity(matrizDelAla);
-		mat4.translate(matrizDelAla, matrizNaveEspacial, [-0.7, 0.4, -1.9])
-		mat4.rotate(matrizDelAla, matrizDelAla, t*100, [0.0, 0.0, 1.0]);
-		mat4.scale(matrizDelAla,matrizDelAla,[0.5,0.5,2.5]);
+		mat4.translate(matrizDelAla, matrizNaveEspacial, [-1.0, 0.8, 0.0])
+		mat4.rotate(matrizDelAla, matrizDelAla, this.anguloRotacionTurbina, [0.0, 1.0, 0.0]);
+		mat4.scale(matrizDelAla,matrizDelAla,[0.5,0.5,1.5]);
 		gl.uniformMatrix4fv(_u_model_view_matrix, false, matrizDelAla);
 		turbina.draw();
 

@@ -9,7 +9,8 @@ function TubosEstacionEspacial (_tubo) {
 		for (var i=0;i<7;i++){
 			mat4.identity(mvMatrizTubo);
 			mat4.rotate(mvMatrizTubo, mvMatrix, angle, [0.0, 1.0, 0.0]);
-			mat4.translate(mvMatrizTubo,mvMatrizTubo,[0.0,0.0,-0.9]);
+			mat4.translate(mvMatrizTubo,mvMatrizTubo,[0.0,0.0,0.0]);
+			mat4.scale(mvMatrizTubo,mvMatrizTubo,[0.3,0.3,1.5]);
 			
 			angle+= (Math.PI*1.5)/7;
 			gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrizTubo);
@@ -18,9 +19,9 @@ function TubosEstacionEspacial (_tubo) {
 		
 		for(var i=0;i<2;i++){
 			mat4.identity(mvMatrizTubo);
-			mat4.rotate(mvMatrizTubo,mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
-			mat4.translate(mvMatrizTubo,mvMatrizTubo,[i*0.05,0.0,-5.0]);
-			mat4.scale(mvMatrizTubo,mvMatrizTubo,[0.1,0.1,3.0]);
+			mat4.rotate(mvMatrizTubo,mvMatrix,  i*Math.PI + Math.PI/2, [1.0, 0.0, 0.0]);
+			mat4.translate(mvMatrizTubo,mvMatrizTubo,[0,0.0,0.0]);
+			mat4.scale(mvMatrizTubo,mvMatrizTubo,[0.02,0.02,2.4]);
 			gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrizTubo);
 			this.tubo.draw();
 		}

@@ -2,9 +2,15 @@
 function Turbina (){
 	
 	//El numero de filas 	
-	this.grilla = new VertexGrid(10,31);
+	this.grilla = new VertexGrid(10,33);
 
 	this.puntosPolinomio = [];
+
+	//variables que definen el color... el 0 es 0 y el 1 es 255
+	var r = 255.0/255.0;
+	var g = 255.0/255.0;
+	var b = 255.0/255.0;
+
 
 	this.crearRevolucion = function(){
 
@@ -56,9 +62,9 @@ function Turbina (){
 				/*
 					Se inserta el color
 				*/
-				this.grilla.color_buffer.push(1.0);
-				this.grilla.color_buffer.push(1.0);
-				this.grilla.color_buffer.push(1.0);	
+				this.grilla.color_buffer.push(r);
+				this.grilla.color_buffer.push(g);
+				this.grilla.color_buffer.push(b);	
 				
 
 			}
@@ -70,15 +76,23 @@ function Turbina (){
 	}
 
 	this.iniciarPuntosDelPolinomio = function(){
-		punto0 = new Punto(0.0, 0.50, 0.0);
-
+		puntoInicial = new Punto(0.0, -0.20, 0.0);
+/*
 		punto1 = new Punto(0.20, 0.50, 0,0);
 		punto2 = new Punto(0.30,0.60,0.0);
 		punto3 = new Punto(0.40,0.70,0.0);
 		punto4 = new Punto(0.50,0.80,0.0);
 		punto5 = new Punto(0.6,0.9,0.0);
 		punto6 = new Punto(0.35,0.90,0.0);
+*/
+		punto1 = new Punto(0.20, -0.20, 0.0);
+		punto2 = new Punto(0.30, -0.10, 0.0);
+		punto3 = new Punto(0.40, 0.00, 0.0);
+		punto4 = new Punto(0.50, 0.10, 0.0);
+		punto5 = new Punto(0.60, 0.20, 0.0);
+		punto6 = new Punto(0.35, 0.20, 0.0);
 
+		puntoFinal = new Punto(0.0, 0.20, 0.0);
 		
 		puntos = [punto1,punto2,punto3,punto4, punto5, punto6];
 
@@ -86,7 +100,8 @@ function Turbina (){
 		bezier.bezier();
 
 		this.puntosPolinomio = bezier.getPuntosFinales();
-		this.puntosPolinomio.unshift(punto0);
+		this.puntosPolinomio.unshift(puntoInicial);
+		this.puntosPolinomio.push(puntoFinal);
 	}
 
 	this.draw = function(){
