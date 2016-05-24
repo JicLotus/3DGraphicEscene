@@ -1,7 +1,7 @@
 function Manguera () {
 	
 	this.puntosBSplineInternos = 20;
-	this.cantidadBSplines =1;
+	this.cantidadBSplines =5;
 	
 	this.grilla = new VertexGrid(this.puntosBSplineInternos* this.cantidadBSplines,10);
 	
@@ -42,8 +42,8 @@ function Manguera () {
 				for (var j=0;j<this.grilla.cols;j++){
 					
 					
-					x = Math.cos(angle);
-					y = Math.sin(angle);
+					x = 0.1*Math.cos(angle);
+					y = 0.1*Math.sin(angle);
 					
 					mat4.identity(base);
 					mat4.translate(base,base,v);

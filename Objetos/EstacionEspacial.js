@@ -33,7 +33,7 @@ function EstacionEspacial () {
 		mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
 		mat4.translate(mvMatrix, mvMatrix, [40.0, 3.0,0.0]);
 		mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
-		mat4.scale(mvMatrix,mvMatrix,[0.1,0.1,0.1]);
+		mat4.scale(mvMatrix,mvMatrix,[0.3,0.3,0.3]);
 		
 		mat4.copy(matrizTransformacion,mvMatrix);
 		
