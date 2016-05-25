@@ -70,10 +70,13 @@ function EstacionEspacial () {
 		
 		mat4.rotate(mvMatrix, mvMatrix, -Math.PI/2, [1.0, 0.0, 0.0]);
 		mat4.translate(mvMatrix,mvMatrix,[0.0,1.0,0.0]);
-		mat4.scale(mvMatrix,mvMatrix,[1.2,1.2,1.2]);		
+		mat4.scale(mvMatrix,mvMatrix,[1.2,1.2,1.2]);
+		mat4.rotate(mvMatrix, mvMatrix, Math.PI*1/5, [0.0, 1.0, 0.0]);
+				
 		this.dibujarPaneles(mvMatrix,_matrizModeloVista,1.4);
 		this.dibujarPaneles(mvMatrix,_matrizModeloVista,-1.4);
 
+		mat4.rotate(mvMatrix, mvMatrix, -Math.PI*1/5, [0.0, 1.0, 0.0]);
 		this.tubosCentral.dibujar(_matrizModeloVista);
 		
 	}              
