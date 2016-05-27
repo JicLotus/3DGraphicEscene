@@ -19,21 +19,21 @@ function AlaNaveEspacial() {
 		mat4.translate(matrizDelAla, matrizNaveEspacial, [0.0, 0.0, 0.0]);
 		mat4.scale(matrizDelAla, matrizDelAla, [2.0,2.0,2.0]);
 		gl.uniformMatrix4fv(_u_model_view_matrix, false, matrizDelAla);
-   		sostenTurbinas.draw();
+   		sostenTurbinas.draw(matrizDelAla);
 
 		mat4.identity(matrizDelAla);
 		mat4.translate(matrizDelAla, matrizNaveEspacial, [1.0, 0.8, 0.0]);
 		mat4.rotate(matrizDelAla, matrizDelAla, this.anguloRotacionTurbina, [0.0, 1.0, 0.0]);
 		mat4.scale(matrizDelAla,matrizDelAla,[0.5,0.5,1.5]);
 		gl.uniformMatrix4fv(_u_model_view_matrix, false, matrizDelAla);			   
-		turbina.draw();
+		turbina.draw(matrizDelAla);
 
 		mat4.identity(matrizDelAla);
 		mat4.translate(matrizDelAla, matrizNaveEspacial, [-1.0, 0.8, 0.0])
 		mat4.rotate(matrizDelAla, matrizDelAla, this.anguloRotacionTurbina, [0.0, 1.0, 0.0]);
 		mat4.scale(matrizDelAla,matrizDelAla,[0.5,0.5,1.5]);
 		gl.uniformMatrix4fv(_u_model_view_matrix, false, matrizDelAla);
-		turbina.draw();
+		turbina.draw(matrizDelAla);
 
 
 	}

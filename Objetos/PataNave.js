@@ -28,12 +28,12 @@ function PataNave (){
 
 		gl.uniformMatrix4fv(_u_model_view_matrix, false, matrizPataNave);
 
-		patita.draw();
+		patita.draw(matrizPataNave);
 		
 		mat4.identity(matrizPataNave);
 		mat4.translate(matrizPataNave, matrizNaveEspacial, [-desplazamientoHorizontal,0.0,-desplazamientoVertical-alturaPata/20]);
 		gl.uniformMatrix4fv(_u_model_view_matrix, false, matrizPataNave);
-		base.draw();
+		base.draw(matrizPataNave);
 
 
 	}              

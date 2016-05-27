@@ -13,6 +13,7 @@ function Manguera () {
 		
 		this.grilla.position_buffer = [];
 		this.grilla.color_buffer= [];
+		this.grilla.normal_buffer = [];
 
 		var x=0.0;
 		var y=0.0;
@@ -62,6 +63,10 @@ function Manguera () {
 					this.grilla.color_buffer.push(1.0);
 					this.grilla.color_buffer.push(1.0);	
 					
+					this.grilla.normal_buffer.push(posNew[0]);
+					this.grilla.normal_buffer.push(posNew[1]);
+					this.grilla.normal_buffer.push(posNew[2]);
+					
 					angle+= (Math.PI*2.23)/this.grilla.cols;
 				}
 				
@@ -71,8 +76,8 @@ function Manguera () {
 		
 	}
 	
-	this.draw = function(){
-		this.grilla.draw();
+	this.draw = function(modelMatrix){
+		this.grilla.draw(modelMatrix);
 	}
 	
 	this.inicializar = function()

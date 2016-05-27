@@ -71,7 +71,7 @@ function NaveEspacial () {
 		mat4.translate(mvMatrix, matrizNaveEspacial, [-0.6, 0.0, 0.0]);
 		mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [0.0,1.0,0.0]);
 		gl.uniformMatrix4fv(_u_model_view_matrix, false, mvMatrix);
-	    this.tubo.draw();
+	    this.tubo.draw(mvMatrix);
 
 
 		//dibujo un ala

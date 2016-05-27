@@ -8,9 +8,11 @@ function VertexGrid (_rows, _cols) {
 
                 this.position_buffer = null;
                 this.color_buffer = null;
+                this.normal_buffer = null;
 				this.texture_coord_buffer = null;
 
                 this.webgl_position_buffer = null;
+                this.webgl_normal_buffer = null;
                 this.webgl_color_buffer = null;
                 this.webgl_texture_coord_buffer = null;
                 
@@ -60,6 +62,7 @@ function VertexGrid (_rows, _cols) {
                     
                     this.position_buffer = [];
                     this.color_buffer = [];
+                    this.normal_buffer = [];
 
                     var cte=((this.cols-1.0)/2.0); 
                     var x=0.0;
@@ -70,15 +73,19 @@ function VertexGrid (_rows, _cols) {
                     		for (var i=0;i<this.cols;i++){
 									x=cte+i;		  							
 		  						
-  									this.position_buffer.push(x);
-									this.position_buffer.push(y);
-									this.position_buffer.push(0.0);		
+							this.position_buffer.push(x);
+							this.position_buffer.push(y);
+							this.position_buffer.push(0.0);		
   
-		  							//Todos los vertices siempre blanco
+							this.normal_buffer.push(x);
+							this.normal_buffer.push(y);
+							this.normal_buffer.push(0.0);
+  
+		  					//Todos los vertices siempre blanco
       		              	this.color_buffer.push(1.0);
-            		        	this.color_buffer.push(1.0);
+            		        this.color_buffer.push(1.0);
                   		  	this.color_buffer.push(1.0);
-                    		}
+                    	}
                     }
                 }
 
@@ -98,14 +105,18 @@ function VertexGrid (_rows, _cols) {
                     // Repetimos los pasos 1. 2. y 3. para la información del color
                     this.webgl_color_buffer = gl.createBuffer();
                     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);   
-
+                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);
+                    
+                    
+                    this.webgl_normal_buffer = gl.createBuffer();
+                    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);    
+                    
 					/*
 					this.webgl_texture_coord_buffer = gl.createBuffer();
 					gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
 					gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coord_buffer), gl.STATIC_DRAW);
-*/
-
+					*/	
 
                     // Repetimos los pasos 1. 2. y 3. para la información de los índices
                     // Notar que esta vez se usa ELEMENT_ARRAY_BUFFER en lugar de ARRAY_BUFFER.
@@ -116,7 +127,7 @@ function VertexGrid (_rows, _cols) {
                 }
 
 
-                this.draw = function(){
+                this.draw = function(modelMatrix){
 
                     var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
                     gl.enableVertexAttribArray(vertexPositionAttribute);
@@ -135,9 +146,31 @@ function VertexGrid (_rows, _cols) {
                     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
                     gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
 
+					var vertexNormalAttribute = gl.getAttribLocation(glProgram, "aVertexNormal");
+                    gl.enableVertexAttribArray(vertexNormalAttribute);
+                    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+                    gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+
+
+					////////////////////////////////////////////////////////////
+					
+					var nMatrixUniform = gl.getUniformLocation(glProgram, "uNMatrix");
+					var modelMatrix = mat4.create();
+					var normalMatrix = mat3.create();
+					var invertModelMatrix = mat4.create();
+
+					mat4.invert(invertModelMatrix, modelMatrix);
+					mat3.fromMat4(normalMatrix, invertModelMatrix);
+
+					mat3.transpose(normalMatrix, normalMatrix);
+					gl.uniformMatrix3fv(nMatrixUniform, false, normalMatrix);
+					
+					////////////////////////////////////////////////////////////
+					
+						
                     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 
-                    gl.drawElements(gl.LINE_STRIP, this.cantidadVertices, gl.UNSIGNED_SHORT, 0);
+                    gl.drawElements(gl.TRIANGLE_STRIP, this.cantidadVertices, gl.UNSIGNED_SHORT, 0);
                 }
                 
                 

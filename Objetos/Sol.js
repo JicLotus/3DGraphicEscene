@@ -11,7 +11,7 @@ function Sol () {
 		
 		gl.uniformMatrix4fv(_u_model_view_matrix, false, mMatrixSol);
 		
-		esfera.draw();
+		esfera.draw(mMatrixSol);
 	}
 	
 	

@@ -15,7 +15,7 @@ function Tierra () {
 
 		gl.uniformMatrix4fv(_u_model_view_matrix, false, mMatrixTierra);
 	   
-		esfera.draw();
+		esfera.draw(mMatrixTierra);
 	}
 	
 	

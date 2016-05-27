@@ -16,6 +16,7 @@ function CentroBaseEspacialExterno () {
 		
 		this.grilla.position_buffer = [];
 		this.grilla.color_buffer = [];
+		this.grilla.normal_buffer = [];
 
 		var x=0.0;
 		var y=0.0;
@@ -61,7 +62,11 @@ function CentroBaseEspacialExterno () {
 
 					this.grilla.color_buffer.push(1.0);
 					this.grilla.color_buffer.push(1.0);
-					this.grilla.color_buffer.push(1.0);	
+					this.grilla.color_buffer.push(1.0);
+					
+					this.grilla.normal_buffer.push(posNew[0]);
+					this.grilla.normal_buffer.push(posNew[1]);
+					this.grilla.normal_buffer.push(posNew[2]);
 					
 				}
 			}	
@@ -76,8 +81,8 @@ function CentroBaseEspacialExterno () {
 		return this.puntosTapas2;
 	}
 
-	this.draw = function(){
-		this.grilla.draw();
+	this.draw = function(modelMatrix){
+		this.grilla.draw(modelMatrix);
 	}
 
 	this.inicializar = function()

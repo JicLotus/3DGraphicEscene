@@ -11,6 +11,7 @@ function EsferaGrid () {
 		this.grilla.position_buffer = [];
 		this.grilla.color_buffer = [];
 		this.grilla.texture_coord_buffer = [];
+		this.grilla.normal_buffer = [];
 		
 		var x=0.0;
 		var y=0.0;
@@ -48,12 +49,16 @@ function EsferaGrid () {
 				this.grilla.color_buffer.push(1.0);
 				this.grilla.color_buffer.push(1.0);
 				
+				this.grilla.normal_buffer.push(x);
+				this.grilla.normal_buffer.push(y);
+				this.grilla.normal_buffer.push(z);
+			
 			}
 		}	
 	}
 
-	this.draw = function(){
-		this.grilla.draw();
+	this.draw = function(modelMatrix){
+		this.grilla.draw(modelMatrix);
 	}              
 
 	this.getTexture = function()

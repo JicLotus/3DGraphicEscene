@@ -23,6 +23,7 @@ function CilindroGrid (_radio,_altura) {
 		
 		this.grilla.position_buffer = [];
 		this.grilla.color_buffer = [];
+		this.grilla.normal_buffer = [];
 
 		var x=0.0;
 		var y=0.0;
@@ -40,6 +41,10 @@ function CilindroGrid (_radio,_altura) {
 			this.grilla.color_buffer.push(r);
 			this.grilla.color_buffer.push(g);
 			this.grilla.color_buffer.push(b);	
+			
+			this.grilla.normal_buffer.push(0);
+			this.grilla.normal_buffer.push(0);
+			this.grilla.normal_buffer.push(alturaAux);
 		}
 		
 		
@@ -55,6 +60,10 @@ function CilindroGrid (_radio,_altura) {
 				this.grilla.position_buffer.push(x);								
 				this.grilla.position_buffer.push(y);
 				this.grilla.position_buffer.push(alturaAux);	
+
+				this.grilla.normal_buffer.push(x);
+				this.grilla.normal_buffer.push(y);
+				this.grilla.normal_buffer.push(alturaAux);
 
 				//Todos los vertices siempre blanco
 				this.grilla.color_buffer.push(r);
@@ -74,14 +83,17 @@ function CilindroGrid (_radio,_altura) {
 			this.grilla.position_buffer.push(alturaAux);				
 			this.grilla.color_buffer.push(r);
 			this.grilla.color_buffer.push(g);
-			this.grilla.color_buffer.push(b);	
+			this.grilla.color_buffer.push(b);
+			this.grilla.normal_buffer.push(0);
+			this.grilla.normal_buffer.push(0);
+			this.grilla.normal_buffer.push(alturaAux);	
 		}
 	
 		
 	}
 
-	this.draw = function(){
-		this.grilla.draw();
+	this.draw = function(modelMatrix){
+		this.grilla.draw(modelMatrix);
 	}              
 
 	this.inicializar = function()

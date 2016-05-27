@@ -30,7 +30,7 @@ function PanelSolar (_tubo) {
 			mat4.scale(this.mvMatrizTubo,this.mvMatrizTubo,[1.0,0.25,1.0]);
 		
 			gl.uniformMatrix4fv(_matrizModeloVista, false, this.mvMatrizTubo);
-			this.panel.draw();
+			this.panel.draw(this.mvMatrizTubo);
 		}
 	}
 	
@@ -41,7 +41,7 @@ function PanelSolar (_tubo) {
 		mat4.translate(this.mvMatrizTubo,this.mvMatrizTubo,[0.0,1.2,-0.18]);
 		mat4.scale(this.mvMatrizTubo,this.mvMatrizTubo,[0.02,0.02,0.36]);
 		gl.uniformMatrix4fv(_matrizModeloVista, false, this.mvMatrizTubo);
-		this.tubo.draw();
+		this.tubo.draw(this.mvMatrizTubo);
 	}
 	
 	this.dibujarTuboLargo = function(matrizPanelSolar,_matrizModeloVista)
@@ -50,7 +50,7 @@ function PanelSolar (_tubo) {
 		mat4.translate(this.mvMatrizTubo,matrizPanelSolar,[0.0,0.0,0.0]);
 		mat4.scale(this.mvMatrizTubo,this.mvMatrizTubo,[0.02,0.02,1.2]);
 		gl.uniformMatrix4fv(_matrizModeloVista, false, this.mvMatrizTubo);
-		this.tubo.draw();
+		this.tubo.draw(this.mvMatrizTubo);
 	}
 
 	

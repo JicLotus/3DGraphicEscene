@@ -14,7 +14,7 @@ function TubosEstacionEspacial (_tubo) {
 			
 			angle+= (Math.PI*1.5)/7;
 			gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrizTubo);
-			this.tubo.draw();
+			this.tubo.draw(mvMatrizTubo);
 		}
 		
 		for(var i=0;i<2;i++){
@@ -23,7 +23,7 @@ function TubosEstacionEspacial (_tubo) {
 			mat4.translate(mvMatrizTubo,mvMatrizTubo,[0,0.0,0.0]);
 			mat4.scale(mvMatrizTubo,mvMatrizTubo,[0.02,0.02,2.4]);
 			gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrizTubo);
-			this.tubo.draw();
+			this.tubo.draw(mvMatrizTubo);
 		}
 		
 	}

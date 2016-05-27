@@ -17,7 +17,7 @@ function Turbina (){
 		
 		this.grilla.position_buffer = [];
 		this.grilla.color_buffer = [];
-
+		this.grilla.normal_buffer = [];
 
 		var x=0.0;
 		var y=0.0;
@@ -64,7 +64,11 @@ function Turbina (){
 				*/
 				this.grilla.color_buffer.push(r);
 				this.grilla.color_buffer.push(g);
-				this.grilla.color_buffer.push(b);	
+				this.grilla.color_buffer.push(b);
+				
+				this.grilla.normal_buffer.push(posNew[0]);
+				this.grilla.normal_buffer.push(posNew[1]);
+				this.grilla.normal_buffer.push(posNew[2]);	
 				
 
 			}
@@ -104,8 +108,8 @@ function Turbina (){
 		this.puntosPolinomio.push(puntoFinal);
 	}
 
-	this.draw = function(){
-		this.grilla.draw();
+	this.draw = function(modelMatrix){
+		this.grilla.draw(modelMatrix);
 	}              
 
 

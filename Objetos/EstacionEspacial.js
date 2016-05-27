@@ -38,7 +38,7 @@ function EstacionEspacial () {
 		mat4.copy(matrizTransformacion,mvMatrix);
 		
 		gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
-		this.centroBaseEspacialInterno.draw();
+		this.centroBaseEspacialInterno.draw(mvMatrix);
 		
 		
 		m = mat4.create();
@@ -46,7 +46,7 @@ function EstacionEspacial () {
 		mat4.translate(m,mvMatrix,[-1.5,0.0,3.0]);
 		mat4.scale(m,m,[0.1,0.1,0.1]);
 		gl.uniformMatrix4fv(_matrizModeloVista, false, m);
-		this.manguera.draw();
+		this.manguera.draw(m);
 		
 		
 		m = mat4.create();
@@ -54,18 +54,18 @@ function EstacionEspacial () {
 		mat4.scale(m,mvMatrix,[4.0,4.0,0.8]);
 		mat4.translate(m,m,[0.0,0.0,-1.2]);
 		gl.uniformMatrix4fv(_matrizModeloVista, false, m);
-		this.corazonEstacionEspacial.draw();
+		this.corazonEstacionEspacial.draw(m);
 		
 		
 		gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
 		
-		this.centroBaseEspacialExterno.draw();
+		this.centroBaseEspacialExterno.draw(mvMatrix);
 		
 		gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
-		this.tapaPrincipal.draw();
+		this.tapaPrincipal.draw(mvMatrix);
 		
 		gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
-		this.tapaSecundaria.draw();
+		this.tapaSecundaria.draw(mvMatrix);
 		
 		
 		mat4.rotate(mvMatrix, mvMatrix, -Math.PI/2, [1.0, 0.0, 0.0]);
