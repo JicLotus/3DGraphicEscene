@@ -52,7 +52,7 @@ function CilindroGrid (_radio,_altura) {
 			
 			
 			for (var i=0;i<this.grilla.cols;i++){				
-				u+=(2*Math.PI)/this.grilla.cols;                    											   	
+				u+=(2.13*Math.PI)/this.grilla.cols;                    											   	
 				
 				x = this.radio * Math.cos(u);
 				y = this.radio * Math.sin(u);	

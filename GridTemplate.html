@@ -162,6 +162,8 @@
 			
 				sol.draw(u_model_view_matrix);
 				
+				gl.uniform3f(ambientColorUniform, 0.2, 0.2, 0.2 );
+				gl.uniform3f(directionalColorUniform, 0.8, 0.8, 0.8);
 				
                 naveEspacial.setParametros(anguloRotacionTurbina, anguloRotacionAla, factorTrenAterrizaje);
                 naveEspacial.step();
