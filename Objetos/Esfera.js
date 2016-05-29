@@ -50,7 +50,7 @@ function EsferaGrid () {
 				this.grilla.normal_buffer.push(z);
 			
 			}
-			v+=(Math.PI)/this.grilla.rows;
+			v+=(1.13*Math.PI)/this.grilla.rows;
 
 		}	
 	}

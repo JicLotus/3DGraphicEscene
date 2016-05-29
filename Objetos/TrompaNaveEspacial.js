@@ -27,8 +27,45 @@ function TrompaNaveEspacial(){
 		var base= mat4.create();
 
 
+		//cierro la primer cara
+		for (var i=0; i<this.grilla.cols; i++){
+				x = 0.0;
+				y = 0.0;
+		
+				mat4.identity(base);
+
+				mat4.scale(base,base,[factor,factor,1.0]);
+				//Se traslada sobre el eje Z
+
+				mat4.translate(base, base, [0.0, 0.0, paso]);
+												
+				//se aplica la rotacion y traslacion
+				vec3.transformMat4(posNew,[x,y,0.0],base);
+				
+				/*
+				Se insertan las coordenadas en la grilla
+				*/
+
+				this.grilla.position_buffer.push(posNew[0]);								
+				this.grilla.position_buffer.push(posNew[1]);
+				this.grilla.position_buffer.push(posNew[2]);	
+
+				/*
+					Se inserta el color
+				*/
+				this.grilla.color_buffer.push(r);
+				this.grilla.color_buffer.push(g);
+				this.grilla.color_buffer.push(b);	
+				
+				
+				this.grilla.normal_buffer.push(posNew[0]);
+				this.grilla.normal_buffer.push(posNew[1]);
+				this.grilla.normal_buffer.push(posNew[2]);
+
+			}
+
 		//Cada fila es una cara que se barre
-		for (var j=0; j<this.grilla.rows-1; j++){
+		for (var j=0; j<this.grilla.rows-2; j++){
 		
 			factor = 1.0*(this.grilla.rows-j)/this.grilla.rows + 0.1*j/this.grilla.rows;
 			//Cada columna es un punto del polinomio
@@ -69,7 +106,7 @@ function TrompaNaveEspacial(){
 
 			}
 				/*Se incrementa el paso*/
-				paso+= (1.0/this.grilla.rows);
+				paso+= (1.0/(this.grilla.rows-2.0));
 						
 
 		}

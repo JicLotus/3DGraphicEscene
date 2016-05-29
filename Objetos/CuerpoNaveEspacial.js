@@ -26,7 +26,6 @@ function CuerpoNaveEspacial(){
 		var posNew = [];
 		var base= mat4.create();
 
-
 		//la primer cara es cerrada
 
 		//Cada columna es un punto del polinomio
@@ -62,11 +61,10 @@ function CuerpoNaveEspacial(){
 			
 
 		}
-		/*Se incrementa el paso*/
-		paso+= (1.0/this.grilla.rows);
 
 		//Cada fila es una cara que se barre
-		for (var j=1; j<this.grilla.rows; j++){
+		var j=1;
+		for (j; j<this.grilla.rows-1; j++){
 		
 			//Cada columna es un punto del polinomio
 			for (var i=0; i<this.grilla.cols; i++){
@@ -102,8 +100,41 @@ function CuerpoNaveEspacial(){
 
 			}
 				/*Se incrementa el paso*/
-				paso+= (1.0/this.grilla.rows);
-						
+				paso+= (1.0/(this.grilla.rows-2.0));			
+
+		}
+		
+		//La ultima cara es cerrada
+		for (var i=0; i<this.grilla.cols; i++){
+			x = 0.0;
+			y = 0.0;
+	
+			mat4.identity(base);
+			//Se traslada sobre el eje Z
+			mat4.translate(base, base, [0.0, 0.0, paso]);
+
+			//se aplica la rotacion y traslacion
+			vec3.transformMat4(posNew,[x,y,0.0],base);
+			
+			/*
+			Se insertan las coordenadas en la grilla
+			*/
+
+			this.grilla.position_buffer.push(posNew[0]);								
+			this.grilla.position_buffer.push(posNew[1]);
+			this.grilla.position_buffer.push(posNew[2]);	
+
+			/*
+				Se inserta el color
+			*/
+			this.grilla.color_buffer.push(r);
+			this.grilla.color_buffer.push(g);
+			this.grilla.color_buffer.push(b);	
+			
+			this.grilla.normal_buffer.push(posNew[0]);
+			this.grilla.normal_buffer.push(posNew[1]);
+			this.grilla.normal_buffer.push(posNew[2]);
+			
 
 		}
 
@@ -111,15 +142,6 @@ function CuerpoNaveEspacial(){
 
 	this.iniciarPuntosDelPolinomio = function(){
         
-/*	punto1 = new Punto(0.0, 0.0, 0,0);
-	punto2 = new Punto(1.0, 0.0, 0.0);
-	punto3 = new Punto(1.0, 0.8, 0.0);
-	punto4 = new Punto(0.8, 1.0, 0.0);
-	punto5 = new Punto(0.2, 1.0, 0.0);
-	punto6 = new Punto(0.0, 0.8, 0.0);
-	punto7 = new Punto(0.0, 0.0, 0.0);
-	   
-*/
 	punto1 = new Punto(-0.5, -0.5, 0,0);
 	punto2 = new Punto(0.5, -0.5, 0.0);
 	punto3 = new Punto(0.5, 0.3, 0.0);
