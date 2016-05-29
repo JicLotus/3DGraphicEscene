@@ -1,7 +1,7 @@
 
 function EsferaGrid () {
 
-	this.grilla = new VertexGrid(30,30);
+	this.grilla = new VertexGrid(40,40);
 
 	/*
 		Este método crea los puntos que componen la esfera
@@ -24,11 +24,10 @@ function EsferaGrid () {
 		for (var j=0;j<this.grilla.rows;j++){
 			
 			//define los saltos en altura
-			v+=(2*Math.PI)/this.grilla.rows;
 			
 			for (var i=0;i<this.grilla.cols;i++){				
 				//define el paso	
-				u+=(2*Math.PI)/this.grilla.cols;                    											   	
+				u+=(2.13*Math.PI)/this.grilla.cols;                    											   	
 					
 				x =  Math.cos(v) * Math.cos(u);
 				y =  Math.cos(v) * Math.sin(u);  									
@@ -40,10 +39,7 @@ function EsferaGrid () {
 				this.grilla.position_buffer.push(x);								
 				this.grilla.position_buffer.push(y);
 				this.grilla.position_buffer.push(z);		
-/*
-				this.grilla.texture_coord_buffer.push(u);
-                this.grilla.texture_coord_buffer.push(v);
-*/
+
 				//Todos los vertices siempre blanco
 				this.grilla.color_buffer.push(1.0);
 				this.grilla.color_buffer.push(1.0);
@@ -54,6 +50,8 @@ function EsferaGrid () {
 				this.grilla.normal_buffer.push(z);
 			
 			}
+			v+=(Math.PI)/this.grilla.rows;
+
 		}	
 	}
 
