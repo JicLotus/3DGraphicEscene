@@ -41,7 +41,7 @@ function myKeyNotPressed(event){
 	var keynum;
 	if(window.event) { // IE                    
 	  keynum = event.keyCode;
-	} else if(e.which){ // Netscape/Firefox/Opera                   
+	} else if(event.which){ // Netscape/Firefox/Opera                   
 	  keynum = event.which;
 	}
 	if(event.keyCode == 38)  naveEspacial.onTeclaUp(naveEspacial.TECLA_ARRIBA);       //S
@@ -66,14 +66,14 @@ function myKeyPress(e){
 	}
 
 
-	if(event.keyCode == 38)  naveEspacial.onTeclaDown(naveEspacial.TECLA_ARRIBA);       //flechaAbajo
-	if(event.keyCode == 39)  naveEspacial.onTeclaDown(naveEspacial.TECLA_IZQUIERDA);  // flechaIzquierda
-	if(event.keyCode == 37)  naveEspacial.onTeclaDown(naveEspacial.TECLA_DERECHA);  // flechaDerecha    
-	if(event.keyCode == 69)  naveEspacial.onTeclaDown(naveEspacial.TECLA_GIRO_ANTIHORARIO);  // q
-	if(event.keyCode == 81)  naveEspacial.onTeclaDown(naveEspacial.TECLA_GIRO_HORARIO);   // e
-	if(event.keyCode ==107)  naveEspacial.onTeclaDown(naveEspacial.TECLA_MAS);      
-	if(event.keyCode == 40)  naveEspacial.onTeclaDown(naveEspacial.TECLA_ABAJO);   //flechaArriba
-	if(event.keyCode ==109)  naveEspacial.onTeclaDown(naveEspacial.TECLA_MENOS);
+	if(e.keyCode == 38)  naveEspacial.onTeclaDown(naveEspacial.TECLA_ARRIBA);       //flechaAbajo
+	if(e.keyCode == 39)  naveEspacial.onTeclaDown(naveEspacial.TECLA_IZQUIERDA);  // flechaIzquierda
+	if(e.keyCode == 37)  naveEspacial.onTeclaDown(naveEspacial.TECLA_DERECHA);  // flechaDerecha    
+	if(e.keyCode == 69)  naveEspacial.onTeclaDown(naveEspacial.TECLA_GIRO_ANTIHORARIO);  // q
+	if(e.keyCode == 81)  naveEspacial.onTeclaDown(naveEspacial.TECLA_GIRO_HORARIO);   // e
+	if(e.keyCode ==107)  naveEspacial.onTeclaDown(naveEspacial.TECLA_MAS);      
+	if(e.keyCode == 40)  naveEspacial.onTeclaDown(naveEspacial.TECLA_ABAJO);   //flechaArriba
+	if(e.keyCode ==109)  naveEspacial.onTeclaDown(naveEspacial.TECLA_MENOS);
 	 
 
 	if (keynum==49){

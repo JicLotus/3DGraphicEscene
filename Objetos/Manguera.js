@@ -1,12 +1,13 @@
 function Manguera () {
 	
-	this.puntosBSplineInternos = 20;
+	this.puntosBSplineInternos = 30;
 	this.cantidadBSplines =5;
 	
-	this.grilla = new VertexGrid(this.puntosBSplineInternos* this.cantidadBSplines,10);
+	this.grilla = new VertexGrid(this.puntosBSplineInternos* this.cantidadBSplines,5);
 	
 	this.curvas = new CurvasManguera(this.puntosBSplineInternos);
 	this.puntosPolinomio = [];
+	
 	
 	
 	this.crear = function(){
@@ -54,6 +55,7 @@ function Manguera () {
 					
 					vec3.transformMat4(posNew,[x,y,0.0],base);
 					
+
 					
 					this.grilla.position_buffer.push(posNew[0]);								
 					this.grilla.position_buffer.push(posNew[1]);
@@ -66,6 +68,7 @@ function Manguera () {
 					this.grilla.normal_buffer.push(posNew[0]);
 					this.grilla.normal_buffer.push(posNew[1]);
 					this.grilla.normal_buffer.push(posNew[2]);
+					
 					
 					angle+= (Math.PI*2.23)/this.grilla.cols;
 				}

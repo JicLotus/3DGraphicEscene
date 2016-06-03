@@ -3,7 +3,7 @@ function setMatrizLookAtAdentroEstacion(){
 	var u_vista_matrix = gl.getUniformLocation(glProgram, "uVistaMatrix");
 	//////////CAMARA
 	////////////////////////////////////////////////////////////////
-	mat4.identity(mvMatrix);
+	mat4.identity(CameraMatrix);
 	
 	matrizTransformacion = estacionEspacial.getMatriz();                                
 	// Y es el vector de arriba
@@ -58,16 +58,14 @@ function setMatrizLookAtAdentroEstacion(){
 	vec3.transformMat4(eye,eyeEstacion,matrizTransformacion);
 	vec3.transformMat4(center,centerEstacion,matrizTransformacion);
 
-	mat4.lookAt(mvMatrix, eye, center, up);
-	
-	gl.uniformMatrix4fv(u_vista_matrix, false, mvMatrix);
+	mat4.lookAt(CameraMatrix, eye, center, up);
 }
 
 function setMatrizLookAtNavePiloto(){
 	var u_vista_matrix = gl.getUniformLocation(glProgram, "uVistaMatrix");
 	//////////CAMARA
 	////////////////////////////////////////////////////////////////
-	mat4.identity(mvMatrix);
+	mat4.identity(CameraMatrix);
 	
 	matrizTransformacion = naveEspacial.getMatriz();
 	
@@ -79,11 +77,7 @@ function setMatrizLookAtNavePiloto(){
 	
 	up = [0.0,1.0,0.0];
 
-	mat4.lookAt(mvMatrix, eye, center, up);
-	
-	
-	gl.uniformMatrix4fv(u_vista_matrix, false, mvMatrix);
-
+	mat4.lookAt(CameraMatrix, eye, center, up);
 }			
 
 function setMatrizLookAtNaveAtras()
@@ -92,7 +86,7 @@ function setMatrizLookAtNaveAtras()
 	var u_vista_matrix = gl.getUniformLocation(glProgram, "uVistaMatrix");
 	//////////CAMARA
 	////////////////////////////////////////////////////////////////
-	mat4.identity(mvMatrix);
+	mat4.identity(CameraMatrix);
 					
 	matrizTransformacion = naveEspacial.getMatriz();
 
@@ -104,12 +98,10 @@ function setMatrizLookAtNaveAtras()
 	
 	up = [0.0,1.0,0.0];
 
-	mat4.lookAt(mvMatrix, eye, center, up);
+	mat4.lookAt(CameraMatrix, eye, center, up);
 	
-	gl.uniformMatrix4fv(u_vista_matrix, false, mvMatrix);
+
 	////////////////////////////////////////////////////////////////
-
-
 }
 
 function setMatrizLookAtVistaGeneral()
@@ -118,7 +110,7 @@ function setMatrizLookAtVistaGeneral()
 	var u_vista_matrix = gl.getUniformLocation(glProgram, "uVistaMatrix");
 	//////////CAMARA
 	////////////////////////////////////////////////////////////////
-	mat4.identity(mvMatrix);
+	mat4.identity(CameraMatrix);
 
 	matrizTransformacion = estacionEspacial.getMatriz();
 	
@@ -135,9 +127,7 @@ function setMatrizLookAtVistaGeneral()
 	vec3.transformMat4(center,center,matrizTransformacion);
 	
 	up = [0.0,1.0,0.0];
-	mat4.lookAt(mvMatrix, eye, center, up);
+	mat4.lookAt(CameraMatrix, eye, center, up);
 	
-	gl.uniformMatrix4fv(u_vista_matrix, false, mvMatrix);
 	////////////////////////////////////////////////////////////////
-
 }

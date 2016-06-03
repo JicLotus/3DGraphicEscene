@@ -7,20 +7,19 @@ function PanelSolar (_tubo) {
 	matrizPanelSolarRotada = mat4.create();		
 	
 
-	this.dibujar = function(matrizPanelSolar,_matrizModeloVista){
+	this.dibujar = function(matrizPanelSolar){
 
 		mat4.rotate(matrizPanelSolarRotada, matrizPanelSolar, window.anguloPaneles, [0,0,1]);
-		this.dibujarPanel(matrizPanelSolarRotada,_matrizModeloVista);
-		this.dibujarTuboChiquito(matrizPanelSolarRotada,_matrizModeloVista);
-		this.dibujarTuboLargo(matrizPanelSolarRotada,_matrizModeloVista);
+		this.dibujarPanel(matrizPanelSolarRotada);
+		this.dibujarTuboChiquito(matrizPanelSolarRotada);
+		this.dibujarTuboLargo(matrizPanelSolarRotada);
 
 	}
 	
-	this.dibujarPanel = function(matrizPanelSolar,_matrizModeloVista)
+	this.dibujarPanel = function(matrizPanelSolar)
 	{
 
 		for (var i=0;i<2;i++){
-
 
 			mat4.identity(this.mvMatrizTubo);
 
@@ -28,28 +27,25 @@ function PanelSolar (_tubo) {
 //			mat4.rotate(this.mvMatrizTubo,this.mvMatrizTubo, window.anguloPaneles, [1.0, 0.0, 0.0]);
 			mat4.translate(this.mvMatrizTubo,this.mvMatrizTubo,[-2.2,0.18-i*0.36,0.0]);
 			mat4.scale(this.mvMatrizTubo,this.mvMatrizTubo,[1.0,0.25,1.0]);
-		
-			gl.uniformMatrix4fv(_matrizModeloVista, false, this.mvMatrizTubo);
+
 			this.panel.draw(this.mvMatrizTubo);
 		}
 	}
 	
-	this.dibujarTuboChiquito = function(matrizPanelSolar,_matrizModeloVista)
+	this.dibujarTuboChiquito = function(matrizPanelSolar)
 	{		
 		mat4.identity(this.mvMatrizTubo);
 		mat4.rotate(this.mvMatrizTubo, matrizPanelSolar, Math.PI/2, [1.0, 0.0, 0.0]);
 		mat4.translate(this.mvMatrizTubo,this.mvMatrizTubo,[0.0,1.2,-0.18]);
 		mat4.scale(this.mvMatrizTubo,this.mvMatrizTubo,[0.02,0.02,0.36]);
-		gl.uniformMatrix4fv(_matrizModeloVista, false, this.mvMatrizTubo);
 		this.tubo.draw(this.mvMatrizTubo);
 	}
 	
-	this.dibujarTuboLargo = function(matrizPanelSolar,_matrizModeloVista)
+	this.dibujarTuboLargo = function(matrizPanelSolar)
 	{
 		mat4.identity(this.mvMatrizTubo);
 		mat4.translate(this.mvMatrizTubo,matrizPanelSolar,[0.0,0.0,0.0]);
 		mat4.scale(this.mvMatrizTubo,this.mvMatrizTubo,[0.02,0.02,1.2]);
-		gl.uniformMatrix4fv(_matrizModeloVista, false, this.mvMatrizTubo);
 		this.tubo.draw(this.mvMatrizTubo);
 	}
 

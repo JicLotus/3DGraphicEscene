@@ -26,18 +26,18 @@ function EstacionEspacial () {
 	var matrizTransformacion = mat4.create();
 	
 	
-	this.draw = function(_matrizModeloVista){
+	this.draw = function(){
 		
 		mat4.identity(mvMatrix);
 
 		mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
 		mat4.translate(mvMatrix, mvMatrix, [40.0, 3.0,0.0]);
+		mat4.rotate(mvMatrix, mvMatrix, -t, [0.0, 1.0, 0.0]);
 		mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
 		mat4.scale(mvMatrix,mvMatrix,[0.3,0.3,0.3]);
 		
 		mat4.copy(matrizTransformacion,mvMatrix);
 		
-		gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
 		this.centroBaseEspacialInterno.draw(mvMatrix);
 		
 		
@@ -45,26 +45,18 @@ function EstacionEspacial () {
 		mat4.identity(m);
 		mat4.translate(m,mvMatrix,[-1.5,0.0,3.0]);
 		mat4.scale(m,m,[0.1,0.1,0.1]);
-		gl.uniformMatrix4fv(_matrizModeloVista, false, m);
-		this.manguera.draw(m);
 		
+		this.manguera.draw(m);
 		
 		m = mat4.create();
 		mat4.identity(m);
 		mat4.scale(m,mvMatrix,[4.0,4.0,0.8]);
 		mat4.translate(m,m,[0.0,0.0,-1.2]);
-		gl.uniformMatrix4fv(_matrizModeloVista, false, m);
+		
 		this.corazonEstacionEspacial.draw(m);
 		
-		
-		gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
-		
 		this.centroBaseEspacialExterno.draw(mvMatrix);
-		
-		gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
 		this.tapaPrincipal.draw(mvMatrix);
-		
-		gl.uniformMatrix4fv(_matrizModeloVista, false, mvMatrix);
 		this.tapaSecundaria.draw(mvMatrix);
 		
 		
@@ -73,15 +65,15 @@ function EstacionEspacial () {
 		mat4.scale(mvMatrix,mvMatrix,[1.2,1.2,1.2]);
 		mat4.rotate(mvMatrix, mvMatrix, Math.PI*1/5, [0.0, 1.0, 0.0]);
 				
-		this.dibujarPaneles(mvMatrix,_matrizModeloVista,1.4);
-		this.dibujarPaneles(mvMatrix,_matrizModeloVista,-1.4);
+		this.dibujarPaneles(mvMatrix,1.4);
+		this.dibujarPaneles(mvMatrix,-1.4);
 
-		mat4.rotate(mvMatrix, mvMatrix, -Math.PI*1/5, [0.0, 1.0, 0.0]);
-		this.tubosCentral.dibujar(_matrizModeloVista);
+		mat4.rotate(mvMatrix, mvMatrix, -Math.PI*1/7.2, [0.0, 1.0, 0.0]);
+		this.tubosCentral.dibujar();
 		
 	}              
 
-	this.dibujarPaneles = function(mvMatrix,_matrizModeloVista,_yPosition)
+	this.dibujarPaneles = function(mvMatrix,_yPosition)
 	{
 		matrizPanelSolar = mat4.create();
 		mat4.identity(matrizPanelSolar);
@@ -103,7 +95,7 @@ function EstacionEspacial () {
 			}else{
 				mat4.translate(matrizPanelSolar,matrizPanelSolar,[0.0,paso,0.0]);
 			}
-			this.panelSolar.dibujar(matrizPanelSolar,_matrizModeloVista);
+			this.panelSolar.dibujar(matrizPanelSolar);
 		}
 		
 		mat4.identity(matrizPanelSolar);
@@ -117,7 +109,7 @@ function EstacionEspacial () {
 			}else{
 				mat4.translate(matrizPanelSolar,matrizPanelSolar,[0.0,paso,0.0]);
 			}
-			this.panelSolar.dibujar(matrizPanelSolar,_matrizModeloVista);
+			this.panelSolar.dibujar(matrizPanelSolar);
 		}
 		
 	}

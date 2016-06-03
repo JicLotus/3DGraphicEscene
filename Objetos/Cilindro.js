@@ -52,7 +52,7 @@ function CilindroGrid (_radio,_altura) {
 			
 			
 			for (var i=0;i<this.grilla.cols;i++){				
-				u+=(2.13*Math.PI)/this.grilla.cols;                    											   	
+				                    											   	
 				
 				x = this.radio * Math.cos(u);
 				y = this.radio * Math.sin(u);	
@@ -69,8 +69,11 @@ function CilindroGrid (_radio,_altura) {
 				this.grilla.color_buffer.push(r);
 				this.grilla.color_buffer.push(g);
 				this.grilla.color_buffer.push(b);	
+				
+				u+=(2.23*Math.PI)/this.grilla.cols;
 					
 			}
+			u=0;
 			alturaAux+=paso;
 	
 		}	

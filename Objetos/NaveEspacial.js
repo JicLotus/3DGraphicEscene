@@ -53,7 +53,7 @@ function NaveEspacial () {
 		factorTrenAterrizaje = factorTren;
 	}
 
-	this.draw = function(_u_model_view_matrix)
+	this.draw = function()
 	{
 		
 
@@ -70,7 +70,7 @@ function NaveEspacial () {
 		mat4.identity(mvMatrix);
 		mat4.translate(mvMatrix, matrizNaveEspacial, [-0.6, 0.0, 0.0]);
 		mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [0.0,1.0,0.0]);
-		gl.uniformMatrix4fv(_u_model_view_matrix, false, mvMatrix);
+		
 	    this.tubo.draw(mvMatrix);
 
 
@@ -80,7 +80,7 @@ function NaveEspacial () {
 		mat4.translate(mvMatrix, matrizNaveEspacial, [-0.5, 0.0, 0.0]);
 		mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [0.0,0.0,1.0]);
 		mat4.rotate(mvMatrix, mvMatrix, -this.anguloRotacionAla, [0.0,1.0,0.0]);
-		alaNave.draw(mvMatrix, _u_model_view_matrix);
+		alaNave.draw(mvMatrix);
 
 		//dibujo el otro ala
 		alaNave.setAnguloRotacionTurbina(-this.anguloRotacionTurbina);
@@ -88,7 +88,7 @@ function NaveEspacial () {
 		mat4.translate(mvMatrix, matrizNaveEspacial, [0.5, 0.0, 0.0]);
 		mat4.rotate(mvMatrix, mvMatrix, 3*Math.PI/2, [0.0,0.0,1.0]);
 		mat4.rotate(mvMatrix, mvMatrix, this.anguloRotacionAla, [0.0,1.0,0.0]);
-		alaNave.draw(mvMatrix, _u_model_view_matrix);
+		alaNave.draw(mvMatrix);
 
 		//dibujo el cuerpo de la nave
 		mat4.identity(mvMatrix);
@@ -96,18 +96,14 @@ function NaveEspacial () {
 		mat4.scale(mvMatrix,mvMatrix,[1.0,1.0,2.0]);
 		
 
-		gl.uniformMatrix4fv(_u_model_view_matrix, false, mvMatrix);
-				   
-		cuerpoNave.draw();
+		cuerpoNave.draw(mvMatrix);
 
 		//dibuja la trompa	
 		mat4.identity(mvMatrix);
 		mat4.translate(mvMatrix, matrizNaveEspacial, [0.0, 0.0, 0.90]);
 		mat4.scale(mvMatrix,mvMatrix,[1.0,1.0,1.0]);				
-
-		gl.uniformMatrix4fv(_u_model_view_matrix, false, mvMatrix);
 				   
-		trompaNave.draw();
+		trompaNave.draw(mvMatrix);
 
 
 		//dibujo una pata
@@ -116,7 +112,7 @@ function NaveEspacial () {
 		mat4.rotate(mvMatrix, mvMatrix, -Math.PI/4, [0.0,1.0,0.0]);
 		mat4.rotate(mvMatrix, mvMatrix, -Math.PI/2, [1.0,0.0,0.0]);
 		mat4.rotate(mvMatrix, mvMatrix, 2*Math.PI/2, [0.0,0.0,1.0]);
-		pata.draw(mvMatrix, _u_model_view_matrix);
+		pata.draw(mvMatrix);
 
 		//dibujo una pata
 		mat4.identity(mvMatrix);
@@ -124,7 +120,7 @@ function NaveEspacial () {
 		mat4.rotate(mvMatrix, mvMatrix, +Math.PI/4, [0.0,1.0,0.0]);
 		mat4.rotate(mvMatrix, mvMatrix, -Math.PI/2, [1.0,0.0,0.0]);
 		mat4.rotate(mvMatrix, mvMatrix, 2*Math.PI/2, [0.0,0.0,1.0]);
-		pata.draw(mvMatrix, _u_model_view_matrix);
+		pata.draw(mvMatrix);
 
 		//dibujo una pata
 		mat4.identity(mvMatrix);
@@ -132,7 +128,7 @@ function NaveEspacial () {
 		mat4.rotate(mvMatrix, mvMatrix, -Math.PI+Math.PI/4, [0.0,1.0,0.0]);
 		mat4.rotate(mvMatrix, mvMatrix, -Math.PI/2, [1.0,0.0,0.0]);
 		mat4.rotate(mvMatrix, mvMatrix, 2*Math.PI/2, [0.0,0.0,1.0]);
-		pata.draw(mvMatrix, _u_model_view_matrix);
+		pata.draw(mvMatrix);
 
 		//dibujo una pata
 		mat4.identity(mvMatrix);
@@ -140,7 +136,7 @@ function NaveEspacial () {
 		mat4.rotate(mvMatrix, mvMatrix, -Math.PI-Math.PI/4, [0.0,1.0,0.0]);
 		mat4.rotate(mvMatrix, mvMatrix, -Math.PI/2, [1.0,0.0,0.0]);
 		mat4.rotate(mvMatrix, mvMatrix, 2*Math.PI/2, [0.0,0.0,1.0]);
-		pata.draw(mvMatrix, _u_model_view_matrix);
+		pata.draw(mvMatrix);
 
 
 	}

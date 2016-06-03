@@ -28,9 +28,9 @@ function TapaCentroBaseEspacial (_puntosTapasInternas,_puntosTapasExternas) {
 					this.grilla.position_buffer.push(y);
 					this.grilla.position_buffer.push(z);	
 
-					this.grilla.color_buffer.push(0.1);
-					this.grilla.color_buffer.push(0.1);
-					this.grilla.color_buffer.push(0.1);	
+					this.grilla.color_buffer.push(88/255);
+					this.grilla.color_buffer.push(88/255);
+					this.grilla.color_buffer.push(88/255);	
 					
 					this.grilla.normal_buffer.push(x);
 					this.grilla.normal_buffer.push(y);

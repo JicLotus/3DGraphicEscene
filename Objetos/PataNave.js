@@ -15,7 +15,7 @@ function PataNave (){
 	var matrizPataNave = mat4.create();
 
 
-	this.draw = function(matrizNaveEspacial, _u_model_view_matrix){
+	this.draw = function(matrizNaveEspacial){
 
 
 		var desplazamientoHorizontal = Math.cos(Math.PI/4)*alturaPata;
@@ -26,13 +26,11 @@ function PataNave (){
 		mat4.translate(matrizPataNave, matrizNaveEspacial, [-desplazamientoHorizontal, 0.0, -desplazamientoVertical]);
 		mat4.rotate(matrizPataNave, matrizPataNave, Math.PI/4, [0,1,0]);
 
-		gl.uniformMatrix4fv(_u_model_view_matrix, false, matrizPataNave);
 
 		patita.draw(matrizPataNave);
 		
 		mat4.identity(matrizPataNave);
 		mat4.translate(matrizPataNave, matrizNaveEspacial, [-desplazamientoHorizontal,0.0,-desplazamientoVertical-alturaPata/20]);
-		gl.uniformMatrix4fv(_u_model_view_matrix, false, matrizPataNave);
 		base.draw(matrizPataNave);
 
 

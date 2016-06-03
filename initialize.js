@@ -43,7 +43,7 @@ var gl = null,
 	nivelCierre = 4;
 	clickPresionado = false;
 
-
+var CameraMatrix = mat4.create();
 var mvMatrix = mat4.create();
 var pMatrix = mat4.create();
 var matrizTransformacion = mat4.create();
@@ -187,20 +187,25 @@ function makeShader(src, type)
 
 function setupBuffers()
 {
-   tierra = new Tierra();
+   
    sol = new Sol();
+   tierra = new Tierra();
+   
    estacionEspacial = new EstacionEspacial();
    estacionEspacial.inicializar();
+   
    naveEspacial = new NaveEspacial();
 }
 
-function handleLoadedTexture() {
-	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-	gl.bindTexture(gl.TEXTURE_2D, sol.getTexture());
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, sol.getTexture().image);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-	gl.generateMipmap(gl.TEXTURE_2D);
+function handleLoadedTexture(_textura) {
 
-	gl.bindTexture(gl.TEXTURE_2D, null);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.bindTexture(gl.TEXTURE_2D, _textura);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, _textura.image);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+        gl.generateMipmap(gl.TEXTURE_2D);
+
+        gl.bindTexture(gl.TEXTURE_2D, null);
+        
 }

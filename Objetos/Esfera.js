@@ -1,7 +1,7 @@
 
 function EsferaGrid () {
 
-	this.grilla = new VertexGrid(40,40);
+	this.grilla = new VertexGrid(30,30);
 
 	/*
 		Este método crea los puntos que componen la esfera
@@ -18,23 +18,24 @@ function EsferaGrid () {
 		var z=0.0;
 		
 		var v=-Math.PI/2;
-		var u=-Math.PI;
+		var u=0.0;
 		
 		
 		for (var j=0;j<this.grilla.rows;j++){
 			
 			//define los saltos en altura
-			
 			for (var i=0;i<this.grilla.cols;i++){				
 				//define el paso	
-				u+=(2.13*Math.PI)/this.grilla.cols;                    											   	
-					
+				          
 				x =  Math.cos(v) * Math.cos(u);
 				y =  Math.cos(v) * Math.sin(u);  									
 				z =  Math.sin(v);
 
                 var imgU = 1.0 - (i / this.grilla.cols);
                 var imgV = 1.0 - (j / this.grilla.rows);
+
+				this.grilla.texture_coord_buffer.push(imgU);
+                this.grilla.texture_coord_buffer.push(imgV);
 
 				this.grilla.position_buffer.push(x);								
 				this.grilla.position_buffer.push(y);
@@ -48,10 +49,12 @@ function EsferaGrid () {
 				this.grilla.normal_buffer.push(x);
 				this.grilla.normal_buffer.push(y);
 				this.grilla.normal_buffer.push(z);
+				
 			
+				u+=(2.07 *Math.PI)/this.grilla.cols;
 			}
-			v+=(1.13*Math.PI)/this.grilla.rows;
-
+			v+=(1.05*Math.PI)/this.grilla.rows;
+			u=0;
 		}	
 	}
 
@@ -59,17 +62,15 @@ function EsferaGrid () {
 		this.grilla.draw(modelMatrix);
 	}              
 
-	this.getTexture = function()
-	{
-		return this.grilla.getTexture();
-	}
-
 	this.inicializar = function()
 	{
 		this.createUniformEsfera();
 		this.grilla.createIndexBuffer();
 		this.grilla.setupWebGLBuffers();
-		//this.grilla.initTexture("sun.jpg");         
+	}
+	
+	this.setTexture = function(_fileName){
+		this.grilla.initTexture(_fileName);
 	}
 	
 }
