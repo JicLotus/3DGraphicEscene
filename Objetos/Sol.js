@@ -1,7 +1,7 @@
 function Sol () {
 	
 	this.esfera = new EsferaGrid();
-	this.esfera.setTexture("sun.jpg");
+	this.esfera.setTexture("Resources/sun.jpg");
 	this.esfera.inicializar();
 	
 	

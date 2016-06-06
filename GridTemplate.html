@@ -34,6 +34,7 @@
         <script type="text/javascript" src="Objetos/CorazonNaveEspacial.js"></script>
         <script type="text/javascript" src="Objetos/NaveEspacial.js"></script>
         <script type="text/javascript" src="Objetos/Sol.js"></script>
+        <script type="text/javascript" src="Objetos/Cielo.js"></script>
         <script type="text/javascript" src="Objetos/Tierra.js"></script>
         <script type="text/javascript" src="Objetos/CuerpoNaveEspacial.js"></script>
         <script type="text/javascript" src="Objetos/TrompaNaveEspacial.js"></script>
@@ -96,7 +97,7 @@
                 }
                 
                 
-                vec3 light_dir_normalized =  normalize(uLightPosition - vec3( pos_camera_view ) );
+                vec3 light_dir_normalized =  normalize(uLightPosition- vec3( pos_camera_view ) );
 				
 				vec3 transformedNormal = normalize(uNMatrix * aVertexNormal);
 				
@@ -168,7 +169,6 @@
 
 			function seleccionDeCamara()
 			{
-				camara=3;
 				
 				if (camara==1){
                     setMatrizLookAtNaveAtras();
@@ -198,7 +198,7 @@
 				//////////////////////////
 				var lightPosition = [0.0, 0.0, 0.0];
 		
-				vec3.transformMat4(lightPosition,lightPosition,CameraMatrix);
+				//vec3.transformMat4(lightPosition,lightPosition,CameraMatrix);
 				gl.uniform3fv(lightingDirectionUniform, lightPosition); 
         
         
@@ -221,6 +221,7 @@
         
  				gl.uniform3f(ambientColorUniform,1.0, 1.0, 1.0);
 				sol.draw();
+				cielo.draw();
 				
 				
 				gl.uniform3f(ambientColorUniform, 0.1, 0.1, 0.1);

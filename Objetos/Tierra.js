@@ -1,7 +1,7 @@
 function Tierra () {
 	
 	this.esfera = new EsferaGrid();
-	this.esfera.setTexture("earth.jpg");
+	this.esfera.setTexture("Resources/earth.jpg");
     this.esfera.inicializar();
     
     

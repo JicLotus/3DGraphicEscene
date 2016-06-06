@@ -195,6 +195,8 @@ function setupBuffers()
    estacionEspacial.inicializar();
    
    naveEspacial = new NaveEspacial();
+   
+   cielo = new Cielo();
 }
 
 function handleLoadedTexture(_textura) {
