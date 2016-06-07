@@ -2,7 +2,7 @@
 function SostenTurbinas(){
 	
 	//El numero de filas 	
-	this.grilla = new VertexGrid(10,31);
+	this.grilla = new VertexGrid(10,33);
 
 	this.puntosPolinomio = [];
 
@@ -180,6 +180,8 @@ function SostenTurbinas(){
 		}
 
 		this.puntosPolinomio.push(punto1);
+		
+
 	}
 
 	this.draw = function(modelMatrix){

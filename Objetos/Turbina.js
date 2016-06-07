@@ -73,7 +73,7 @@ function Turbina (){
 
 			}
 				/*Se incrementa el paso*/
-				angle+= (2.2*Math.PI/this.grilla.rows);
+				angle+= (2.05*Math.PI/(this.grilla.rows-1));
 
 		}
 
@@ -81,14 +81,7 @@ function Turbina (){
 
 	this.iniciarPuntosDelPolinomio = function(){
 		puntoInicial = new Punto(0.0, -0.20, 0.0);
-/*
-		punto1 = new Punto(0.20, 0.50, 0,0);
-		punto2 = new Punto(0.30,0.60,0.0);
-		punto3 = new Punto(0.40,0.70,0.0);
-		punto4 = new Punto(0.50,0.80,0.0);
-		punto5 = new Punto(0.6,0.9,0.0);
-		punto6 = new Punto(0.35,0.90,0.0);
-*/
+
 		punto1 = new Punto(0.20, -0.20, 0.0);
 		punto2 = new Punto(0.30, -0.10, 0.0);
 		punto3 = new Punto(0.40, 0.00, 0.0);
