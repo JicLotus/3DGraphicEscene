@@ -7,6 +7,7 @@ function Bezier (_puntos,_posicionesPixel) {
 	this.puntosIniciales = _puntos;
 	this.posicionesPixel = _posicionesPixel;
 	this.puntosFinales = [];
+	this.normales = [];
 	
 	//Coeficientes Binomiales = C(n,k)= n! / (k!*(n-k)!)
 	this.C = [];
@@ -16,6 +17,30 @@ function Bezier (_puntos,_posicionesPixel) {
 	this.getPuntosFinales  = function(){
 		return this.puntosFinales;
 	}
+	
+	/* Suponemos que la curva esta contenida en el plano XY */
+	this.getNormales = function(){
+		var normal = [];
+		var tanX = 0.0;
+		var tanY = 0.0;
+		
+		if (this.normales.length == 0){
+			for (var i=0; i < puntosFinales.length-1; i++) {
+				tanX = this.puntosFinales[i+1].getX() - x;
+				tanY = this.puntosFinales[i+1].getY() - y;					
+				normal = this.cross([tanX, tanY, 0],  [0,0,1]);
+				this.normales.push(new Punto(normal[0],normal[1],normal[2]));					
+			}
+			this.normales.push(new Punto(normal[0],normal[1],normal[2]));
+		}
+		return normales;
+		
+	}
+	
+	this.cross = function(A, B){
+		return [ A[1]* B[2] - A[2] * B[1], A[2] * B[0] - A[0] * B[2], A[0] * B[1] - A[1] * B[0] ];
+	}
+
 
 	this.bezier  = function(){
 		var k,u;
@@ -56,7 +81,6 @@ function Bezier (_puntos,_posicionesPixel) {
 		var k;
 		var n = this.numeroPuntos-1;
 		var bezBlendFcn;
-		
 		var x=0.0,y=0.0,z=0.0;
 		
 		//Calcula las funciones de combinacion y los puntos de control de combinacion
@@ -66,10 +90,12 @@ function Bezier (_puntos,_posicionesPixel) {
 			x += this.puntosIniciales[k].getX() * bezBlendFcn;
 			y += this.puntosIniciales[k].getY() * bezBlendFcn;
 			z += this.puntosIniciales[k].getZ() * bezBlendFcn;
+
 		}
-		
+				
 		punto = new Punto(x,y,z);
 		this.puntosFinales.push(punto);
+
 	}
 
 }

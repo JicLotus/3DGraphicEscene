@@ -19,6 +19,10 @@ function SostenTurbinas(){
 		var x=0.0;
 		var y=0.0;
 		var z=0.0;
+		var tanX=0.0;
+		var tanY=0.0;
+		var normal = [];
+		var normalTransformada = [];
 		var paso=0.0;
 		var cantidad = 0;
 		var posNew = [];
@@ -58,9 +62,9 @@ function SostenTurbinas(){
 			this.grilla.color_buffer.push(g);
 			this.grilla.color_buffer.push(b);	
 
-			this.grilla.normal_buffer.push(posNew[0]);
-			this.grilla.normal_buffer.push(posNew[1]);
-			this.grilla.normal_buffer.push(posNew[2]);
+			this.grilla.normal_buffer.push(0);
+			this.grilla.normal_buffer.push(0);
+			this.grilla.normal_buffer.push(-1);
 			
 
 		}
@@ -72,14 +76,17 @@ function SostenTurbinas(){
 			for (var i=0; i<this.grilla.cols; i++){
 				x = this.puntosPolinomio[i].getX();
 				y = this.puntosPolinomio[i].getY();
-		
+				
+				if (i<this.grilla.cols-1){
+					tanX = this.puntosPolinomio[i+1].getX() - x;
+					tanY = this.puntosPolinomio[i+1].getY() - y;					
+					normal = bezier.cross([tanX, tanY, 0], [0,0,1]);
+				}
+
 				mat4.identity(base);
 				//Se traslada sobre el eje Z
 				mat4.translate(base, base, [0.0, 0.0, paso]);
 
-				//Se rota 90 grados respecto del eje X
-//				mat4.rotate(base, base, Math.PI/2, [1.0, 0.0, 0.0]);
-				
 				//se aplica la rotacion y traslacion
 				vec3.transformMat4(posNew,[x,y,0.0],base);
 				
@@ -98,9 +105,9 @@ function SostenTurbinas(){
 				this.grilla.color_buffer.push(g);
 				this.grilla.color_buffer.push(b);	
 				
-				this.grilla.normal_buffer.push(posNew[0]);
-				this.grilla.normal_buffer.push(posNew[1]);
-				this.grilla.normal_buffer.push(posNew[2]);
+				this.grilla.normal_buffer.push(normal[0]);
+				this.grilla.normal_buffer.push(normal[1]);
+				this.grilla.normal_buffer.push(normal[2]);
 
 			}
 				/*Se incrementa el paso*/
@@ -137,9 +144,9 @@ function SostenTurbinas(){
 			this.grilla.color_buffer.push(g);
 			this.grilla.color_buffer.push(b);	
 
-			this.grilla.normal_buffer.push(posNew[0]);
-			this.grilla.normal_buffer.push(posNew[1]);
-			this.grilla.normal_buffer.push(posNew[2]);
+			this.grilla.normal_buffer.push(0);
+			this.grilla.normal_buffer.push(0);
+			this.grilla.normal_buffer.push(1);
 			
 
 		}
