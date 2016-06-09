@@ -67,16 +67,15 @@
             // vértice del polígono al cual pertenecen.
             varying highp vec4 vColor;    
 			varying vec2 vTextureCoord;
-			varying vec3 vLightWeighting;
 			
-			
-			uniform vec3 uAmbientColor;
 			uniform vec3 uLightPosition;
-			uniform vec3 uDirectionalColor;
 			
     
 			uniform bool uUsarImagen;
 			varying float vUsarImagen;
+			
+			varying vec3 light_dir_normalized;
+			varying vec3 transformedNormal;
  
             void main(void) {
                 // gl_Position es una variable "built-in" de GLSL que es usada para 
@@ -96,18 +95,9 @@
 					vUsarImagen = 0.0;
                 }
                 
-                
-				vec3 transformedNormal = normalize(uNMatrix * aVertexNormal);
-				
-				
-				vec3 light_dir_normalized =  -normalize(vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
+                light_dir_normalized =  -normalize(vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
+				transformedNormal = normalize(uNMatrix * aVertexNormal);
 								
-				
-				float directionalLightWeighting = max(dot(transformedNormal, light_dir_normalized), 0.0);
-				
-				
-				
-				vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
 				
                 vColor = vec4(aVertexColor,1.0);
                 
@@ -126,22 +116,27 @@
 			
 			
 			varying highp vec4 vColor;
-			varying vec3 vLightWeighting;
-			
 			varying vec2 vTextureCoord;
-
 			uniform sampler2D uSampler;
-			
 			varying float vUsarImagen;
+			
+			
+			uniform vec3 uAmbientColor;
+			uniform vec3 uDirectionalColor;
+			
+			varying vec3 light_dir_normalized;
+			varying vec3 transformedNormal;
 
 			void main(void) {
 				
-				
-				
-				
-				
 				// gl_FragColor es una variable "built-in" de GLSL que es usada para 
 				// almacenar el color resultante del fragmento.
+				
+				
+				float directionalLightWeighting = max(dot(transformedNormal, light_dir_normalized), 0.0);
+				vec3 vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+				
+				
 				vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 				vec4 fragColor;
 
