@@ -40,7 +40,6 @@ function EstacionEspacial () {
 		
 		this.centroBaseEspacialInterno.draw(mvMatrix);
 		
-		
 		m = mat4.create();
 		mat4.identity(m);
 		mat4.translate(m,mvMatrix,[-1.5,0.0,3.0]);

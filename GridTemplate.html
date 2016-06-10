@@ -72,7 +72,17 @@
 			varying float vUsarImagen;
 			
 			varying vec3 light_dir_normalized;
+			varying vec3 light_dir_normalized2;
+			varying vec3 light_dir_normalized3;
+			
 			varying vec3 transformedNormal;
+			
+			uniform bool lucesExternas;
+			uniform vec3 l1Position;
+			uniform vec3 l2Position;
+			uniform vec3 l3Position;
+			
+			varying float vLucesExternas;
  
             void main(void) {
                 // gl_Position es una variable "built-in" de GLSL que es usada para 
@@ -84,6 +94,8 @@
 				// Transformamos al vértice al espacio de la proyección
 				gl_Position = uPMatrix * pos_camera_view;
                 
+                
+                
                 if (uUsarImagen){
 					vUsarImagen = 1.0;
 					vTextureCoord = aTextureCoord; // Coordenada de textura sin modifiaciones
@@ -92,7 +104,19 @@
 					vUsarImagen = 0.0;
                 }
                 
-                light_dir_normalized =  -normalize(vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
+                
+                if (lucesExternas){
+					light_dir_normalized =  -normalize(vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
+					vLucesExternas=1.0;
+                }else
+                {
+					light_dir_normalized =  normalize(l1Position-vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
+					light_dir_normalized2 =  normalize(l2Position-vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
+					light_dir_normalized3 =  normalize(l3Position-vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
+					vLucesExternas=0.0;
+				}
+                
+                
 				transformedNormal = normalize(uNMatrix * aVertexNormal);
 								
 				
@@ -117,12 +141,15 @@
 			uniform sampler2D uSampler;
 			varying float vUsarImagen;
 			
-			
+			varying float vLucesExternas;
 			uniform vec3 uAmbientColor;
 			uniform vec3 uDirectionalColor;
 			uniform vec3 uEarthResplandor;
 			
+			
 			varying vec3 light_dir_normalized;
+			varying vec3 light_dir_normalized2;
+			varying vec3 light_dir_normalized3;
 			varying vec3 transformedNormal;
 
 			void main(void) {
@@ -130,29 +157,40 @@
 				// gl_FragColor es una variable "built-in" de GLSL que es usada para 
 				// almacenar el color resultante del fragmento.
 				
-				
-				
-				float directionalLightWeighting = max(dot(transformedNormal, light_dir_normalized), 0.0);
-				float directionalLightWeighting2 = max(dot(transformedNormal, vec3(0,-1,0)), 0.0);
-				
-				vec3 vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting + uEarthResplandor * directionalLightWeighting2;
-				
-				
-				vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 				vec4 fragColor;
+				
+				if (vLucesExternas == 1.0){
+					float directionalLightWeighting = max(dot(transformedNormal, light_dir_normalized), 0.0);
+					float directionalLightWeighting2 = max(dot(transformedNormal, vec3(0,-1,0)), 0.0);
+					
+					vec3 vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting + uEarthResplandor * directionalLightWeighting2;
+					
+					vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+					
+					if (vUsarImagen == 1.0){
+						fragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+					}else{
+						fragColor = vColor * vec4(vLightWeighting,1.0);}
+						
+				}else
+				{
+					float directionalLightWeighting = max(dot(transformedNormal, light_dir_normalized), 0.0);
+					float directionalLightWeighting2 = max(dot(transformedNormal, light_dir_normalized2), 0.0);
+					float directionalLightWeighting3 = max(dot(transformedNormal, light_dir_normalized3), 0.0);
+					
+					vec3 vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting + uDirectionalColor * directionalLightWeighting2 + uDirectionalColor * directionalLightWeighting3;				
+					
+					fragColor = vColor * vec4(vLightWeighting,1.0);
+				}
+				
+				
 
-
-				if (vUsarImagen == 1.0){
-					fragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
-				}else{
-					fragColor = vColor * vec4(vLightWeighting,1.0);}
 
 
 				gl_FragColor = fragColor;
-			}
-			
-			        
+			}        
         </script>
+        
 
 		<script type="text/javascript" src="initialize.js"></script>
 
@@ -198,6 +236,10 @@
 				var directionalColorUniform = gl.getUniformLocation(glProgram, "uDirectionalColor");
 				
 				
+				var lucesExternas = gl.getUniformLocation(glProgram, "lucesExternas");
+				gl.uniform1i(lucesExternas, true);
+        	
+				
 				var earthResplandor = gl.getUniformLocation(glProgram, "uEarthResplandor");
 				gl.uniform3fv(earthResplandor, [0,0,0]); 
  
@@ -217,6 +259,7 @@
 				////////////////////////////////////////////
         
         
+				
 				var usarImagen= true;
 				gl.uniform1i(uUsarImagen, usarImagen);
         
@@ -247,6 +290,8 @@
 				
 				tierra.draw();
 				
+	
+	
 			}
 			
         </script>

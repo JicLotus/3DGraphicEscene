@@ -12,6 +12,8 @@ function CentroBaseEspacialInterno () {
 	
 	this.puntosTapas = [];
 	this.puntosTapas2 = [];
+	
+	this.puntosLuces = [];
 
 	this.crearEstacionEspacial = function(){
 		
@@ -55,8 +57,12 @@ function CentroBaseEspacialInterno () {
 					
 					vec3.transformMat4(posNew,[x,y,0.0],base);
 					
-					if(j==0) this.puntosTapas.push([posNew[0],posNew[1],posNew[2]]);
-					if(j==this.grilla.rows-1) this.puntosTapas2.push([posNew[0],posNew[1],posNew[2]]);
+					if (j==0){
+						this.puntosTapas.push([posNew[0],posNew[1],posNew[2]]);
+					}
+					else if (j==this.grilla.rows-1){
+						this.puntosTapas2.push([posNew[0],posNew[1],posNew[2]]);
+					}
 					
 					this.grilla.position_buffer.push(posNew[0]);								
 					this.grilla.position_buffer.push(posNew[1]);
@@ -69,16 +75,44 @@ function CentroBaseEspacialInterno () {
 					this.grilla.normal_buffer.push(posNew[0]);
 					this.grilla.normal_buffer.push(posNew[1]);
 					this.grilla.normal_buffer.push(posNew[2]);
-					
-					
 				}
-			}	
+			}
+			
+			if (j==1)
+				this.puntosLuces.push([posNew[0],posNew[1],posNew[2]]);
+			else if (j==5)
+				this.puntosLuces.push([posNew[0],posNew[1],posNew[2]]);
+			else if (j==this.grilla.rows-1)
+				this.puntosLuces.push([posNew[0],posNew[1],posNew[2]]);
+				
+			
 		}
 	}
 
 
 	this.draw = function(modelMatrix){
+		
+		var luz = [this.puntosLuces[0][0],this.puntosLuces[0][1],this.puntosLuces[0][2]];
+		var luz2 = [this.puntosLuces[1][0],this.puntosLuces[1][1],this.puntosLuces[1][2]];
+		var luz3 = [this.puntosLuces[2][0],this.puntosLuces[2][1],this.puntosLuces[2][2]];
+		
+		vec3.transformMat4(luz,luz,modelMatrix);
+		vec3.transformMat4(luz2,luz2,modelMatrix);
+		vec3.transformMat4(luz3,luz3,modelMatrix);
+		
+		var lucesExternas = gl.getUniformLocation(glProgram, "lucesExternas");
+		var l1 = gl.getUniformLocation(glProgram, "l1Position");
+		var l2 = gl.getUniformLocation(glProgram, "l2Position");
+		var l3 = gl.getUniformLocation(glProgram, "l3Position");
+		
+		gl.uniform3fv(l1, luz);
+		gl.uniform3fv(l2, luz2);
+		gl.uniform3fv(l3, luz3);
+		
+		
+		gl.uniform1i(lucesExternas, false);
 		this.grilla.draw(modelMatrix);
+		gl.uniform1i(lucesExternas, true);
 	}
 
 	this.getTapas = function(){
