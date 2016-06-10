@@ -71,6 +71,8 @@
 			uniform bool uUsarImagen;
 			varying float vUsarImagen;
 			
+			varying vec3 view_dir_normalized;
+			
 			varying vec3 light_dir_normalized;
 			varying vec3 light_dir_normalized2;
 			varying vec3 light_dir_normalized3;
@@ -82,8 +84,10 @@
 			uniform vec3 l2Position;
 			uniform vec3 l3Position;
 			
+			uniform vec3 eyePoint;
+			
 			varying float vLucesExternas;
- 
+			
             void main(void) {
                 // gl_Position es una variable "built-in" de GLSL que es usada para 
                 // almacenar la posición resultante del fragmento.
@@ -107,6 +111,8 @@
                 
                 if (lucesExternas){
 					light_dir_normalized =  -normalize(vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
+					view_dir_normalized = normalize(eyePoint - vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
+					
 					vLucesExternas=1.0;
                 }else
                 {
@@ -151,6 +157,10 @@
 			varying vec3 light_dir_normalized2;
 			varying vec3 light_dir_normalized3;
 			varying vec3 transformedNormal;
+			
+			varying vec3 view_dir_normalized;
+			
+			uniform float uReflejoNave;
 
 			void main(void) {
 				
@@ -160,17 +170,31 @@
 				vec4 fragColor;
 				
 				if (vLucesExternas == 1.0){
+					
+					vec3 halfVector = normalize(light_dir_normalized + view_dir_normalized);
+					
 					float directionalLightWeighting = max(dot(transformedNormal, light_dir_normalized), 0.0);
 					float directionalLightWeighting2 = max(dot(transformedNormal, vec3(0,-1,0)), 0.0);
+					
+					float specular=0.0;
+					
+					//if (uReflejoNave == 1.0)
+					
+					specular = pow(max(dot(transformedNormal, halfVector),0.0),50.0);
+						
 					
 					vec3 vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting + uEarthResplandor * directionalLightWeighting2;
 					
 					vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 					
+					
 					if (vUsarImagen == 1.0){
 						fragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
 					}else{
 						fragColor = vColor * vec4(vLightWeighting,1.0);}
+						
+					fragColor += specular;
+					
 						
 				}else
 				{
@@ -184,9 +208,6 @@
 				}
 				
 				
-
-
-
 				gl_FragColor = fragColor;
 			}        
         </script>
@@ -235,6 +256,7 @@
 				var lightingDirectionUniform = gl.getUniformLocation(glProgram, "uLightPosition");
 				var directionalColorUniform = gl.getUniformLocation(glProgram, "uDirectionalColor");
 				
+
 				
 				var lucesExternas = gl.getUniformLocation(glProgram, "lucesExternas");
 				gl.uniform1i(lucesExternas, true);
@@ -257,9 +279,12 @@
 				gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 				gl.uniformMatrix4fv(u_vista, false, CameraMatrix);
 				////////////////////////////////////////////
+
+
+				var eyePoint = gl.getUniformLocation(glProgram, "eyePoint");
+				gl.uniform3fv(eyePoint, eye);        
         
-        
-				
+        				
 				var usarImagen= true;
 				gl.uniform1i(uUsarImagen, usarImagen);
         
@@ -275,6 +300,8 @@
 				var usarImagen= false;
 				gl.uniform1i(uUsarImagen, usarImagen);
 				gl.uniform3fv(earthResplandor, [0.5,0.5,1]);
+				
+				
 				estacionEspacial.draw();
 				
 				gl.uniform3fv(earthResplandor, [0,0,0]);
