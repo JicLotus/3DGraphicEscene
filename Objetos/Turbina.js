@@ -18,6 +18,7 @@ function Turbina (){
 		this.grilla.position_buffer = [];
 		this.grilla.color_buffer = [];
 		this.grilla.normal_buffer = [];
+		this.grilla.texture_coord_buffer = [];
 
 		var x=0.0;
 		var tanX=0.0;
@@ -62,25 +63,22 @@ function Turbina (){
 				vec3.transformMat4(posNew,[x,y,0.0],base);
 				vec3.transformMat4(normalTransformada,normal,base);
 				
-				/*
-				Se insertan las coordenadas en la grilla
-				*/
+				this.grilla.texture_coord_buffer.push(0.0);
+				this.grilla.texture_coord_buffer.push(0.0);
+				
+				this.grilla.normal_buffer.push(normalTransformada[0]);
+				this.grilla.normal_buffer.push(normalTransformada[1]);
+				this.grilla.normal_buffer.push(normalTransformada[2]);	
+
+				this.grilla.color_buffer.push(r);
+				this.grilla.color_buffer.push(g);
+				this.grilla.color_buffer.push(b);
+				
 
 				this.grilla.position_buffer.push(posNew[0]);								
 				this.grilla.position_buffer.push(posNew[1]);
 				this.grilla.position_buffer.push(posNew[2]);	
 
-				/*
-					Se inserta el color
-				*/
-				this.grilla.color_buffer.push(r);
-				this.grilla.color_buffer.push(g);
-				this.grilla.color_buffer.push(b);
-				
-				this.grilla.normal_buffer.push(normalTransformada[0]);
-				this.grilla.normal_buffer.push(normalTransformada[1]);
-				this.grilla.normal_buffer.push(normalTransformada[2]);	
-				
 
 			}
 				/*Se incrementa el paso*/

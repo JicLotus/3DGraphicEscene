@@ -24,6 +24,7 @@ function CilindroGrid (_radio,_altura) {
 		this.grilla.position_buffer = [];
 		this.grilla.color_buffer = [];
 		this.grilla.normal_buffer = [];
+		this.grilla.texture_coord_buffer = [];
 
 		var x=0.0;
 		var y=0.0;
@@ -34,17 +35,22 @@ function CilindroGrid (_radio,_altura) {
 
 		//esta es la primer cara...		
 		for (var i=0;i<this.grilla.cols;i++){
-			this.grilla.position_buffer.push(0);								
-			this.grilla.position_buffer.push(0);
-			this.grilla.position_buffer.push((alturaAux));
 			
-			this.grilla.color_buffer.push(r);
-			this.grilla.color_buffer.push(g);
-			this.grilla.color_buffer.push(b);	
+			this.grilla.texture_coord_buffer.push(0.0);
+			this.grilla.texture_coord_buffer.push(0.0);
 			
 			this.grilla.normal_buffer.push(0);
 			this.grilla.normal_buffer.push(0);
 			this.grilla.normal_buffer.push(alturaAux);
+
+			this.grilla.color_buffer.push(r);
+			this.grilla.color_buffer.push(g);
+			this.grilla.color_buffer.push(b);	
+			
+			this.grilla.position_buffer.push(0);								
+			this.grilla.position_buffer.push(0);
+			this.grilla.position_buffer.push((alturaAux));
+		
 		}
 		
 		
@@ -57,18 +63,21 @@ function CilindroGrid (_radio,_altura) {
 				x = this.radio * Math.cos(u);
 				y = this.radio * Math.sin(u);	
 				
-				this.grilla.position_buffer.push(x);								
-				this.grilla.position_buffer.push(y);
-				this.grilla.position_buffer.push(alturaAux);	
-
+				this.grilla.texture_coord_buffer.push(0.0);
+				this.grilla.texture_coord_buffer.push(0.0);
+				
 				this.grilla.normal_buffer.push(x);
 				this.grilla.normal_buffer.push(y);
 				this.grilla.normal_buffer.push(alturaAux);
-
+				
 				//Todos los vertices siempre blanco
 				this.grilla.color_buffer.push(r);
 				this.grilla.color_buffer.push(g);
-				this.grilla.color_buffer.push(b);	
+				this.grilla.color_buffer.push(b);
+				
+				this.grilla.position_buffer.push(x);								
+				this.grilla.position_buffer.push(y);
+				this.grilla.position_buffer.push(alturaAux);	
 				
 				u+=(2.23*Math.PI)/this.grilla.cols;
 					
@@ -90,6 +99,9 @@ function CilindroGrid (_radio,_altura) {
 			this.grilla.normal_buffer.push(0);
 			this.grilla.normal_buffer.push(0);
 			this.grilla.normal_buffer.push(alturaAux);	
+			
+			this.grilla.texture_coord_buffer.push(0.0);
+			this.grilla.texture_coord_buffer.push(0.0);
 		}
 	
 		
@@ -98,6 +110,10 @@ function CilindroGrid (_radio,_altura) {
 	this.draw = function(modelMatrix){
 		this.grilla.draw(modelMatrix);
 	}              
+
+	this.setTexture = function(_fileName){
+		this.grilla.initTexture(_fileName);
+	}
 
 	this.inicializar = function()
 	{

@@ -188,15 +188,15 @@ function makeShader(src, type)
 function setupBuffers()
 {
    
-   sol = new Sol();
-   tierra = new Tierra();
+	sol = new Sol();
+	tierra = new Tierra();
    
-   estacionEspacial = new EstacionEspacial();
-   estacionEspacial.inicializar();
+	estacionEspacial = new EstacionEspacial();
+	estacionEspacial.inicializar();
    
-   naveEspacial = new NaveEspacial();
+	naveEspacial = new NaveEspacial();
    
-   cielo = new Cielo();
+	cielo = new Cielo();
 }
 
 function handleLoadedTexture(_textura) {
@@ -209,5 +209,4 @@ function handleLoadedTexture(_textura) {
         gl.generateMipmap(gl.TEXTURE_2D);
 
         gl.bindTexture(gl.TEXTURE_2D, null);
-        
 }

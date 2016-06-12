@@ -1,10 +1,10 @@
 function CentroBaseEspacialExterno () {
 
-	this.puntosBezierInternos = 10;
+	this.puntosBezierInternos = 70;
 	this.cantidadBeziers =4;
 	
 	//El numero de columnas es el numero de puntos que tenga el perfil
-	this.grilla = new VertexGrid(10,this.puntosBezierInternos*this.cantidadBeziers);
+	this.grilla = new VertexGrid(50,this.puntosBezierInternos*this.cantidadBeziers);
 	
 	this.puntosPolinomio = [];
 	
@@ -17,6 +17,8 @@ function CentroBaseEspacialExterno () {
 		this.grilla.position_buffer = [];
 		this.grilla.color_buffer = [];
 		this.grilla.normal_buffer = [];
+		this.grilla.texture_coord_buffer = [];
+		
 		var tanX=0.0;
 		var tanY=0.0;
 		var normal = [];
@@ -80,18 +82,21 @@ function CentroBaseEspacialExterno () {
 					if(j==0) this.puntosTapas.push([posNew[0],posNew[1],posNew[2]]);
 					if(j==this.grilla.rows-1) this.puntosTapas2.push([posNew[0],posNew[1],posNew[2]]);
 					
-					this.grilla.position_buffer.push(posNew[0]);								
-					this.grilla.position_buffer.push(posNew[1]);
-					this.grilla.position_buffer.push(posNew[2]);	
-
-					this.grilla.color_buffer.push(88/255);
-					this.grilla.color_buffer.push(88/255);
-					this.grilla.color_buffer.push(88/255);
-					
+					this.grilla.texture_coord_buffer.push(0.0);
+					this.grilla.texture_coord_buffer.push(0.0);
 					
 					this.grilla.normal_buffer.push(normalTransformada[0]);
 					this.grilla.normal_buffer.push(normalTransformada[1]);
 					this.grilla.normal_buffer.push(normalTransformada[2]);
+					
+					this.grilla.color_buffer.push(88/255);
+					this.grilla.color_buffer.push(88/255);
+					this.grilla.color_buffer.push(88/255);
+					
+					this.grilla.position_buffer.push(posNew[0]);								
+					this.grilla.position_buffer.push(posNew[1]);
+					this.grilla.position_buffer.push(posNew[2]);	
+					
 					
 				}
 			}	

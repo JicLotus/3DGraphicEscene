@@ -1,6 +1,6 @@
 function TapaCentroBaseEspacial (_puntosTapasInternas,_puntosTapasExternas) {
 
-	this.grilla = new VertexGrid(2,40);
+	this.grilla = new VertexGrid(2,280);
 	this.puntosTapasInternas = _puntosTapasInternas;
 	this.puntosTapasExternas = _puntosTapasExternas;
 	
@@ -9,6 +9,8 @@ function TapaCentroBaseEspacial (_puntosTapasInternas,_puntosTapasExternas) {
 		this.grilla.position_buffer = [];
 		this.grilla.color_buffer = [];
 		this.grilla.normal_buffer = [];
+		this.grilla.texture_coord_buffer = [];
+
 
 		var x=0.0;
 		var y=0.0;
@@ -23,19 +25,21 @@ function TapaCentroBaseEspacial (_puntosTapasInternas,_puntosTapasExternas) {
 					x=this.puntosTapasTemp[i][0];
 					y=this.puntosTapasTemp[i][1];
 					z=this.puntosTapasTemp[i][2];
-				
-					this.grilla.position_buffer.push(x);
-					this.grilla.position_buffer.push(y);
-					this.grilla.position_buffer.push(z);	
-
-					this.grilla.color_buffer.push(88/255);
-					this.grilla.color_buffer.push(88/255);
-					this.grilla.color_buffer.push(88/255);	
 					
+					this.grilla.texture_coord_buffer.push(0.0);
+					this.grilla.texture_coord_buffer.push(0.0);
+				
 					this.grilla.normal_buffer.push(x);
 					this.grilla.normal_buffer.push(y);
 					this.grilla.normal_buffer.push(z);
-		
+				
+					this.grilla.color_buffer.push(88/255);
+					this.grilla.color_buffer.push(88/255);
+					this.grilla.color_buffer.push(88/255);	
+				
+					this.grilla.position_buffer.push(x);
+					this.grilla.position_buffer.push(y);
+					this.grilla.position_buffer.push(z);
 			}
 		}
 		

@@ -37,19 +37,18 @@ function EsferaGrid () {
 				this.grilla.texture_coord_buffer.push(imgU);
                 this.grilla.texture_coord_buffer.push(imgV);
 
-				this.grilla.position_buffer.push(x);								
-				this.grilla.position_buffer.push(y);
-				this.grilla.position_buffer.push(z);		
+				this.grilla.normal_buffer.push(x);
+				this.grilla.normal_buffer.push(y);
+				this.grilla.normal_buffer.push(z);
 
 				//Todos los vertices siempre blanco
 				this.grilla.color_buffer.push(1.0);
 				this.grilla.color_buffer.push(1.0);
 				this.grilla.color_buffer.push(1.0);
-				
-				this.grilla.normal_buffer.push(x);
-				this.grilla.normal_buffer.push(y);
-				this.grilla.normal_buffer.push(z);
-				
+
+				this.grilla.position_buffer.push(x);								
+				this.grilla.position_buffer.push(y);
+				this.grilla.position_buffer.push(z);		
 			
 				u+=(2.07 *Math.PI)/this.grilla.cols;
 			}

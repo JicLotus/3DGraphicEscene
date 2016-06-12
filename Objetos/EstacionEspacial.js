@@ -1,5 +1,6 @@
 function EstacionEspacial () {
 
+
 	this.tubo = new CilindroGrid(0.5,1.0);
 	this.tubo.inicializar();
 	//Esto dibuja los tubos en forma de rayos de bicicleta
@@ -29,7 +30,8 @@ function EstacionEspacial () {
 	this.draw = function(){
 		
 		mat4.identity(mvMatrix);
-
+		
+		
 		mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
 		mat4.translate(mvMatrix, mvMatrix, [40.0, 3.0,0.0]);
 		mat4.rotate(mvMatrix, mvMatrix, -t, [0.0, 1.0, 0.0]);
@@ -53,8 +55,8 @@ function EstacionEspacial () {
 		mat4.translate(m,m,[0.0,0.0,-1.2]);
 		
 		this.corazonEstacionEspacial.draw(m);
-		
 		this.centroBaseEspacialExterno.draw(mvMatrix);
+		
 		this.tapaPrincipal.draw(mvMatrix);
 		this.tapaSecundaria.draw(mvMatrix);
 		

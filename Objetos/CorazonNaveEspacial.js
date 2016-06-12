@@ -14,6 +14,7 @@ function CorazonNaveEspacial (_puntosPolinomio){
 		this.grilla.position_buffer = [];
 		this.grilla.color_buffer = [];
 		this.grilla.normal_buffer = [];
+		this.grilla.texture_coord_buffer = [];
 		
 		var x=0.0;
 		var y=0.0;
@@ -33,24 +34,27 @@ function CorazonNaveEspacial (_puntosPolinomio){
 					x = beizerActual[i].getX();
 					y = beizerActual[i].getY();
 			
-			
 					mat4.identity(base);			
 					mat4.rotate(base, base, Math.PI/2, [1.0, 0.0, 0.0]);
 					mat4.rotate(base, base, angle, [0.0, 1.0, 0.0]);
 				
 					vec3.transformMat4(posNew,[x,y,0.0],base);
-					
-					this.grilla.position_buffer.push(posNew[0]);								
-					this.grilla.position_buffer.push(posNew[1]);
-					this.grilla.position_buffer.push(posNew[2]);	
+
+					this.grilla.texture_coord_buffer.push(0.0);
+					this.grilla.texture_coord_buffer.push(0.0);
+
+					this.grilla.normal_buffer.push(posNew[0]);
+					this.grilla.normal_buffer.push(posNew[1]);
+					this.grilla.normal_buffer.push(posNew[2]);
 
 					this.grilla.color_buffer.push(0.2);
 					this.grilla.color_buffer.push(0.2);
 					this.grilla.color_buffer.push(0.2);	
 					
-					this.grilla.normal_buffer.push(posNew[0]);
-					this.grilla.normal_buffer.push(posNew[1]);
-					this.grilla.normal_buffer.push(posNew[2]);
+					this.grilla.position_buffer.push(posNew[0]);								
+					this.grilla.position_buffer.push(posNew[1]);
+					this.grilla.position_buffer.push(posNew[2]);	
+
 				}
 			}
 			angle+= (2.23*Math.PI/this.grilla.rows);

@@ -15,6 +15,7 @@ function SostenTurbinas(){
 		this.grilla.position_buffer = [];
 		this.grilla.color_buffer = [];
 		this.grilla.normal_buffer = [];
+		this.grilla.texture_coord_buffer = [];
 
 		var x=0.0;
 		var y=0.0;
@@ -46,26 +47,21 @@ function SostenTurbinas(){
 			//se aplica la rotacion y traslacion
 			vec3.transformMat4(posNew,[x,y,0.0],base);
 			
-			/*
-			Se insertan las coordenadas en la grilla
-			*/
-
-			this.grilla.position_buffer.push(posNew[0]);								
-			this.grilla.position_buffer.push(posNew[1]);
-			this.grilla.position_buffer.push(posNew[2]);	
-
-			/*
-				Se inserta el color
-			*/
+			this.grilla.texture_coord_buffer.push(0.0);
+			this.grilla.texture_coord_buffer.push(0.0);
+			
+			this.grilla.normal_buffer.push(0);
+			this.grilla.normal_buffer.push(0);
+			this.grilla.normal_buffer.push(-1);
 
 			this.grilla.color_buffer.push(r);
 			this.grilla.color_buffer.push(g);
 			this.grilla.color_buffer.push(b);	
 
-			this.grilla.normal_buffer.push(0);
-			this.grilla.normal_buffer.push(0);
-			this.grilla.normal_buffer.push(-1);
-			
+			this.grilla.position_buffer.push(posNew[0]);								
+			this.grilla.position_buffer.push(posNew[1]);
+			this.grilla.position_buffer.push(posNew[2]);	
+
 
 		}
 
@@ -90,24 +86,21 @@ function SostenTurbinas(){
 				//se aplica la rotacion y traslacion
 				vec3.transformMat4(posNew,[x,y,0.0],base);
 				
-				/*
-				Se insertan las coordenadas en la grilla
-				*/
-
-				this.grilla.position_buffer.push(posNew[0]);								
-				this.grilla.position_buffer.push(posNew[1]);
-				this.grilla.position_buffer.push(posNew[2]);	
-
-				/*
-					Se inserta el color
-				*/
-				this.grilla.color_buffer.push(r);
-				this.grilla.color_buffer.push(g);
-				this.grilla.color_buffer.push(b);	
+				this.grilla.texture_coord_buffer.push(0.0);
+				this.grilla.texture_coord_buffer.push(0.0);
 				
 				this.grilla.normal_buffer.push(normal[0]);
 				this.grilla.normal_buffer.push(normal[1]);
 				this.grilla.normal_buffer.push(normal[2]);
+				
+				this.grilla.color_buffer.push(r);
+				this.grilla.color_buffer.push(g);
+				this.grilla.color_buffer.push(b);	
+				
+				this.grilla.position_buffer.push(posNew[0]);								
+				this.grilla.position_buffer.push(posNew[1]);
+				this.grilla.position_buffer.push(posNew[2]);	
+
 
 			}
 				/*Se incrementa el paso*/
@@ -128,26 +121,20 @@ function SostenTurbinas(){
 			//se aplica la rotacion y traslacion
 			vec3.transformMat4(posNew,[x,y,0.0],base);
 			
-			/*
-			Se insertan las coordenadas en la grilla
-			*/
-
-			this.grilla.position_buffer.push(posNew[0]);								
-			this.grilla.position_buffer.push(posNew[1]);
-			this.grilla.position_buffer.push(posNew[2]);	
-
-			/*
-				Se inserta el color
-			*/
-
-			this.grilla.color_buffer.push(r);
-			this.grilla.color_buffer.push(g);
-			this.grilla.color_buffer.push(b);	
-
+			this.grilla.texture_coord_buffer.push(0.0);
+			this.grilla.texture_coord_buffer.push(0.0);
+			
 			this.grilla.normal_buffer.push(0);
 			this.grilla.normal_buffer.push(0);
 			this.grilla.normal_buffer.push(1);
 			
+			this.grilla.color_buffer.push(r);
+			this.grilla.color_buffer.push(g);
+			this.grilla.color_buffer.push(b);	
+
+			this.grilla.position_buffer.push(posNew[0]);								
+			this.grilla.position_buffer.push(posNew[1]);
+			this.grilla.position_buffer.push(posNew[2]);	
 
 		}
 

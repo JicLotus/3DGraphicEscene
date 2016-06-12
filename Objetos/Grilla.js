@@ -1,5 +1,3 @@
-
-
 function VertexGrid (_rows, _cols) {
                 this.cols = _cols;
                 this.rows = _rows;
@@ -19,13 +17,81 @@ function VertexGrid (_rows, _cols) {
                 this.webgl_index_buffer = null;
 
 				this.texture = null;
+				this.textureMapaNormal = null;
 
+				this.initTexture = function(texture_file){
+					
+					var aux_texture = gl.createTexture();
+					this.texture = aux_texture;
+					this.texture.image = new Image();
+					
+					this.texture.image.onload = function () {
+						   handleLoadedTexture(aux_texture)
+					}
+					this.texture.image.src = texture_file;
+				}
+
+				this.initNormalTexture = function(texture_file){
+					
+					var aux_texture = gl.createTexture();
+					this.textureMapaNormal = aux_texture;
+					this.textureMapaNormal.image = new Image();
+					
+					this.textureMapaNormal.image.onload = function () {
+						   handleLoadedTexture(aux_texture)
+					}
+					this.textureMapaNormal.image.src = texture_file;
+				}
+                
+                this.createUniformPlaneGrid = function(){
+                    
+                    this.position_buffer = [];
+                    this.color_buffer = [];
+                    this.normal_buffer = [];
+                    this.texture_coord_buffer = [];
+	
+                    var cte=((this.cols-1.0)/2.0); 
+                    var x=0.0;
+                    var y=0.0;
+                    
+                    var imgU;
+                    var imgV;
+                     
+                    for (var j=0;j<this.rows;j++){
+                    		y=cte-j;	
+                    		for (var i=0;i<this.cols;i++){
+								x=cte+i;		  							
+		  						
+		  						//imgU = 1.0 - i/this.cols;
+		  						//imgV = 1.0 -j/this.rows;
+		  						imgU = 1.0 * i /5;
+		  						imgV = 1.0 * j /5;
+								
+		  						this.texture_coord_buffer.push(imgU);
+		  						this.texture_coord_buffer.push(imgV);
+		  						
+								this.normal_buffer.push(0.0);
+								this.normal_buffer.push(0.0);
+								this.normal_buffer.push(1.0);
+
+								//Todos los vertices siempre blanco
+								this.color_buffer.push(1.0);
+								this.color_buffer.push(1.0);
+								this.color_buffer.push(1.0);
+		  						
+								this.position_buffer.push(x);
+								this.position_buffer.push(y);
+								this.position_buffer.push(0.0);		
+                  		  	
+                    	}
+                    }
+                }
 
                 this.createIndexBuffer = function(){
                 	  
 					this.index_buffer = [];  
 							
-							
+					
 					this.index_buffer.push(this.cols-1);
 					this.index_buffer.push(this.cols-1);
 					this.index_buffer.push(0);
@@ -55,79 +121,34 @@ function VertexGrid (_rows, _cols) {
 					
 					//this.cantidadVertices = (this.rows -1) * (this.cols-1) * 2 +6;
 					this.cantidadVertices = this.cols*2*(this.rows-1)+ (this.rows-2)*2 +3+3;
-                }
-                        
-                
-                this.createUniformPlaneGrid = function(){
-                    
-                    this.position_buffer = [];
-                    this.color_buffer = [];
-                    this.normal_buffer = [];
-	
-                    var cte=((this.cols-1.0)/2.0); 
-                    var x=0.0;
-                    var y=0.0;
-                     
-                    for (var j=0;j<this.rows;j++){
-                    		y=cte-j;	
-                    		for (var i=0;i<this.cols;i++){
-									x=cte+i;		  							
-		  						
-							this.position_buffer.push(x);
-							this.position_buffer.push(y);
-							this.position_buffer.push(0.0);		
-  
-							this.normal_buffer.push(x);
-							this.normal_buffer.push(y);
-							this.normal_buffer.push(0.0);
-  
-		  					//Todos los vertices siempre blanco
-      		              	this.color_buffer.push(1.0);
-            		        this.color_buffer.push(1.0);
-                  		  	this.color_buffer.push(1.0);
-                  		  	
-                    	}
-                    }
+					
                 }
 
-
-                // Esta función crea e incializa los buffers dentro del pipeline para luego
-                // utlizarlos a la hora de renderizar.
                 this.setupWebGLBuffers = function(){
 
-                    // 1. Creamos un buffer para las posicioens dentro del pipeline.
-                    this.webgl_position_buffer = gl.createBuffer();
-                    // 2. Le decimos a WebGL que las siguientes operaciones que vamos a ser se aplican sobre el buffer que
-                    // hemos creado.
-                    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-                    // 3. Cargamos datos de las posiciones en el buffer.
-                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
-
-                    
-                    
-                    this.webgl_normal_buffer = gl.createBuffer();
-                    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
-                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);    
-                    
-                    
-                    // Repetimos los pasos 1. 2. y 3. para la información del color
-                    this.webgl_color_buffer = gl.createBuffer();
-                    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);
-                    
-                    
-                    
-					if (this.texture != null){
+					//if (this.texture != null || this.textureMapaNormal != null){
 						this.webgl_texture_coord_buffer = gl.createBuffer();
 						gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
 						gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coord_buffer), gl.STATIC_DRAW);
 						this.webgl_texture_coord_buffer.itemSize = 2;
 						this.webgl_texture_coord_buffer.numItems = this.texture_coord_buffer.length / 2;
-					}
+					//}
 
-                    // Repetimos los pasos 1. 2. y 3. para la información de los índices
-                    // Notar que esta vez se usa ELEMENT_ARRAY_BUFFER en lugar de ARRAY_BUFFER.
-                    // Notar también que se usa un array de enteros en lugar de floats.
+
+                    this.webgl_normal_buffer = gl.createBuffer();
+                    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);  
+                    
+                    
+                    this.webgl_color_buffer = gl.createBuffer();
+                    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
+                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);
+                    
+                    this.webgl_position_buffer = gl.createBuffer();
+                    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
+
+                    
                     this.webgl_index_buffer = gl.createBuffer();
                     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
                     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);					
@@ -152,21 +173,29 @@ function VertexGrid (_rows, _cols) {
                     gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
 
 					
-					if (this.texture != null){
-						var vertexTextureAttribute = gl.getAttribLocation(glProgram, "aTextureCoord");
-						gl.enableVertexAttribArray(vertexTextureAttribute);
-						gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
-						gl.vertexAttribPointer(vertexTextureAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+					
+					var vertexTextureAttribute = gl.getAttribLocation(glProgram, "aTextureCoord");
+					gl.enableVertexAttribArray(vertexTextureAttribute);
+					gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+					gl.vertexAttribPointer(vertexTextureAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+
 						
+					if (this.texture != null || this.textureMapaNormal != null){	
 						var sampler = gl.getUniformLocation(glProgram, "uSampler");
 						gl.activeTexture(gl.TEXTURE0);
 						gl.bindTexture(gl.TEXTURE_2D, this.texture);
 						gl.uniform1i(sampler, 0);
-						
-						gl.bindTexture(gl.TEXTURE_2D, this.texture);
 					}
 					
 
+					if (this.textureMapaNormal != null){
+						var normalSampler = gl.getUniformLocation(glProgram, "uNormalSampler");
+						gl.activeTexture(gl.TEXTURE0 + 1);
+						gl.bindTexture(gl.TEXTURE_2D, this.textureMapaNormal);
+						gl.uniform1i(normalSampler, 1);
+					}
+					
+					
 					///////////////////////////////////////////////////////////////////////////
 					var u_model_view_matrix = gl.getUniformLocation(glProgram, "uMVMatrix");
 					gl.uniformMatrix4fv(u_model_view_matrix, false, modelMatrix);
@@ -181,29 +210,16 @@ function VertexGrid (_rows, _cols) {
 					gl.uniformMatrix3fv(nMatrixUniform, false, normalMatrix);
 					///////////////////////////////////////////////////////////////////////////
 					
+					
+					if (this.texture != null) gl.bindTexture(gl.TEXTURE_2D, this.texture);
+					if (this.textureMapaNormal != null) gl.bindTexture(gl.TEXTURE_2D, this.textureMapaNormal);
+					
 						
                     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
-                    gl.drawElements(gl.TRIANGLE_STRIP, this.cantidadVertices, gl.UNSIGNED_SHORT, 0);
+                    gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
                 }
                 
                 
-				this.initTexture = function(texture_file){
-					
-					var aux_texture = gl.createTexture();
-					gl.bindTexture(gl.TEXTURE_2D, aux_texture);
-					gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,new Uint8Array([255, 0, 0, 255]));
-					
-					
-					this.texture = aux_texture;
-					this.texture.image = new Image();
-					
-					this.texture.image.src = texture_file;
-					
-					this.texture.image.onload = function () {
-						   handleLoadedTexture(aux_texture)
-					}
-					
-				}
 				
                 this.inicializar = function(){
 					this.createUniformPlaneGrid();
