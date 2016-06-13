@@ -5,7 +5,11 @@ function CentroBaseEspacialInterno () {
 	
 	//El numero de columnas es el numero de puntos que tenga el perfil
 	this.grilla = new VertexGrid(20,this.puntosBezierInternos*this.cantidadBeziers);
+	this.grilla.initTexture("Resources/techo.jpg");
+	this.grilla.initNormalTexture("Resources/piso.jpg");
+	this.grilla.initSecondTexture("Resources/paredInterna1.jpg");
 	
+	this.grilla.multipleImages = true;
 	
 	this.puntosPolinomio = [];
 	
@@ -68,8 +72,12 @@ function CentroBaseEspacialInterno () {
 						this.puntosTapas2.push([posNew[0],posNew[1],posNew[2]]);
 					}
 					
-					this.grilla.texture_coord_buffer.push(0.0);
-					this.grilla.texture_coord_buffer.push(0.0);
+					imgU = j / this.puntosBezierInternos *5.0;
+					imgV = i /this.grilla.rows / 2.2;
+					
+					this.grilla.texture_coord_buffer.push(imgU);
+					this.grilla.texture_coord_buffer.push(imgV);
+					this.grilla.texture_coord_buffer.push(h);
 					
 					this.grilla.normal_buffer.push(posNew[0]);
 					this.grilla.normal_buffer.push(posNew[1]);
@@ -97,7 +105,7 @@ function CentroBaseEspacialInterno () {
 			
 			if (j==1)
 				this.puntosLuces.push([posNew[0],posNew[1],posNew[2]]);
-			else if (j==5)
+			else if (j==10)
 				this.puntosLuces.push([posNew[0],posNew[1],posNew[2]]);
 			else if (j==this.grilla.rows-1)
 				this.puntosLuces.push([posNew[0],posNew[1],posNew[2]]);

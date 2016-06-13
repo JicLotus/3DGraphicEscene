@@ -25,7 +25,10 @@ function VertexGrid (_rows, _cols) {
                 this.webgl_index_buffer = null;
 
 				this.texture = null;
+				this.secondTexture = null;
 				this.textureMapaNormal = null;
+				
+				this.multipleImages= false;
 
 				this.initTexture = function(texture_file){
 					
@@ -37,6 +40,18 @@ function VertexGrid (_rows, _cols) {
 						   handleLoadedTexture(aux_texture)
 					}
 					this.texture.image.src = texture_file;
+				}
+
+				this.initSecondTexture = function(texture_file){
+					
+					var aux_texture = gl.createTexture();
+					this.secondTexture = aux_texture;
+					this.secondTexture.image = new Image();
+					
+					this.secondTexture.image.onload = function () {
+						   handleLoadedTexture(aux_texture)
+					}
+					this.secondTexture.image.src = texture_file;
 				}
 
 				this.initNormalTexture = function(texture_file){
@@ -216,8 +231,11 @@ function VertexGrid (_rows, _cols) {
 					var vertexTextureAttribute = gl.getAttribLocation(glProgram, "aTextureCoord");
 					gl.enableVertexAttribArray(vertexTextureAttribute);
 					gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
-					gl.vertexAttribPointer(vertexTextureAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
-
+					
+					if (!this.multipleImages)
+						gl.vertexAttribPointer(vertexTextureAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+					else gl.vertexAttribPointer(vertexTextureAttribute, this.webgl_texture_coord_buffer.itemSize + 1, gl.FLOAT, false, 0, 0);
+						
 						
 					if (this.texture != null || this.textureMapaNormal != null){	
 						var sampler = gl.getUniformLocation(glProgram, "uSampler");
@@ -229,6 +247,14 @@ function VertexGrid (_rows, _cols) {
 
 					if (this.textureMapaNormal != null){
 						var normalSampler = gl.getUniformLocation(glProgram, "uNormalSampler");
+						gl.activeTexture(gl.TEXTURE0 + 1);
+						gl.bindTexture(gl.TEXTURE_2D, this.textureMapaNormal);
+						gl.uniform1i(normalSampler, 1);
+					}
+					
+					
+					if (this.secondTexture != null){
+						var normalSampler = gl.getUniformLocation(glProgram, "uSecondTexture");
 						gl.activeTexture(gl.TEXTURE0 + 1);
 						gl.bindTexture(gl.TEXTURE_2D, this.textureMapaNormal);
 						gl.uniform1i(normalSampler, 1);
@@ -252,6 +278,7 @@ function VertexGrid (_rows, _cols) {
 					
 					if (this.texture != null) gl.bindTexture(gl.TEXTURE_2D, this.texture);
 					if (this.textureMapaNormal != null) gl.bindTexture(gl.TEXTURE_2D, this.textureMapaNormal);
+					if (this.secondTexture != null) gl.bindTexture(gl.TEXTURE_2D, this.secondTexture);
 					
 						
                     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
