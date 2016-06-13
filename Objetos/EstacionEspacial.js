@@ -2,6 +2,7 @@ function EstacionEspacial () {
 
 
 	this.tubo = new CilindroGrid(0.5,1.0);
+	this.tubo.initTexture("Resources/refMap.jpg");
 	this.tubo.inicializar();
 	//Esto dibuja los tubos en forma de rayos de bicicleta
 	this.tubosCentral = new TubosEstacionEspacial(this.tubo);
@@ -70,7 +71,20 @@ function EstacionEspacial () {
 		this.dibujarPaneles(mvMatrix,-1.4);
 
 		mat4.rotate(mvMatrix, mvMatrix, -Math.PI*1/7.2, [0.0, 1.0, 0.0]);
+		
+		var uUsarImagen = gl.getUniformLocation(glProgram, "uUsarImagen");		
+		var usarImagen= true;
+		gl.uniform1i(uUsarImagen, usarImagen);
+		var ureflexion = gl.getUniformLocation(glProgram, "uTieneReflexion");		
+		var reflexion= true;
+		gl.uniform1i(ureflexion, reflexion);
+		
 		this.tubosCentral.dibujar();
+		
+		usarImagen= false;
+		gl.uniform1i(uUsarImagen, usarImagen);
+		reflexion= false;
+		gl.uniform1i(ureflexion, reflexion);
 		
 	}              
 

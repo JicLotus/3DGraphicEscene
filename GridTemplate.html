@@ -52,7 +52,10 @@
             attribute vec3 aVertexPosition;
             attribute vec3 aVertexColor;
             attribute vec2 aTextureCoord;
+            
             attribute vec3 aVertexNormal;
+            attribute vec3 aVertexBiNormal;
+            attribute vec3 aVertexTangent;
 
             // Los uniforms son características propias de una etapa de dibujado completa.
             // Son comunes a todos los vertices involucrados en el dibujado.
@@ -78,6 +81,8 @@
 			varying vec3 light_dir_normalized3;
 			
 			varying vec3 transformedNormal;
+			varying vec3 transformedBiNormal;
+			varying vec3 transformedTangent;
 			
 			uniform bool lucesExternas;
 			uniform vec3 l1Position;
@@ -91,6 +96,11 @@
 			uniform bool uNormalMap;
 			varying float vNormalMap;
 			
+			uniform bool uTieneReflexion;
+			varying float vTieneReflexion;
+			
+			varying vec2 vN;
+			
             void main(void) {
                 // gl_Position es una variable "built-in" de GLSL que es usada para 
                 // almacenar la posición resultante del fragmento.
@@ -102,13 +112,14 @@
 				gl_Position = uPMatrix * pos_camera_view;
                 
                 vNormalMap=0.0;
+                vTieneReflexion = 0.0;
                 vTextureCoord = aTextureCoord;
                 
                 
                 if (uUsarImagen){
 					vUsarImagen = 1.0;
-					
 					if (uNormalMap) vNormalMap = 1.0;
+					if (uTieneReflexion) vTieneReflexion = 1.0;
 				}
 				else{
 					vUsarImagen = 0.0;
@@ -116,7 +127,7 @@
                 
                 
                 if (lucesExternas){
-					light_dir_normalized =  -normalize(vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
+					light_dir_normalized = normalize(vec3(0.0,4.0,1.0)-vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
 					view_dir_normalized = normalize(eyePoint - vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
 					
 					vLucesExternas=1.0;
@@ -130,7 +141,21 @@
                 
                 
 				transformedNormal = normalize(uNMatrix * aVertexNormal);
-								
+				transformedBiNormal = normalize(uNMatrix * aVertexBiNormal);
+				transformedTangent = normalize(uNMatrix * aVertexTangent);
+					
+				vec3 e = normalize(vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
+				vec3 r = reflect(e , transformedNormal );
+				
+				float m = 2. * sqrt( 
+					pow( r.x, 2. ) + 
+					pow( r.y, 2. ) + 
+					pow( r.z + 1., 2. ) 
+				);
+				
+				vN = r.xy / m + .5;	
+				
+							
 				
                 vColor = vec4(aVertexColor,1.0);
                 
@@ -165,11 +190,17 @@
 			varying vec3 light_dir_normalized;
 			varying vec3 light_dir_normalized2;
 			varying vec3 light_dir_normalized3;
+			
 			varying vec3 transformedNormal;
+			varying vec3 transformedBiNormal;
+			varying vec3 transformedTangent;
 			
 			varying vec3 view_dir_normalized;
 			
 			varying float vNormalMap;
+			varying float vTieneReflexion;
+			
+			varying vec2 vN;
 
 			void main(void) {
 				
@@ -195,19 +226,38 @@
 						
 						vec3 vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting + uEarthResplandor * directionalLightWeighting2;
 						
+							
 						if (vNormalMap==1.0){
 							vec4 textureNormalColor = texture2D(uNormalSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 							
 							vec3 normalMap = normalize(textureNormalColor.rgb * 2.0 - 1.0);
+							
+							float normalXComponent = dot(transformedTangent,normalMap);
+							float normalYComponent = dot(transformedBiNormal,normalMap);
+							float normalZComponent = dot(transformedNormal,normalMap);
+							
+							normalMap = vec3(normalXComponent, normalYComponent, normalZComponent);
+							
 							directionalLightWeighting =  max(dot(light_dir_normalized, normalMap), 0.0);
+							
 							
 							vec3 vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
 							
-							fragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
-						}
-						else
-						{
-							fragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+							if (vTieneReflexion==1.0){
+								vec4 textureReflect = texture2D(uSampler,vN);
+								fragColor = vec4(textureReflect.rgb * vLightWeighting, textureColor.a);
+							}else
+							{
+								fragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+							}
+							
+						}	
+						else if (vTieneReflexion==1.0){
+								vec4 textureReflect = texture2D(uSampler,vN);
+								fragColor = vec4(textureReflect.rgb * vLightWeighting, textureColor.a);
+								
+						}else{
+								fragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
 						}
 						
 					}else{
@@ -254,7 +304,6 @@
 
 			function seleccionDeCamara()
 			{
-				camara = 4;
 				
 				if (camara==1){
                     setMatrizLookAtNaveAtras();
@@ -296,7 +345,7 @@
 				seleccionDeCamara();
 				
 				//mat4.identity(CameraMatrix);
-				//mat4.translate(CameraMatrix,CameraMatrix, [0, 0, -40]);
+				//mat4.translate(CameraMatrix,CameraMatrix, [-1, 0, -5.0]);
 				
 				gl.uniformMatrix4fv(u_proj_matrix, false, pMatrix);
 				gl.uniformMatrix4fv(u_vista, false, CameraMatrix);
@@ -310,8 +359,10 @@
 				var usarImagen= true;
 				gl.uniform1i(uUsarImagen, usarImagen);
         
- 				gl.uniform3f(ambientColorUniform,1.0, 1.0, 1.0);
-				sol.draw();
+ 				
+ 				gl.uniform3f(ambientColorUniform, 1.0, 1.0, 1.0);
+				
+ 				sol.draw();
 				cielo.draw();
 				
 				
@@ -333,12 +384,10 @@
                 naveEspacial.getMatriz();
                 naveEspacial.draw();
                 
-				
 				var usarImagen= true;
 				gl.uniform1i(uUsarImagen, usarImagen);
 				
 				tierra.draw();
-				
 				
 			}
 			

@@ -44,7 +44,7 @@ function myKeyNotPressed(event){
 	} else if(event.which){ // Netscape/Firefox/Opera                   
 	  keynum = event.which;
 	}
-	if(event.keyCode == 38)  naveEspacial.onTeclaUp(naveEspacial.TECLA_ARRIBA);upDown+=0.5;       //S
+	if(event.keyCode == 38)  naveEspacial.onTeclaUp(naveEspacial.TECLA_ARRIBA);      //S
 	if(event.keyCode == 39)  naveEspacial.onTeclaUp(naveEspacial.TECLA_IZQUIERDA);  // A
 	if(event.keyCode == 37)  naveEspacial.onTeclaUp(naveEspacial.TECLA_DERECHA);  // D    
 	if(event.keyCode == 69)  naveEspacial.onTeclaUp(naveEspacial.TECLA_GIRO_ANTIHORARIO);  // q
@@ -65,7 +65,7 @@ function myKeyPress(e){
 	}
 
 
-	if(e.keyCode == 38)  naveEspacial.onTeclaDown(naveEspacial.TECLA_ARRIBA); upDown+=0.5;      //flechaAbajo
+	if(e.keyCode == 38)  naveEspacial.onTeclaDown(naveEspacial.TECLA_ARRIBA);      //flechaAbajo
 	if(e.keyCode == 39)  naveEspacial.onTeclaDown(naveEspacial.TECLA_IZQUIERDA);  // flechaIzquierda
 	if(e.keyCode == 37)  naveEspacial.onTeclaDown(naveEspacial.TECLA_DERECHA);  // flechaDerecha    
 	if(e.keyCode == 69)  naveEspacial.onTeclaDown(naveEspacial.TECLA_GIRO_ANTIHORARIO);  // q

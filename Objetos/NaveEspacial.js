@@ -60,7 +60,9 @@ function NaveEspacial () {
 
 		mat4.identity(matrizNaveEspacial);	
 
-		mat4.translate(matrizNaveEspacial,matrizNaveEspacial,[30.0,3.0,0.0]);
+		mat4.rotate(matrizNaveEspacial, matrizNaveEspacial, t, [0.0, 1.0, 0.0]);
+		mat4.translate(matrizNaveEspacial,matrizNaveEspacial,[41.0,3.0,0.0]);
+		mat4.rotate(matrizNaveEspacial, matrizNaveEspacial, -t, [0.0, 1.0, 0.0]);
 		mat4.rotate(matrizNaveEspacial, matrizNaveEspacial, -Math.PI/2, [0,1,0]);
 		mat4.translate(matrizNaveEspacial,matrizNaveEspacial,posicion);
 		mat4.multiply(matrizNaveEspacial,matrizNaveEspacial,rotacion);

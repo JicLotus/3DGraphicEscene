@@ -3,6 +3,7 @@ function CuerpoNaveEspacial(){
 	
 	//El numero de filas 	
 	this.grilla = new VertexGrid(30,7);
+	this.grilla.initTexture("Resources/refMap.jpg");
 
 	this.puntosPolinomio = [];
 
@@ -18,6 +19,8 @@ function CuerpoNaveEspacial(){
 		this.grilla.color_buffer = [];
 		this.grilla.normal_buffer = [];
 		this.grilla.texture_coord_buffer = [];
+		this.grilla.biNormal_buffer = [];
+        this.grilla.tangent_buffer = [];
 
 		var x=0.0;
 		var y=0.0;
@@ -51,6 +54,14 @@ function CuerpoNaveEspacial(){
 			this.grilla.normal_buffer.push(posNew[0]);
 			this.grilla.normal_buffer.push(posNew[1]);
 			this.grilla.normal_buffer.push(posNew[2]);
+
+			this.grilla.biNormal_buffer.push(1.0);
+			this.grilla.biNormal_buffer.push(0.0);
+			this.grilla.biNormal_buffer.push(0.0);
+			
+			this.grilla.tangent_buffer.push(0.0);
+			this.grilla.tangent_buffer.push(1.0);
+			this.grilla.tangent_buffer.push(0.0);
 
 			this.grilla.color_buffer.push(r);
 			this.grilla.color_buffer.push(g);
@@ -86,6 +97,13 @@ function CuerpoNaveEspacial(){
 				this.grilla.normal_buffer.push(posNew[0]);
 				this.grilla.normal_buffer.push(posNew[1]);
 				this.grilla.normal_buffer.push(posNew[2]);
+				this.grilla.biNormal_buffer.push(1.0);
+				this.grilla.biNormal_buffer.push(0.0);
+				this.grilla.biNormal_buffer.push(0.0);
+				
+				this.grilla.tangent_buffer.push(0.0);
+				this.grilla.tangent_buffer.push(1.0);
+				this.grilla.tangent_buffer.push(0.0);
 
 				this.grilla.color_buffer.push(r);
 				this.grilla.color_buffer.push(g);
@@ -122,6 +140,14 @@ function CuerpoNaveEspacial(){
 			this.grilla.normal_buffer.push(posNew[1]);
 			this.grilla.normal_buffer.push(posNew[2]);
 
+			this.grilla.biNormal_buffer.push(1.0);
+			this.grilla.biNormal_buffer.push(0.0);
+			this.grilla.biNormal_buffer.push(0.0);
+			
+			this.grilla.tangent_buffer.push(0.0);
+			this.grilla.tangent_buffer.push(1.0);
+			this.grilla.tangent_buffer.push(0.0);
+
 			this.grilla.color_buffer.push(r);
 			this.grilla.color_buffer.push(g);
 			this.grilla.color_buffer.push(b);
@@ -152,7 +178,20 @@ function CuerpoNaveEspacial(){
 
 
 	this.draw = function(modelMatrix){
+		var uUsarImagen = gl.getUniformLocation(glProgram, "uUsarImagen");		
+		var usarImagen= true;
+		gl.uniform1i(uUsarImagen, usarImagen);
+		var ureflexion = gl.getUniformLocation(glProgram, "uTieneReflexion");		
+		var reflexion= true;
+		gl.uniform1i(ureflexion, reflexion);
+		
 		this.grilla.draw(modelMatrix);
+		
+		
+		usarImagen= false;
+		gl.uniform1i(uUsarImagen, usarImagen);
+		reflexion= false;
+		gl.uniform1i(ureflexion, reflexion);
 	}              
 
 

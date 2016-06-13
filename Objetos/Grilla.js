@@ -6,11 +6,19 @@ function VertexGrid (_rows, _cols) {
 
                 this.position_buffer = null;
                 this.color_buffer = null;
+                
                 this.normal_buffer = null;
+                this.biNormal_buffer = null;
+				this.tangent_buffer = null;
+				
 				this.texture_coord_buffer = null;
 
                 this.webgl_position_buffer = null;
+                
                 this.webgl_normal_buffer = null;
+                this.webgl_biNormal_buffer = null;
+                this.webgl_tangent_buffer = null;
+                
                 this.webgl_color_buffer = null;
                 this.webgl_texture_coord_buffer = null;
                 
@@ -47,7 +55,11 @@ function VertexGrid (_rows, _cols) {
                     
                     this.position_buffer = [];
                     this.color_buffer = [];
+                    
                     this.normal_buffer = [];
+                    this.biNormal_buffer = [];
+                    this.tangent_buffer = [];
+                    
                     this.texture_coord_buffer = [];
 	
                     var cte=((this.cols-1.0)/2.0); 
@@ -64,8 +76,8 @@ function VertexGrid (_rows, _cols) {
 		  						
 		  						//imgU = 1.0 - i/this.cols;
 		  						//imgV = 1.0 -j/this.rows;
-		  						imgU = 1.0 * i /5;
-		  						imgV = 1.0 * j /5;
+		  						imgU = 1.0 * i *2;
+		  						imgV = 1.0 * j *2;
 								
 		  						this.texture_coord_buffer.push(imgU);
 		  						this.texture_coord_buffer.push(imgV);
@@ -73,6 +85,14 @@ function VertexGrid (_rows, _cols) {
 								this.normal_buffer.push(0.0);
 								this.normal_buffer.push(0.0);
 								this.normal_buffer.push(1.0);
+								
+								this.biNormal_buffer.push(1.0);
+								this.biNormal_buffer.push(0.0);
+								this.biNormal_buffer.push(0.0);
+								
+								this.tangent_buffer.push(0.0);
+								this.tangent_buffer.push(1.0);
+								this.tangent_buffer.push(0.0);
 
 								//Todos los vertices siempre blanco
 								this.color_buffer.push(1.0);
@@ -126,19 +146,28 @@ function VertexGrid (_rows, _cols) {
 
                 this.setupWebGLBuffers = function(){
 
-					//if (this.texture != null || this.textureMapaNormal != null){
-						this.webgl_texture_coord_buffer = gl.createBuffer();
-						gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
-						gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coord_buffer), gl.STATIC_DRAW);
-						this.webgl_texture_coord_buffer.itemSize = 2;
-						this.webgl_texture_coord_buffer.numItems = this.texture_coord_buffer.length / 2;
-					//}
+					
+					this.webgl_texture_coord_buffer = gl.createBuffer();
+					gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+					gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_coord_buffer), gl.STATIC_DRAW);
+					this.webgl_texture_coord_buffer.itemSize = 2;
+					this.webgl_texture_coord_buffer.numItems = this.texture_coord_buffer.length / 2;
+					
 
 
                     this.webgl_normal_buffer = gl.createBuffer();
                     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
-                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);  
+                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);
                     
+                    
+					this.webgl_biNormal_buffer = gl.createBuffer();
+					gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_biNormal_buffer);
+					gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.biNormal_buffer), gl.STATIC_DRAW);
+					
+					this.webgl_tangent_buffer = gl.createBuffer();
+					gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
+					gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.tangent_buffer), gl.STATIC_DRAW);       
+					
                     
                     this.webgl_color_buffer = gl.createBuffer();
                     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
@@ -172,8 +201,18 @@ function VertexGrid (_rows, _cols) {
                     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
                     gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
 
-					
-					
+
+					var vertexBiNormalAttribute = gl.getAttribLocation(glProgram, "aVertexBiNormal");
+					gl.enableVertexAttribArray(vertexBiNormalAttribute);
+					gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_biNormal_buffer);
+					gl.vertexAttribPointer(vertexBiNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+				
+					var vertexTangentAttribute = gl.getAttribLocation(glProgram, "aVertexTangent");
+					gl.enableVertexAttribArray(vertexTangentAttribute);
+					gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_tangent_buffer);
+					gl.vertexAttribPointer(vertexTangentAttribute, 3, gl.FLOAT, false, 0, 0);
+
+						
 					var vertexTextureAttribute = gl.getAttribLocation(glProgram, "aTextureCoord");
 					gl.enableVertexAttribArray(vertexTextureAttribute);
 					gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);

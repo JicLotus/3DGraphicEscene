@@ -1,6 +1,6 @@
 function TapaCentroBaseEspacial (_puntosTapasInternas,_puntosTapasExternas) {
 
-	this.grilla = new VertexGrid(2,280);
+	this.grilla = new VertexGrid(2,200);
 	this.puntosTapasInternas = _puntosTapasInternas;
 	this.puntosTapasExternas = _puntosTapasExternas;
 	
@@ -10,6 +10,8 @@ function TapaCentroBaseEspacial (_puntosTapasInternas,_puntosTapasExternas) {
 		this.grilla.color_buffer = [];
 		this.grilla.normal_buffer = [];
 		this.grilla.texture_coord_buffer = [];
+		this.grilla.biNormal_buffer = [];
+        this.grilla.tangent_buffer = [];		
 
 
 		var x=0.0;
@@ -32,6 +34,15 @@ function TapaCentroBaseEspacial (_puntosTapasInternas,_puntosTapasExternas) {
 					this.grilla.normal_buffer.push(x);
 					this.grilla.normal_buffer.push(y);
 					this.grilla.normal_buffer.push(z);
+
+					this.grilla.biNormal_buffer.push(1.0);
+					this.grilla.biNormal_buffer.push(0.0);
+					this.grilla.biNormal_buffer.push(0.0);
+					
+					this.grilla.tangent_buffer.push(0.0);
+					this.grilla.tangent_buffer.push(1.0);
+					this.grilla.tangent_buffer.push(0.0);
+
 				
 					this.grilla.color_buffer.push(88/255);
 					this.grilla.color_buffer.push(88/255);

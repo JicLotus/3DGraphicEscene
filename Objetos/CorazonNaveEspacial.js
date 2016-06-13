@@ -15,6 +15,8 @@ function CorazonNaveEspacial (_puntosPolinomio){
 		this.grilla.color_buffer = [];
 		this.grilla.normal_buffer = [];
 		this.grilla.texture_coord_buffer = [];
+		this.grilla.biNormal_buffer = [];
+        this.grilla.tangent_buffer = [];
 		
 		var x=0.0;
 		var y=0.0;
@@ -46,6 +48,13 @@ function CorazonNaveEspacial (_puntosPolinomio){
 					this.grilla.normal_buffer.push(posNew[0]);
 					this.grilla.normal_buffer.push(posNew[1]);
 					this.grilla.normal_buffer.push(posNew[2]);
+					this.grilla.biNormal_buffer.push(1.0);
+					this.grilla.biNormal_buffer.push(0.0);
+					this.grilla.biNormal_buffer.push(0.0);
+					
+					this.grilla.tangent_buffer.push(0.0);
+					this.grilla.tangent_buffer.push(1.0);
+					this.grilla.tangent_buffer.push(0.0);
 
 					this.grilla.color_buffer.push(0.2);
 					this.grilla.color_buffer.push(0.2);

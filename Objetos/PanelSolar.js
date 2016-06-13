@@ -1,8 +1,8 @@
 function PanelSolar (_tubo) {
 
 	this.tubo = _tubo;
-	this.panel = new VertexGrid(19,19);
-	this.panel.initTexture("Resources/panelsolar-bump.gif");
+	this.panel = new VertexGrid(2,2);
+	this.panel.initTexture("Resources/refMap.jpg");
 	this.panel.initNormalTexture("Resources/panelsolar-normalMap.jpg");
 	
 	
@@ -28,6 +28,9 @@ function PanelSolar (_tubo) {
         var uUsarImagen = gl.getUniformLocation(glProgram, "uUsarImagen");		
 		var usarImagen= true;
 		gl.uniform1i(uUsarImagen, usarImagen);
+		var ureflexion = gl.getUniformLocation(glProgram, "uTieneReflexion");		
+		var reflexion= true;
+		gl.uniform1i(ureflexion, reflexion);
 		
 		for (var i=0;i<2;i++){
 
@@ -35,8 +38,8 @@ function PanelSolar (_tubo) {
 
 			mat4.rotate(this.mvMatrizTubo,matrizPanelSolar, Math.PI/2, [0.0, 1.0, 0.0]);
 			mat4.translate(this.mvMatrizTubo,this.mvMatrizTubo,[-2.2,0.18-i*0.36,0.0]);
-			mat4.scale(this.mvMatrizTubo,this.mvMatrizTubo,[0.05,0.017,1.0]);
-			//mat4.scale(this.mvMatrizTubo,this.mvMatrizTubo,[1.0,0.25,1.0]);
+			//mat4.scale(this.mvMatrizTubo,this.mvMatrizTubo,[0.05,0.017,1.0]);
+			mat4.scale(this.mvMatrizTubo,this.mvMatrizTubo,[1.0,0.25,1.0]);
 
 			this.panel.draw(this.mvMatrizTubo);
 		}
@@ -44,7 +47,8 @@ function PanelSolar (_tubo) {
 		usarImagen= false;
 		gl.uniform1i(normalMap, false);
 		gl.uniform1i(uUsarImagen, usarImagen);
-		
+		reflexion= false;
+		gl.uniform1i(ureflexion, reflexion);
 	}
 	
 	this.dibujarTuboChiquito = function(matrizPanelSolar)

@@ -1,10 +1,11 @@
 function CentroBaseEspacialInterno () {
 
-	this.puntosBezierInternos = 70;
+	this.puntosBezierInternos = 50;
 	this.cantidadBeziers =4;
 	
 	//El numero de columnas es el numero de puntos que tenga el perfil
-	this.grilla = new VertexGrid(50,this.puntosBezierInternos*this.cantidadBeziers);
+	this.grilla = new VertexGrid(20,this.puntosBezierInternos*this.cantidadBeziers);
+	
 	
 	this.puntosPolinomio = [];
 	
@@ -21,6 +22,8 @@ function CentroBaseEspacialInterno () {
 		this.grilla.color_buffer = [];
 		this.grilla.normal_buffer = [];
 		this.grilla.texture_coord_buffer = [];
+		this.grilla.biNormal_buffer = [];
+        this.grilla.tangent_buffer = [];
 
 		var x=0.0;
 		var y=0.0;
@@ -71,6 +74,15 @@ function CentroBaseEspacialInterno () {
 					this.grilla.normal_buffer.push(posNew[0]);
 					this.grilla.normal_buffer.push(posNew[1]);
 					this.grilla.normal_buffer.push(posNew[2]);
+
+					this.grilla.biNormal_buffer.push(1.0);
+					this.grilla.biNormal_buffer.push(0.0);
+					this.grilla.biNormal_buffer.push(0.0);
+					
+					this.grilla.tangent_buffer.push(0.0);
+					this.grilla.tangent_buffer.push(1.0);
+					this.grilla.tangent_buffer.push(0.0);
+
 
 					this.grilla.color_buffer.push(92/255);
 					this.grilla.color_buffer.push(46/255);

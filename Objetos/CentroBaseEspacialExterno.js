@@ -1,10 +1,12 @@
 function CentroBaseEspacialExterno () {
 
-	this.puntosBezierInternos = 70;
+	this.puntosBezierInternos = 50;
 	this.cantidadBeziers =4;
 	
 	//El numero de columnas es el numero de puntos que tenga el perfil
-	this.grilla = new VertexGrid(50,this.puntosBezierInternos*this.cantidadBeziers);
+	this.grilla = new VertexGrid(20,this.puntosBezierInternos*this.cantidadBeziers);
+	//this.grilla.initTexture("Resources/shiphull.jpg");
+	//this.grilla.initNormalTexture("Resources/shiphull_normalmap.jpg");
 	
 	this.puntosPolinomio = [];
 	
@@ -16,7 +18,11 @@ function CentroBaseEspacialExterno () {
 		
 		this.grilla.position_buffer = [];
 		this.grilla.color_buffer = [];
+		
 		this.grilla.normal_buffer = [];
+		this.grilla.biNormal_buffer = [];
+        this.grilla.tangent_buffer = [];
+		
 		this.grilla.texture_coord_buffer = [];
 		
 		var tanX=0.0;
@@ -35,6 +41,9 @@ function CentroBaseEspacialExterno () {
 		var base= mat4.create();
 		var posNew = [];
 		var angle = 0.0;
+		var imgU;
+		var imgV;
+		
 		
 		for (var j=0;j<this.grilla.rows;j++){
 			
@@ -82,12 +91,23 @@ function CentroBaseEspacialExterno () {
 					if(j==0) this.puntosTapas.push([posNew[0],posNew[1],posNew[2]]);
 					if(j==this.grilla.rows-1) this.puntosTapas2.push([posNew[0],posNew[1],posNew[2]]);
 					
-					this.grilla.texture_coord_buffer.push(0.0);
-					this.grilla.texture_coord_buffer.push(0.0);
+					//imgU = 1.0 - i*h/this.cantidadBeziers* this.puntosBezierInternos;
+					//imgV = 1.0 - j/this.grillarows;
+					
+					this.grilla.texture_coord_buffer.push(imgU);
+					this.grilla.texture_coord_buffer.push(imgV);
 					
 					this.grilla.normal_buffer.push(normalTransformada[0]);
 					this.grilla.normal_buffer.push(normalTransformada[1]);
 					this.grilla.normal_buffer.push(normalTransformada[2]);
+					
+					this.grilla.biNormal_buffer.push(1.0);
+					this.grilla.biNormal_buffer.push(0.0);
+					this.grilla.biNormal_buffer.push(0.0);
+					
+					this.grilla.tangent_buffer.push(0.0);
+					this.grilla.tangent_buffer.push(1.0);
+					this.grilla.tangent_buffer.push(0.0);
 					
 					this.grilla.color_buffer.push(88/255);
 					this.grilla.color_buffer.push(88/255);
@@ -117,7 +137,17 @@ function CentroBaseEspacialExterno () {
 	}
 
 	this.draw = function(modelMatrix){
+		/*var normalMap = gl.getUniformLocation(glProgram, "uNormalMap");
+		gl.uniform1i(normalMap, true);
+        var uUsarImagen = gl.getUniformLocation(glProgram, "uUsarImagen");		
+		var usarImagen= true;
+		gl.uniform1i(uUsarImagen, usarImagen);*/
+		
 		this.grilla.draw(modelMatrix);
+		
+		/*usarImagen= false;
+		gl.uniform1i(normalMap, false);
+		gl.uniform1i(uUsarImagen, usarImagen);*/
 	}
 
 	this.inicializar = function()

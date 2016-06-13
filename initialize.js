@@ -187,7 +187,6 @@ function makeShader(src, type)
 
 function setupBuffers()
 {
-   
 	sol = new Sol();
 	tierra = new Tierra();
    
