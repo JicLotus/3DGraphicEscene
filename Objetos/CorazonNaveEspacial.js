@@ -48,6 +48,8 @@ function CorazonNaveEspacial (_puntosPolinomio){
 					this.grilla.normal_buffer.push(posNew[0]);
 					this.grilla.normal_buffer.push(posNew[1]);
 					this.grilla.normal_buffer.push(posNew[2]);
+					
+					
 					this.grilla.biNormal_buffer.push(1.0);
 					this.grilla.biNormal_buffer.push(0.0);
 					this.grilla.biNormal_buffer.push(0.0);

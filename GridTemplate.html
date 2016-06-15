@@ -227,30 +227,39 @@
 					
 					if (vUsarImagen == 1.0){
 						vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+						
 						vec4 secondTexture = texture2D(uSecondTexture, vec2(vTextureCoord.s, vTextureCoord.t));
 						
 						vec3 vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting + uEarthResplandor * directionalLightWeighting2;
 						
 							
 						if (vNormalMap==1.0){
-							vec4 textureNormalColor = texture2D(uNormalSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 							
-							vec3 normalMap = normalize(textureNormalColor.rgb * 2.0 - 1.0);
 							
-							float normalXComponent = dot(transformedTangent,normalMap);
-							float normalYComponent = dot(transformedBiNormal,normalMap);
-							float normalZComponent = dot(transformedNormal,normalMap);
+							vec4 textureNormalColor = texture2D(uNormalSampler, vec2(vTextureCoord.s, vTextureCoord.t));	
+							
+							
+							vec3 normalMap = normalize(textureNormalColor.xyz * 2.0 - 1.0);
+							
+							mat3 TBN = mat3 (transformedTangent, transformedBiNormal, transformedNormal);
+							vec3 a = TBN * light_dir_normalized;
+							
+							/*
+							float normalXComponent = max(dot(transformedTangent,normalMap),0.0);
+							float normalYComponent = max(dot(transformedBiNormal,normalMap),0.0);
+							float normalZComponent = max(dot(transformedNormal,normalMap),0.0);
 							
 							normalMap = vec3(normalXComponent, normalYComponent, normalZComponent);
+							*/
 							
-							directionalLightWeighting =  max(dot(light_dir_normalized, normalMap), 0.0);
+							directionalLightWeighting =  max(dot(a, normalMap), 0.0);
 							
 							
 							vec3 vLightNormalWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
 							
 							if (vTieneReflexion==1.0){
 								vec4 textureReflect = texture2D(uSampler,vN);
-								fragColor = vec4(textureReflect.rgb * vLightNormalWeighting, textureColor.a);
+								fragColor = vec4(textureReflect.rgb * vLightNormalWeighting, textureColor.a) * 0.8;
 							}else
 							{
 								if (vTextureCoord.z == 0.0)
@@ -279,8 +288,9 @@
 				}else
 				{
 					vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-					vec4 secondTexture = texture2D(uSecondTexture, vec2(vTextureCoord.s, vTextureCoord.t));
-					vec4 textureNormalColor = texture2D(uNormalSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+					vec4 secondTexture = texture2D(uSecondTexture, vec2(vTextureCoord.s, vTextureCoord.t*2.2/2.5));
+					vec4 thirthTexture = texture2D(uSecondTexture, vec2(-vTextureCoord.s, -vTextureCoord.t*2.2/2.5));
+					vec4 textureNormalColor = texture2D(uNormalSampler, vec2(vTextureCoord.s, vTextureCoord.t*3.0));
 					
 					float directionalLightWeighting = max(dot(transformedNormal, light_dir_normalized), 0.0);
 					float directionalLightWeighting2 = max(dot(transformedNormal, light_dir_normalized2), 0.0);
@@ -291,9 +301,9 @@
 					if (vTextureCoord.z == 0.0)
 						fragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
 					else if (vTextureCoord.z == 1.0)
-						fragColor = vec4(secondTexture.rgb * vLightWeighting, textureColor.a);
+						fragColor = vec4(thirthTexture.rgb * vLightWeighting, textureColor.a);
 					else if (vTextureCoord.z == 2.0)
-						fragColor = vec4(secondTexture.rgb * vLightWeighting, textureColor.a);
+						fragColor = vec4(textureNormalColor.rgb * vLightWeighting, textureColor.a);
 					else
 						fragColor = vec4(secondTexture.rgb * vLightWeighting, textureColor.a);
 					

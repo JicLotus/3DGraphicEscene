@@ -97,9 +97,9 @@ function VertexGrid (_rows, _cols) {
 		  						this.texture_coord_buffer.push(imgU);
 		  						this.texture_coord_buffer.push(imgV);
 		  						
-								this.normal_buffer.push(0.0);
-								this.normal_buffer.push(0.0);
-								this.normal_buffer.push(1.0);
+								this.normal_buffer.push(x);
+								this.normal_buffer.push(y);
+								this.normal_buffer.push(-1.0);
 								
 								this.biNormal_buffer.push(1.0);
 								this.biNormal_buffer.push(0.0);
@@ -255,9 +255,9 @@ function VertexGrid (_rows, _cols) {
 					
 					if (this.secondTexture != null){
 						var normalSampler = gl.getUniformLocation(glProgram, "uSecondTexture");
-						gl.activeTexture(gl.TEXTURE0 + 1);
+						gl.activeTexture(gl.TEXTURE0 + 2);
 						gl.bindTexture(gl.TEXTURE_2D, this.textureMapaNormal);
-						gl.uniform1i(normalSampler, 1);
+						gl.uniform1i(normalSampler, 2);
 					}
 					
 					

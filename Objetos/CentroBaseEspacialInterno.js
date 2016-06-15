@@ -72,7 +72,7 @@ function CentroBaseEspacialInterno () {
 						this.puntosTapas2.push([posNew[0],posNew[1],posNew[2]]);
 					}
 					
-					imgU = j / this.puntosBezierInternos *5.0;
+					imgU = j / this.puntosBezierInternos *15.0;
 					imgV = i /this.grilla.rows / 2.2;
 					
 					this.grilla.texture_coord_buffer.push(imgU);
@@ -98,17 +98,19 @@ function CentroBaseEspacialInterno () {
 					
 					this.grilla.position_buffer.push(posNew[0]);								
 					this.grilla.position_buffer.push(posNew[1]);
-					this.grilla.position_buffer.push(posNew[2]);	
+					this.grilla.position_buffer.push(posNew[2]);
+					
+					if (j==1 && h==0 && i==0)
+						this.puntosLuces.push([posNew[0],posNew[1],posNew[2]]);
+					else if (j==10 && h==0 && i==0)
+						this.puntosLuces.push([posNew[0],posNew[1],posNew[2]]);
+					else if (j==this.grilla.rows-1 && h==0 && i==0)
+						this.puntosLuces.push([posNew[0],posNew[1],posNew[2]]);	
 
 				}
 			}
 			
-			if (j==1)
-				this.puntosLuces.push([posNew[0],posNew[1],posNew[2]]);
-			else if (j==10)
-				this.puntosLuces.push([posNew[0],posNew[1],posNew[2]]);
-			else if (j==this.grilla.rows-1)
-				this.puntosLuces.push([posNew[0],posNew[1],posNew[2]]);
+			
 				
 			
 		}

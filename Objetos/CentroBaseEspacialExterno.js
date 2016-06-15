@@ -6,8 +6,9 @@ function CentroBaseEspacialExterno () {
 	//El numero de columnas es el numero de puntos que tenga el perfil
 	this.grilla = new VertexGrid(20,this.puntosBezierInternos*this.cantidadBeziers);
 	this.grilla.initTexture("Resources/shiphull.jpg");
-	this.grilla.initNormalTexture("Resources/shiphull_normalmap.jpg");
 	this.grilla.initSecondTexture("Resources/ventanal.jpg");
+	this.grilla.initNormalTexture("Resources/shiphull_normalmap.jpg");
+	
 	
 	this.grilla.multipleImages = true;
 	
@@ -32,6 +33,8 @@ function CentroBaseEspacialExterno () {
 		var tanY=0.0;
 		var normal = [];
 		var normalTransformada = vec3.create();
+		var tangenteTransformada = vec3.create();
+		var binormalTransformada = vec3.create();
 		
 		var normalMatrix = mat3.create();
 		var invertModelMatrix = mat4.create();
@@ -89,14 +92,21 @@ function CentroBaseEspacialExterno () {
 					vec3.normalize(normalTransformada, normalTransformada);					
 					vec3.transformMat3(normalTransformada, normalTransformada, normalMatrix);
 
-					vec3.transformMat4(posNew,[x,y,0.0],base);
 
+
+					vec3.transformMat4(posNew,[x,y,0.0],base);
+					
+					
+					vec3.transformMat4(tangenteTransformada,[tanX,tanY,0.0],base);
+					
+					vec3.transformMat4(binormalTransformada,[0.0,0.0,0.1],base);
+					
 					
 					if(j==0) this.puntosTapas.push([posNew[0],posNew[1],posNew[2]]);
 					if(j==this.grilla.rows-1) this.puntosTapas2.push([posNew[0],posNew[1],posNew[2]]);
 					
 					
-					imgU = j/ this.puntosBezierInternos *5.0;
+					imgU = j/ this.puntosBezierInternos *10.0;
 					imgV = i /this.grilla.rows / 2.2;
 					
 					this.grilla.texture_coord_buffer.push(imgU);
@@ -107,13 +117,13 @@ function CentroBaseEspacialExterno () {
 					this.grilla.normal_buffer.push(normalTransformada[1]);
 					this.grilla.normal_buffer.push(normalTransformada[2]);
 					
-					this.grilla.biNormal_buffer.push(0.0);
-					this.grilla.biNormal_buffer.push(0.0);
-					this.grilla.biNormal_buffer.push(1.0);
+					this.grilla.biNormal_buffer.push(binormalTransformada[0]);
+					this.grilla.biNormal_buffer.push(binormalTransformada[0]);
+					this.grilla.biNormal_buffer.push(binormalTransformada[0]);
 					
-					this.grilla.tangent_buffer.push(tanX);
-					this.grilla.tangent_buffer.push(tanY);
-					this.grilla.tangent_buffer.push(0.0);
+					this.grilla.tangent_buffer.push(tangenteTransformada[0]);
+					this.grilla.tangent_buffer.push(tangenteTransformada[1]);
+					this.grilla.tangent_buffer.push(tangenteTransformada[2]);
 					
 					this.grilla.color_buffer.push(88/255);
 					this.grilla.color_buffer.push(88/255);

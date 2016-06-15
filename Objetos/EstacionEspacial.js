@@ -35,7 +35,7 @@ function EstacionEspacial () {
 		
 		mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
 		mat4.translate(mvMatrix, mvMatrix, [40.0, 3.0,0.0]);
-		mat4.rotate(mvMatrix, mvMatrix, -t, [0.0, 1.0, 0.0]);
+		mat4.rotate(mvMatrix, mvMatrix, Math.PI, [0.0, 1.0, 0.0]);
 		mat4.rotate(mvMatrix, mvMatrix, Math.PI/2, [1.0, 0.0, 0.0]);
 		mat4.scale(mvMatrix,mvMatrix,[0.3,0.3,0.3]);
 		
@@ -69,6 +69,7 @@ function EstacionEspacial () {
 				
 		this.dibujarPaneles(mvMatrix,1.4);
 		this.dibujarPaneles(mvMatrix,-1.4);
+		
 
 		mat4.rotate(mvMatrix, mvMatrix, -Math.PI*1/7.2, [0.0, 1.0, 0.0]);
 		
@@ -88,12 +89,9 @@ function EstacionEspacial () {
 		
 	}              
 
-	this.dibujarPaneles = function(mvMatrix,_yPosition)
+	this.dibujarPaneles = function(_mvMatrix,_yPosition)
 	{
 		matrizPanelSolar = mat4.create();
-		mat4.identity(matrizPanelSolar);
-		mat4.scale(matrizPanelSolar,mvMatrix,[0.5,0.5,0.5]);
-		mat4.translate(matrizPanelSolar,matrizPanelSolar,[0.0,_yPosition,0.0]);
 		
 		var paso = _yPosition/2;		
 	
@@ -103,22 +101,12 @@ function EstacionEspacial () {
 			paso = -0.8;
 		}
 
-		for (var i =0;i<4;i++){
-
-			if (i>window.nivelCierre){
-				mat4.translate(matrizPanelSolar,matrizPanelSolar,[0.0,paso/2,0.0]);
-			}else{
-				mat4.translate(matrizPanelSolar,matrizPanelSolar,[0.0,paso,0.0]);
-			}
-			this.panelSolar.dibujar(matrizPanelSolar);
-		}
 		
 		mat4.identity(matrizPanelSolar);
-		mat4.scale(matrizPanelSolar,mvMatrix,[0.5,0.5,0.5]);
-		mat4.rotate(matrizPanelSolar,matrizPanelSolar,Math.PI,[0,1,0]);
+		mat4.rotate(matrizPanelSolar,_mvMatrix,Math.PI,[0,1,0]);
 		mat4.translate(matrizPanelSolar,matrizPanelSolar,[0.0,_yPosition,0.0]);
 		
-		for (var i =0;i<4;i++){
+		for (var i =0;i<1;i++){
 			if (i>window.nivelCierre){
 				mat4.translate(matrizPanelSolar,matrizPanelSolar,[0.0,paso/2,0.0]);
 			}else{

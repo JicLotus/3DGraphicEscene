@@ -37,9 +37,17 @@ function PanelSolar (_tubo) {
 			mat4.identity(this.mvMatrizTubo);
 
 			mat4.rotate(this.mvMatrizTubo,matrizPanelSolar, Math.PI/2, [0.0, 1.0, 0.0]);
-			mat4.translate(this.mvMatrizTubo,this.mvMatrizTubo,[-2.2,0.18-i*0.36,0.0]);
-			//mat4.scale(this.mvMatrizTubo,this.mvMatrizTubo,[0.05,0.017,1.0]);
-			mat4.scale(this.mvMatrizTubo,this.mvMatrizTubo,[1.0,0.25,1.0]);
+			mat4.translate(this.mvMatrizTubo,this.mvMatrizTubo,[-2.2,0.65-i*1.25,0.0]);
+
+			this.panel.draw(this.mvMatrizTubo);
+		}
+		
+		for (var i=0;i<2;i++){
+
+			mat4.identity(this.mvMatrizTubo);
+
+			mat4.rotate(this.mvMatrizTubo,matrizPanelSolar, Math.PI/2, [0.0, 1.0, 0.0]);
+			mat4.translate(this.mvMatrizTubo,this.mvMatrizTubo,[0.2,0.65-i*1.25,0.0]);
 
 			this.panel.draw(this.mvMatrizTubo);
 		}
@@ -52,20 +60,24 @@ function PanelSolar (_tubo) {
 	}
 	
 	this.dibujarTuboChiquito = function(matrizPanelSolar)
-	{		
-		mat4.identity(this.mvMatrizTubo);
-		mat4.rotate(this.mvMatrizTubo, matrizPanelSolar, Math.PI/2, [1.0, 0.0, 0.0]);
-		mat4.translate(this.mvMatrizTubo,this.mvMatrizTubo,[0.0,1.2,-0.18]);
-		mat4.scale(this.mvMatrizTubo,this.mvMatrizTubo,[0.02,0.02,0.36]);
-		this.tubo.draw(this.mvMatrizTubo);
+	{	
+		for (var i=0;i<2;i++){	
+			mat4.identity(this.mvMatrizTubo);
+			mat4.rotate(this.mvMatrizTubo, matrizPanelSolar, Math.PI/2, [1.0, 0.0, 0.0]);
+			mat4.translate(this.mvMatrizTubo,this.mvMatrizTubo,[0.0,1.2-i*2.4,-0.18]);
+			mat4.scale(this.mvMatrizTubo,this.mvMatrizTubo,[0.02,0.02,0.36]);
+			this.tubo.draw(this.mvMatrizTubo);
+		}
 	}
 	
 	this.dibujarTuboLargo = function(matrizPanelSolar)
 	{
-		mat4.identity(this.mvMatrizTubo);
-		mat4.translate(this.mvMatrizTubo,matrizPanelSolar,[0.0,0.0,0.0]);
-		mat4.scale(this.mvMatrizTubo,this.mvMatrizTubo,[0.02,0.02,1.2]);
-		this.tubo.draw(this.mvMatrizTubo);
+		for (var i=0;i<2;i++){
+			mat4.identity(this.mvMatrizTubo);
+			mat4.translate(this.mvMatrizTubo,matrizPanelSolar,[0.0,0.0,-i*1.2]);
+			mat4.scale(this.mvMatrizTubo,this.mvMatrizTubo,[0.02,0.02,1.2]);
+			this.tubo.draw(this.mvMatrizTubo);
+		}
 	}
 
 	
