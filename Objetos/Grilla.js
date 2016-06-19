@@ -29,6 +29,7 @@ function VertexGrid (_rows, _cols) {
 				this.textureMapaNormal = null;
 				
 				this.multipleImages= false;
+				this.itsNeil = false;
 
 				this.initTexture = function(texture_file){
 					
@@ -93,6 +94,10 @@ function VertexGrid (_rows, _cols) {
 		  						//imgV = 1.0 -j/this.rows;
 		  						imgU = 1.0 * i *2;
 		  						imgV = 1.0 * j *2;
+								if (this.itsNeil){
+									imgU = 1.0- i/(this.cols-1.0);
+									imgV = 1.0- j/(this.rows-1.0);
+								}
 								
 		  						this.texture_coord_buffer.push(imgU);
 		  						this.texture_coord_buffer.push(imgV);

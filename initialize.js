@@ -187,6 +187,12 @@ function makeShader(src, type)
 
 function setupBuffers()
 {
+	neilArmstrong = new VertexGrid(2,2);
+	neilArmstrong.itsNeil = true;
+	neilArmstrong.initTexture("Resources/astronauta.png");
+	neilArmstrong.inicializar();
+	
+	
 	sol = new Sol();
 	tierra = new Tierra();
    

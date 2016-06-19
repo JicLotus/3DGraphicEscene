@@ -32,6 +32,8 @@ function CentroBaseEspacialExterno () {
 		var tanX=0.0;
 		var tanY=0.0;
 		var normal = [];
+		var tangent = [];
+		var binormal = [];
 		var normalTransformada = vec3.create();
 		var tangenteTransformada = vec3.create();
 		var binormalTransformada = vec3.create();
@@ -70,8 +72,10 @@ function CentroBaseEspacialExterno () {
 				
 					if (i<this.grilla.cols-1){
 						tanX = beizerActual[i+1].getX() - x;
-						tanY = beizerActual[i+1].getY() - y;					
-						normal = bezier.cross([0,0,1], [tanX, tanY, 0]);
+						tanY = beizerActual[i+1].getY() - y;
+						tangent = [tanX, tanY, 0];				
+						binormal = 	[0,0,1];
+						normal = bezier.cross(binormal, tangent);
 					}			
 				
 					
@@ -92,14 +96,20 @@ function CentroBaseEspacialExterno () {
 					vec3.normalize(normalTransformada, normalTransformada);					
 					vec3.transformMat3(normalTransformada, normalTransformada, normalMatrix);
 
+					///////TANGENTE	
+					tangenteTransformada = vec3.fromValues(tangent[0],tangent[1],tangent[2]);
+					vec3.normalize(tangenteTransformada, tangenteTransformada);					
+					vec3.transformMat3(tangenteTransformada, tangenteTransformada, normalMatrix);
+					//////
+
+					///// Binormal
+					binormalTransformada = vec3.fromValues(binormal[0],binormal[1],binormal[2]);
+					vec3.normalize(binormalTransformada, binormalTransformada);					
+					vec3.transformMat3(binormalTransformada, binormalTransformada, normalMatrix);
+					/////
 
 
 					vec3.transformMat4(posNew,[x,y,0.0],base);
-					
-					
-					vec3.transformMat4(tangenteTransformada,[tanX,tanY,0.0],base);
-					
-					vec3.transformMat4(binormalTransformada,[0.0,0.0,0.1],base);
 					
 					
 					if(j==0) this.puntosTapas.push([posNew[0],posNew[1],posNew[2]]);
