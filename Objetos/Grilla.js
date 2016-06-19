@@ -26,6 +26,7 @@ function VertexGrid (_rows, _cols) {
 
 				this.texture = null;
 				this.secondTexture = null;
+				this.thirdTexture = null;
 				this.textureMapaNormal = null;
 				
 				this.multipleImages= false;
@@ -66,6 +67,19 @@ function VertexGrid (_rows, _cols) {
 					}
 					this.textureMapaNormal.image.src = texture_file;
 				}
+                
+                this.initThirdTexture = function(texture_file){
+					
+					var aux_texture = gl.createTexture();
+					this.thirdTexture = aux_texture;
+					this.thirdTexture.image = new Image();
+					
+					this.thirdTexture.image.onload = function () {
+						   handleLoadedTexture(aux_texture)
+					}
+					this.thirdTexture.image.src = texture_file;
+				}
+
                 
                 this.createUniformPlaneGrid = function(){
                     
@@ -261,8 +275,15 @@ function VertexGrid (_rows, _cols) {
 					if (this.secondTexture != null){
 						var normalSampler = gl.getUniformLocation(glProgram, "uSecondTexture");
 						gl.activeTexture(gl.TEXTURE0 + 2);
-						gl.bindTexture(gl.TEXTURE_2D, this.textureMapaNormal);
+						gl.bindTexture(gl.TEXTURE_2D, this.secondTexture);
 						gl.uniform1i(normalSampler, 2);
+					}
+					
+					if (this.thirdTexture != null){
+						var normalSampler = gl.getUniformLocation(glProgram, "uThirdTexture");
+						gl.activeTexture(gl.TEXTURE0 + 3);
+						gl.bindTexture(gl.TEXTURE_2D, this.thirdTexture);
+						gl.uniform1i(normalSampler, 3);
 					}
 					
 					
@@ -284,6 +305,7 @@ function VertexGrid (_rows, _cols) {
 					if (this.texture != null) gl.bindTexture(gl.TEXTURE_2D, this.texture);
 					if (this.textureMapaNormal != null) gl.bindTexture(gl.TEXTURE_2D, this.textureMapaNormal);
 					if (this.secondTexture != null) gl.bindTexture(gl.TEXTURE_2D, this.secondTexture);
+					if (this.thirdTexture != null) gl.bindTexture(gl.TEXTURE_2D, this.thirdTexture);
 					
 						
                     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);

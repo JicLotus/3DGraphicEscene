@@ -82,6 +82,9 @@
 			varying vec3 light_dir_normalized;
 			varying vec3 light_dir_normalized2;
 			varying vec3 light_dir_normalized3;
+			varying vec3 light_dir_normalized4;
+			varying vec3 light_dir_normalized5;
+			varying vec3 light_dir_normalized6;
 			
 			varying vec3 transformedNormal;
 			varying vec3 transformedBiNormal;
@@ -91,6 +94,9 @@
 			uniform vec3 l1Position;
 			uniform vec3 l2Position;
 			uniform vec3 l3Position;
+			uniform vec3 l4Position;
+			uniform vec3 l5Position;
+			uniform vec3 l6Position;
 			
 			uniform vec3 eyePoint;
 			
@@ -139,6 +145,9 @@
 					light_dir_normalized =  normalize(l1Position-vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
 					light_dir_normalized2 =  normalize(l2Position-vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
 					light_dir_normalized3 =  normalize(l3Position-vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
+					light_dir_normalized4 =  normalize(l4Position-vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
+					light_dir_normalized5 =  normalize(l5Position-vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
+					light_dir_normalized6 =  normalize(l6Position-vec3(uMVMatrix * vec4(aVertexPosition, 1.0)));
 					vLucesExternas=0.0;
 				}
                 
@@ -182,6 +191,7 @@
 			uniform sampler2D uSampler;
 			uniform sampler2D uNormalSampler;
 			uniform sampler2D uSecondTexture;
+			uniform sampler2D uThirdTexture;
 			
 			varying float vUsarImagen;
 			
@@ -194,6 +204,9 @@
 			varying vec3 light_dir_normalized;
 			varying vec3 light_dir_normalized2;
 			varying vec3 light_dir_normalized3;
+			varying vec3 light_dir_normalized4;
+			varying vec3 light_dir_normalized5;
+			varying vec3 light_dir_normalized6;
 			
 			varying vec3 transformedNormal;
 			varying vec3 transformedBiNormal;
@@ -292,21 +305,34 @@
 					vec4 thirthTexture = texture2D(uSecondTexture, vec2(-vTextureCoord.s, -vTextureCoord.t*2.2/2.5));
 					vec4 textureNormalColor = texture2D(uNormalSampler, vec2(vTextureCoord.s, vTextureCoord.t*3.0));
 					
+					vec4 fourthTextureColor = texture2D(uThirdTexture, vec2(vTextureCoord.s, vTextureCoord.t));
+					
 					float directionalLightWeighting = max(dot(transformedNormal, light_dir_normalized), 0.0);
 					float directionalLightWeighting2 = max(dot(transformedNormal, light_dir_normalized2), 0.0);
 					float directionalLightWeighting3 = max(dot(transformedNormal, light_dir_normalized3), 0.0);
+					float directionalLightWeighting4 = max(dot(transformedNormal, light_dir_normalized4), 0.0);
+					float directionalLightWeighting5 = max(dot(transformedNormal, light_dir_normalized5), 0.0);
+					float directionalLightWeighting6 = max(dot(transformedNormal, light_dir_normalized6), 0.0);
 					
 					vec3 vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting + uDirectionalColor * directionalLightWeighting2 + uDirectionalColor * directionalLightWeighting3;				
+					vLightWeighting = vLightWeighting + uDirectionalColor * directionalLightWeighting4 + uDirectionalColor * directionalLightWeighting5 + uDirectionalColor * directionalLightWeighting6;
 					
-					if (vTextureCoord.z == 0.0)
-						fragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
-					else if (vTextureCoord.z == 1.0)
+					if (vTextureCoord.z == 0.0){
+						vec3 multiDeImagenes=textureColor.rgb;
+						
+						if (fourthTextureColor.r > 0.8){
+							multiDeImagenes = fourthTextureColor.rgb * textureColor.rgb;
+							fragColor = vec4(multiDeImagenes, textureColor.a*fourthTextureColor.a);
+						}else{
+							fragColor = vec4(multiDeImagenes * vLightWeighting, textureColor.a*fourthTextureColor.a);}
+							
+					}else if (vTextureCoord.z == 1.0){
 						fragColor = vec4(thirthTexture.rgb * vLightWeighting, textureColor.a);
-					else if (vTextureCoord.z == 2.0)
+					}else if (vTextureCoord.z == 2.0){
 						fragColor = vec4(textureNormalColor.rgb * vLightWeighting, textureColor.a);
-					else
+					}else{
 						fragColor = vec4(secondTexture.rgb * vLightWeighting, textureColor.a);
-					
+					}
 					
 				}
 				

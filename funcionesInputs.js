@@ -49,8 +49,8 @@ function myKeyNotPressed(event){
 	if(event.keyCode == 37)  naveEspacial.onTeclaUp(naveEspacial.TECLA_DERECHA);  // D    
 	if(event.keyCode == 69)  naveEspacial.onTeclaUp(naveEspacial.TECLA_GIRO_ANTIHORARIO);  // q
 	if(event.keyCode == 81)  naveEspacial.onTeclaUp(naveEspacial.TECLA_GIRO_HORARIO);
-	if(event.keyCode ==173)  naveEspacial.onTeclaUp(naveEspacial.TECLA_MENOS);   // e
-	if(event.keyCode ==61 )  naveEspacial.onTeclaUp(naveEspacial.TECLA_MAS);
+	if(event.keyCode ==109)  naveEspacial.onTeclaUp(naveEspacial.TECLA_MENOS);   // e
+	if(event.keyCode ==107 )  naveEspacial.onTeclaUp(naveEspacial.TECLA_MAS);
 	if(event.keyCode == 40)  naveEspacial.onTeclaUp(naveEspacial.TECLA_ABAJO);
 
 }
@@ -70,9 +70,9 @@ function myKeyPress(e){
 	if(e.keyCode == 37)  naveEspacial.onTeclaDown(naveEspacial.TECLA_DERECHA);  // flechaDerecha    
 	if(e.keyCode == 69)  naveEspacial.onTeclaDown(naveEspacial.TECLA_GIRO_ANTIHORARIO);  // q
 	if(e.keyCode == 81)  naveEspacial.onTeclaDown(naveEspacial.TECLA_GIRO_HORARIO);   // e
-	if(e.keyCode ==61)  naveEspacial.onTeclaDown(naveEspacial.TECLA_MAS);      
+	if(e.keyCode ==107)  naveEspacial.onTeclaDown(naveEspacial.TECLA_MAS);      
 	if(e.keyCode == 40)  naveEspacial.onTeclaDown(naveEspacial.TECLA_ABAJO);   //flechaArriba
-	if(e.keyCode ==173)  naveEspacial.onTeclaDown(naveEspacial.TECLA_MENOS);
+	if(e.keyCode ==109)  naveEspacial.onTeclaDown(naveEspacial.TECLA_MENOS);
 	 
 
 	if (keynum==49){

@@ -8,6 +8,7 @@ function CentroBaseEspacialInterno () {
 	this.grilla.initTexture("Resources/techo.jpg");
 	this.grilla.initNormalTexture("Resources/piso.jpg");
 	this.grilla.initSecondTexture("Resources/paredInterna1.jpg");
+	this.grilla.initThirdTexture("Resources/techo-ilumMap.jpg");
 	
 	this.grilla.multipleImages = true;
 	
@@ -100,9 +101,15 @@ function CentroBaseEspacialInterno () {
 					this.grilla.position_buffer.push(posNew[1]);
 					this.grilla.position_buffer.push(posNew[2]);
 					
-					if (j==1 && h==0 && i==0)
+					if (j==2 && h==0 && i==0)
 						this.puntosLuces.push([posNew[0],posNew[1],posNew[2]]);
-					else if (j==10 && h==0 && i==0)
+					else if (j==5 && h==0 && i==0)
+						this.puntosLuces.push([posNew[0],posNew[1],posNew[2]]);
+					else if (j==8 && h==0 && i==0)
+						this.puntosLuces.push([posNew[0],posNew[1],posNew[2]]);
+					else if (j==11 && h==0 && i==0)
+						this.puntosLuces.push([posNew[0],posNew[1],posNew[2]]);
+					else if (j==14 && h==0 && i==0)
 						this.puntosLuces.push([posNew[0],posNew[1],posNew[2]]);
 					else if (j==this.grilla.rows-1 && h==0 && i==0)
 						this.puntosLuces.push([posNew[0],posNew[1],posNew[2]]);	
@@ -122,19 +129,31 @@ function CentroBaseEspacialInterno () {
 		var luz = [this.puntosLuces[0][0],this.puntosLuces[0][1],this.puntosLuces[0][2]];
 		var luz2 = [this.puntosLuces[1][0],this.puntosLuces[1][1],this.puntosLuces[1][2]];
 		var luz3 = [this.puntosLuces[2][0],this.puntosLuces[2][1],this.puntosLuces[2][2]];
+		var luz4 = [this.puntosLuces[3][0],this.puntosLuces[3][1],this.puntosLuces[3][2]];
+		var luz5 = [this.puntosLuces[4][0],this.puntosLuces[4][1],this.puntosLuces[4][2]];
+		var luz6 = [this.puntosLuces[5][0],this.puntosLuces[5][1],this.puntosLuces[5][2]];
 		
 		vec3.transformMat4(luz,luz,modelMatrix);
 		vec3.transformMat4(luz2,luz2,modelMatrix);
 		vec3.transformMat4(luz3,luz3,modelMatrix);
+		vec3.transformMat4(luz4,luz4,modelMatrix);
+		vec3.transformMat4(luz5,luz5,modelMatrix);
+		vec3.transformMat4(luz6,luz6,modelMatrix);
 		
 		var lucesExternas = gl.getUniformLocation(glProgram, "lucesExternas");
 		var l1 = gl.getUniformLocation(glProgram, "l1Position");
 		var l2 = gl.getUniformLocation(glProgram, "l2Position");
 		var l3 = gl.getUniformLocation(glProgram, "l3Position");
+		var l4 = gl.getUniformLocation(glProgram, "l4Position");
+		var l5 = gl.getUniformLocation(glProgram, "l5Position");
+		var l6 = gl.getUniformLocation(glProgram, "l6Position");
 		
 		gl.uniform3fv(l1, luz);
 		gl.uniform3fv(l2, luz2);
 		gl.uniform3fv(l3, luz3);
+		gl.uniform3fv(l4, luz4);
+		gl.uniform3fv(l5, luz5);
+		gl.uniform3fv(l6, luz6);
 		
 		
 		gl.uniform1i(lucesExternas, false);
