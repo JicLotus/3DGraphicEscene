@@ -4,8 +4,8 @@ It is a 3D graphic Scene. It was developed in WebGL and Java Script. The 3D mode
 
 Images:
 
-![alt tag](https://github.com/JicLotus/3DGraphicEscene/blob/master/Images/GeneralImage.png)
+![alt tag](https://github.com/JicLotus/3DGraphicScene/blob/master/public/Images/GeneralImage.png?raw=true)
 
-![alt tag](https://github.com/JicLotus/3DGraphicEscene/blob/master/Images/Inside.png)
+![alt tag](https://github.com/JicLotus/3DGraphicEscene/blob/master/public/Images/Inside.png)
 
-![alt tag](https://github.com/JicLotus/3DGraphicEscene/blob/master/Images/intership.JPG)
+![alt tag](https://github.com/JicLotus/3DGraphicEscene/blob/master/public/Images/intership.JPG)
